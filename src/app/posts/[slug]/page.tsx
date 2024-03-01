@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 
 import MoreStories from "../../more-stories";
 import Avatar from "../../avatar";
-import Date from "../../date";
+import Date from "../../../components/date";
 import CoverImage from "../../cover-image";
 
 import { Markdown } from "@/lib/markdown";
@@ -29,14 +29,14 @@ export default async function PostPage({
 
   return (
     <div className="container mx-auto px-5">
-      <h2 className="text-2xl md:text-4xl font-bold tracking-tight md:tracking-tighter leading-tight mb-20 mt-8">
+      <h2 className="text-2xl md:text-4xl  tracking-tight md:tracking-tighter leading-tight mb-20 mt-8">
         <Link href="/" className="hover:underline">
           Blog
         </Link>
         .
       </h2>
       <article>
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left">
+        <h1 className="text-6xl md:text-7xl lg:text-8xl  tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left">
           {post.title}
         </h1>
         <div className="hidden md:block md:mb-12">
