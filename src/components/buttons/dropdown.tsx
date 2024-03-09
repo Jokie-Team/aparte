@@ -1,5 +1,5 @@
 "use client";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { ExpandMoreIcon } from "../icons/expand-more";
 
 const DropdownButton = () => {
@@ -22,7 +22,7 @@ const DropdownButton = () => {
         aria-haspopup="true"
       >
         <span>Options</span>
-        <ExpandMoreIcon />
+        <ExpandMoreIcon rotate180={isOpen} />
       </button>
       <div
         className={`pt-6 text-left absolute left-0 top-0 z-10 mt-2 w-56 origin-top-right rounded-md ${
