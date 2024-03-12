@@ -1,5 +1,6 @@
 import DropdownButton from "./buttons/dropdown";
 import Button from "./buttons/button";
+import ForwardButton from "./buttons/forward";
 
 export default function Footer() {
   return (
@@ -8,6 +9,7 @@ export default function Footer() {
         <div className="py-28 flex flex-col lg:flex-row items-center">
           <DropdownButton />
           <Button text="teste" />
+          <ForwardButton text="label" />
         </div>
       </div>
     </footer>
