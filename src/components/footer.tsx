@@ -1,6 +1,7 @@
 import DropdownButton from "./buttons/dropdown";
 import Button from "./buttons/button";
 import ForwardButton from "./buttons/forward";
+import IconButton from "./buttons/icon";
 
 export default function Footer() {
   return (
@@ -10,6 +11,7 @@ export default function Footer() {
           <DropdownButton />
           <Button text="teste" />
           <ForwardButton text="label" />
+          <IconButton />
         </div>
       </div>
     </footer>

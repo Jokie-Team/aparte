@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ArrowRight } from "../icons/arrow-right";
+import { ArrowDown } from "../icons/arrow-down";
 
 const ForwardButton = ({
   text,
@@ -10,6 +11,8 @@ const ForwardButton = ({
   disabled?: boolean;
 }) => {
   const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
   return (
     <div
       style={{
@@ -26,6 +29,7 @@ const ForwardButton = ({
         aria-haspopup="true"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={() => setClicked((clicked) => !clicked)}
         disabled={disabled}
       >
         <span
@@ -33,7 +37,7 @@ const ForwardButton = ({
         >
           {text}
         </span>
-        <ArrowRight />
+        {clicked ? <ArrowDown /> : <ArrowRight />}
       </button>
     </div>
   );
