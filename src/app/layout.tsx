@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { CMS_NAME } from "@/lib/constants";
 import localFont from "next/font/local";
 import Footer from "../components/footer";
+import Header from "../components/header";
 
 export const metadata = {
   title: `Next.js and ${CMS_NAME} Example`,
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="en" className={neueHaas.variable}>
       <body>
         <section className="min-h-screen">
+          <Header />
           <main>{children}</main>
           <Footer />
         </section>
