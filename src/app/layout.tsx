@@ -40,7 +40,7 @@ export default function RootLayout({
       <body>
         <section className="min-h-screen">
           <Header />
-          <main>{children}</main>
+          <main className="h-10">{children}</main>
           <Footer />
         </section>
       </body>
