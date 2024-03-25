@@ -1,8 +1,8 @@
 import "../styles/globals.css";
 import { CMS_NAME } from "@/lib/constants";
 import localFont from "next/font/local";
-import Footer from "./(aparte)/components/footer";
-import Header from "./(aparte)/components/header";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 export const metadata = {
   title: `Next.js and ${CMS_NAME} Example`,
