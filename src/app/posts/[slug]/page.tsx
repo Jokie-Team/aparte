@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 
 import MoreStories from "../../more-stories";
 import Avatar from "../../avatar";
-import Date from "../../(dashboard)/components/date";
+import Date from "../../(aparte)/components/date";
 import CoverImage from "../../cover-image";
 
 import { Markdown } from "@/lib/markdown";

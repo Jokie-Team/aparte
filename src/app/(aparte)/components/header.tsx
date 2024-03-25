@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import Logo from "./assets/logo";
+import Logo from "./logo/logo";
 import Menu from "./menu";
 
 export default function Header() {

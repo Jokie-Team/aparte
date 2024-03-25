@@ -1,5 +1,5 @@
 import React from 'react';
-import BurgerMenu from './assets/icons/burger-menu';
+import BurgerMenu from './icons/burger-menu';
 import { useRouter } from 'next/navigation'
 
 interface MenuProps {
