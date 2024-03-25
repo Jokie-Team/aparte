@@ -1,7 +1,13 @@
-export const ArrowDown = ({
+export type RotateDirection = "up" | "left" | "down" | "right";
+
+export const Arrow = ({
   fill = "#2B2B2B",
-  rotateUp = false,
+  rotate = "down",
   size = "24",
+}: {
+  fill?: string;
+  rotate?: RotateDirection;
+  size?: string;
 }) => (
   <svg
     width={size}
@@ -9,7 +15,15 @@ export const ArrowDown = ({
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={rotateUp ? "rotate-180" : "rotate-0"}
+    className={
+      rotate == "up"
+        ? "rotate-180"
+        : rotate == "right"
+        ? "-rotate-90"
+        : rotate == "left"
+        ? "rotate-90"
+        : "rotate-0"
+    }
   >
     <mask
       id="mask0_41_330"

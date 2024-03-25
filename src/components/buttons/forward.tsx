@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ArrowRight } from "../icons/arrow-right";
-import { ArrowDown } from "../icons/arrow-down";
+import { Arrow } from "../icons/arrow-down";
 
 const ForwardButton = ({
   text,
@@ -19,7 +19,7 @@ const ForwardButton = ({
         fontFamily: "var(--font-neue-haas)",
         cursor: disabled ? "none" : "pointer",
       }}
-      className="relative inline-block text-left cursor-pointer pb-1"
+      className="relative inline-block text-left pb-1"
     >
       <button
         type="button"
@@ -37,7 +37,7 @@ const ForwardButton = ({
         >
           {text}
         </span>
-        {clicked ? <ArrowDown /> : <ArrowRight />}
+        {clicked ? <Arrow /> : <ArrowRight />}
       </button>
     </div>
   );

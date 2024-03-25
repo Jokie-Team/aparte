@@ -1,7 +1,10 @@
 "use client";
-import { ArrowDown } from "../icons/arrow-down";
+import { useState } from "react";
+import { Arrow, RotateDirection } from "../icons/arrow-down";
 
-const IconButton = () => {
+const IconButton = ({ direction }: { direction: RotateDirection }) => {
+  const [hovered, setHovered] = useState<boolean | null>(null);
+
   return (
     <div
       style={{
@@ -11,11 +14,19 @@ const IconButton = () => {
     >
       <button
         type="button"
-        className="text-white  bg-black font-extrabold justify-center rounded-full p-2"
+        className=" bg-black border hover:bg-white hover:border font-extrabold justify-center rounded-full p-2"
         id="menu-button"
         aria-haspopup="true"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        {<ArrowDown fill="#ffff" rotateUp size="40" />}
+        {
+          <Arrow
+            fill={hovered ? "#000" : "#ffff"}
+            rotate={direction}
+            size="40"
+          />
+        }
       </button>
     </div>
   );

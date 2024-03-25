@@ -1,4 +1,4 @@
-export const ArrowBackIcon = () => (
+export const ArrowBack = ({ fill = "#D9D9D9", size = "24" }) => (
   <svg
     width="24"
     height="24"
@@ -14,7 +14,7 @@ export const ArrowBackIcon = () => (
       width="24"
       height="24"
     >
-      <rect width="24" height="24" fill="#D9D9D9" />
+      <rect width={size} height={size} fill={fill} />
     </mask>
     <g mask="url(#mask0_127_2228)">
       <path
