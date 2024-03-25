@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import Logo from "./images/logo";
+import Logo from "./assets/logo";
 import Menu from "./menu";
 
 export default function Header() {
@@ -11,10 +11,10 @@ export default function Header() {
   };
 
   return (
-    <div className="w-full h-24 border-b border-gray-900 flex flex-row justify-between items-center">
-      <div className="pt-12 pl-10 h-full">
+    <div className="font-neue w-full md:h-24 border-b border-gray-900 flex flex-row justify-between items-center p-4 md:py-0 md:px-10">
+      <a href="/" className="h-full md:pt-12">
         <Logo />
-      </div>
+      </a>
       <Menu isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
     </div>
   );
