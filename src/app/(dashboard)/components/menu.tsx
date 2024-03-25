@@ -2,7 +2,6 @@ import React from 'react';
 import BurgerMenu from './assets/icons/burger-menu';
 import { useRouter } from 'next/navigation'
 
-// Define an interface for your component's props
 interface MenuProps {
     isMobileMenuOpen: boolean;
     toggleMobileMenu: () => void;
@@ -19,7 +18,7 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
     return (
         <div className="h-full">
             <nav className="hidden md:block">
-                <ul className="flex pt-10 gap-20 lg:gap-40">
+                <ul className="flex pt-10 gap-10 lg:gap-40">
                     <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/exhibitions')}>Exposições</li>
                     <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/artists')}>Artistas</li>
                     <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/contacts')}>Contactos</li>
