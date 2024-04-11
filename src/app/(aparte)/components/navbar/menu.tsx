@@ -1,6 +1,6 @@
 import React from 'react';
-import BurgerMenu from './icons/burger-menu';
-import { useRouter } from 'next/navigation'
+import BurgerMenu from '../icons/burger-menu';
+import NavItem from './navItem';
 
 interface MenuProps {
     isMobileMenuOpen: boolean;
@@ -8,21 +8,14 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
-    const router = useRouter()
-
-    const handleNavigation = (path: string) => {
-        router.prefetch(path);
-        router.push(path);
-    };
 
     return (
         <div className="h-full">
             <nav className="hidden md:block">
                 <ul className="flex pt-10 gap-10 lg:gap-40">
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/exhibitions')}>Exposições</li>
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/artists')}>Artistas</li>
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/contacts')}>Contactos</li>
-                    {/* <li className='h-10 flex flex-row items-center hover:text-gray-900'>Pesquisa</a></li> */}
+                    <li><NavItem text="Exposições" href="/exhibitions" /></li>
+                    <li><NavItem text="Artistas" href="/artists" /></li>
+                    <li><NavItem text="Contactos" href="/contacts" /></li>
                     <li className='h-10 flex flex-row items-center'><a className="hover:text-gray-900">PT</a></li>
                 </ul>
             </nav>
