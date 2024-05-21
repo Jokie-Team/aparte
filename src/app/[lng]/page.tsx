@@ -1,6 +1,15 @@
-const Main = ()=> {
+import React from 'react';
+import { useTranslation } from '../i18n';
 
-    return (<p>Main</p>)
-}
+const Main = async ({ params }: { params: { lng: string } }) => {
+    const { t } = await useTranslation(params.lng, 'common')
 
-export default Main
+    return (
+        <div>
+            <h1>{t('homepage')}</h1>
+            {/* Page Content */}
+        </div>
+    );
+};
+
+export default Main;
