@@ -55,7 +55,7 @@ export default function RootLayout({
       <body>
         <section className="min-h-screen">
           <Header lng={lng} />
-          <main className="h-10">{children}</main>
+          <main className="flex-grow">{children}</main>
           <Footer />
         </section>
       </body>
