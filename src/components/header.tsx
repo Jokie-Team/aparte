@@ -3,7 +3,7 @@ import { useState } from "react";
 import Logo from "./logo/logo";
 import Menu from "./menu";
 
-export default function Header() {
+export default function Header({lng}: {lng: string}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -15,7 +15,7 @@ export default function Header() {
       <a href="/" className="h-full md:pt-12">
         <Logo />
       </a>
-      <Menu isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
+      <Menu isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} lng={lng}/>
     </div>
   );
 }
