@@ -4,12 +4,12 @@ import localFont from "next/font/local";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 
-import { dir } from 'i18next';
+import { dir } from "i18next";
 
-const languages = ['en', 'de']
+const languages = ["en", "de"];
 
 export async function generateStaticParams() {
-  return languages.map((lng) => ({ lng }))
+  return languages.map((lng) => ({ lng }));
 }
 
 export const metadata = {
@@ -40,15 +40,12 @@ const neueHaas = localFont({
 
 export default function RootLayout({
   children,
-  params: {
-    lng
-  },
+  params: { lng },
 }: {
   children: React.ReactNode;
-  params:
-  {
-    lng: string
-  }
+  params: {
+    lng: string;
+  };
 }) {
   return (
     <html lang={lng} dir={dir(lng)} className={neueHaas.variable}>
