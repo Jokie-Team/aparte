@@ -1,7 +1,6 @@
 import React from "react";
 import BorderedList from "./list/bordered-list";
 import Newsletter from "./newsletter";
-import AccordionButton from "./buttons/forward";
 
 const Info = [
   { title: "Terça - Sábado: 11h - 14h / 14h30 - 19h" },

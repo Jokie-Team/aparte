@@ -23,10 +23,6 @@ const Contacts = async ({ params }: { params: { lng: string } }) => {
             <Button text="teste" />
           </div>
           <div>
-            <div>Forward Button</div>
-            <AccordionButton text="label" />
-          </div>
-          <div>
             <div>Icon Button</div>
             <IconButton direction="left" />
           </div>

@@ -7,13 +7,16 @@ const AccordionButton = ({
   text,
   disabled = false,
   children,
+  clicked,
+  setClicked,
 }: {
   text: string;
   disabled?: boolean;
   children: ReactElement;
+  clicked: boolean;
+  setClicked: Function;
 }) => {
   const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
 
   return (
     <div
@@ -21,7 +24,7 @@ const AccordionButton = ({
         fontFamily: "var(--font-neue-haas)",
         cursor: disabled ? "none" : "pointer",
       }}
-      className="relative inline-block text-left pb-1 flex flex-col w-3/5"
+      className="relative inline-block text-left pb-1 flex flex-col "
     >
       <button
         type="button"
@@ -31,7 +34,7 @@ const AccordionButton = ({
         aria-haspopup="true"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onClick={() => setClicked((clicked) => !clicked)}
+        onClick={() => setClicked((clicked: boolean) => !clicked)}
         disabled={disabled}
       >
         <span
