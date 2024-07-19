@@ -1,54 +1,57 @@
-import React from 'react';
-import BurgerMenu from './icons/burger-menu';
-import { useRouter, usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { useTranslation } from '../app/i18n/'
-
+"use client";
+import React from "react";
+import BurgerMenu from "./icons/burger-menu";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 interface MenuProps {
-    isMobileMenuOpen: boolean;
-    toggleMobileMenu: () => void;
-    lng: string
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
 }
 
-const Menu: React.FC<MenuProps> = async ({ isMobileMenuOpen, toggleMobileMenu, lng }) => {
-    const router = useRouter()
-    const path = usePathname()
-    const { t } = await useTranslation(lng, 'common')
+const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const t = useTranslations("menu");
+  const currentLocale = useLocale();
 
-    const generateLanguageSwitchLink = () => {
-        if (path === '/en') {
-            return '/pt';
-        } else if (path === '/pt') {
-            return '/en';
-        } else if (lng === 'en') {
-            return path.replace('/en/', '/pt/');
-        } else {
-            return path.replace('/pt/', '/en/');
-        }
-    };
+  const otherLocale = currentLocale === "en" ? "pt" : "en";
+  const localizedPathname = (locale: string) => {
+    return pathname.replace(`/${currentLocale}`, `/${locale}`);
+  };
 
-    const handleNavigation = (path: string) => {
-        router.push(`/${lng}/${path}`);
-    };
-
-    return (
-        <div className="h-full">
-            <nav className="hidden md:block">
-                <ul className="flex pt-10 gap-10 lg:gap-40">
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/exhibitions')}>{t("exhibitions")}</li>
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/artists')}>{t("artists")}</li>
-                    <li className='h-10 flex flex-row items-center cursor-pointer' onClick={() => handleNavigation('/contacts')}>{t("contacts")}</li>
-                    {/* <li className='h-10 flex flex-row items-center hover:text-gray-900'>Pesquisa</a></li> */}
-                    <li className='h-10 flex flex-row items-center'><Link href={generateLanguageSwitchLink()} className='"hover:text-gray-900"'>{lng === 'en' ? "PT" : "EN"}</Link></li>
-                </ul>
-            </nav>
-            <div className="flex md:hidden items-center h-full">
-                <button onClick={toggleMobileMenu}>
-                    <BurgerMenu />
-                </button>
-            </div>
-            {/*{isMobileMenuOpen && (
+  return (
+    <div className="h-full">
+      <nav className="hidden md:block">
+        <ul className="flex pt-10 gap-10 lg:gap-40">
+          <li className="h-10 flex flex-row items-center cursor-pointer">
+            <Link href="/exhibitions">{t("exhibitions")}</Link>
+          </li>
+          <li className="h-10 flex flex-row items-center cursor-pointer">
+            <Link href="/artists">{t("artists")}</Link>
+          </li>
+          <li className="h-10 flex flex-row items-center cursor-pointer">
+            <Link href="/contacts">{t("contacts")}</Link>
+          </li>
+          {/* <li className='h-10 flex flex-row items-center hover:text-gray-900'>Pesquisa</a></li> */}
+          <li className="h-10 flex flex-row items-center">
+            <Link
+              href={localizedPathname(otherLocale)}
+              locale={false}
+              className="hover:text-gray-900"
+            >
+              {otherLocale.toUpperCase()}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="flex md:hidden items-center h-full">
+        <button onClick={toggleMobileMenu}>
+          <BurgerMenu />
+        </button>
+      </div>
+      {/*{isMobileMenuOpen && (
                 <nav className="md:hidden">
                     <ul className="flex flex-col items-center space-y-2 mt-4">
                         <li><a href="/exhibitions" className="hover:text-gray-900">{t("exhibitions")}</a></li>
@@ -59,8 +62,8 @@ const Menu: React.FC<MenuProps> = async ({ isMobileMenuOpen, toggleMobileMenu, l
                     </ul>
                 </nav>
             )} */}
-        </div >
-    );
+    </div>
+  );
 };
 
 export default Menu;
