@@ -1,0 +1,20 @@
+{
+  "menu": {
+    "homepage": "Início",
+    "artists": "Artistas",
+    "exhibitions": "Exposições",
+    "contacts": "Contactos"
+  },
+  "artists": {
+    "title": "Artistas"
+  },
+  "exhibitions": {
+    "title": "Exposições"
+  },
+  "contacts": {
+    "title": "Contactos"
+  },
+  "homepage": {
+    "title": "Página Inicial"
+  }
+}
