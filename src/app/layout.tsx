@@ -1,12 +1,9 @@
+import { LngProvider } from "./context/language";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <LngProvider>{children}</LngProvider>;
 }

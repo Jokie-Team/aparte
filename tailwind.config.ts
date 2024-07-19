@@ -8,10 +8,7 @@ export default {
   ],
   theme: {
     screens: {
-      sm: "480px",
-      md: "768px",
-      lg: "976px",
-      xl: "1440px",
+      sm: "768px",
     },
     colors: {
       black: "#2B2B2B",

@@ -5,18 +5,20 @@ const Button = ({
   filled = false,
   disabled = false,
   uppercase = false,
+  classnames,
 }: {
   text: string;
   filled?: boolean;
   disabled?: boolean;
   uppercase?: boolean;
+  classnames?: string;
 }) => {
   return (
     <button
       style={{
         fontFamily: "var(--font-neue-haas)",
       }}
-      className={`font-medium px-6 
+      className={`${classnames} font-medium px-6 
       ${uppercase ? "py-4" : "py-3"} 
       ${
         filled
