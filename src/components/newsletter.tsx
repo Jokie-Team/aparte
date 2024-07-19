@@ -11,8 +11,8 @@ const Newsletter = () => {
   const t = useTranslations("footer.newsletter");
 
   return (
-    <div className="w-7/12">
-      <div className="flex-1 w-3/5">
+    <div className="w-full sm:w-7/12">
+      <div className="flex-1 w-full sm:w-3/5 gap-20 sm:gap-0">
         <AccordionButton
           text={t("input")}
           clicked={clicked}
@@ -23,7 +23,7 @@ const Newsletter = () => {
             <Input id="email" label={t("form.email")} onChange={() => {}} />
           </>
         </AccordionButton>
-        <div className="text-left my-4 text-sm flex flex-row justify-between items-center">
+        <div className="text-left my-0 sm:my-4 text-sm flex flex-row justify-between items-center">
           <span>{t("info")}</span>
           {clicked && (
             <Button classnames="mt-2 p-1" text={t("cta")} filled={true} />

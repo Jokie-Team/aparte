@@ -9,26 +9,24 @@ interface BorderedListProps<T extends Item> {
   classNames?: string;
   items: T[];
   bulleted?: boolean;
-  listClassName?: string;
   itemClassName?: string;
 }
 
 const BorderedList = <T extends Item>({
   items,
   bulleted = false,
-  listClassName = "font-normal text-base",
-  itemClassName = "",
+  itemClassName,
 }: BorderedListProps<T>) => {
   return (
-    <ul className={`${listClassName} text-sm`}>
+    <ul className="text-base">
       {items.map((item) => (
         <li
-          className={`${itemClassName} flex border-t py-1 last:border-b cursor-pointer`}
+          className="flex border-t py-1 last:border-b cursor-pointer"
           key={item.title}
           onClick={item.onItemClick}
         >
           {bulleted && <span className="mr-2 list-disc">•</span>}
-          <div>{item.title}</div>
+          <div className={itemClassName}>{item.title}</div>
         </li>
       ))}
     </ul>

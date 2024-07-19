@@ -44,7 +44,7 @@ const AccordionButton = ({
         </span>
         {clicked ? <Arrow /> : <ArrowRight />}
       </button>
-      <div className="my-5">{clicked ? children : null}</div>
+      {clicked ? <div className="my-5">{children}</div> : null}
     </div>
   );
 };
