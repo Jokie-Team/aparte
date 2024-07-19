@@ -1,44 +1,53 @@
+"use client";
+
 import React from "react";
 import BorderedList from "./list/bordered-list";
 import Newsletter from "./newsletter";
-
-const Info = [
-  { title: "Terça - Sábado: 11h - 14h / 14h30 - 19h" },
-  { title: "Rua de Miguel Bombarda 221, 4050-381 Porto" },
-  { title: "+351 220 120 184 chamada para rede fixa nacional" },
-  { title: "Facebook" },
-];
-
-const Menu = [
-  { title: "Página Inicial" },
-  { title: "Exposições" },
-  { title: "Artistas" },
-  { title: "Contactos" },
-];
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations("footer");
+  const menuT = useTranslations("menu");
+
+  const ContactItems = [
+    { title: t("info.agenda") },
+    {
+      title: t("info.address"),
+      onItemClick: () => {
+        window.open("https://maps.app.goo.gl/CUWJBwhB4dun5ZPA9");
+      },
+    },
+    { title: t("info.phone"), onItemClick: () => {} },
+    { title: t("info.facebook"), onItemClick: () => {} },
+  ];
+
+  const MenuItems = [
+    { title: menuT("homepage") },
+    { title: menuT("exhibitions") },
+    { title: menuT("artists") },
+    { title: menuT("contacts") },
+  ];
+
   return (
     <footer className="absolute w-full bottom-0 h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center p-4  mt-auto">
       <h1 className="font-neue font-extrabold text-5xl text-left mb-10">
-        Expomos Singularidade
+        {t("title")}
       </h1>
       <div className="h-full flex ">
         <Newsletter />
         <div className="flex flex-col flex-1 justify-around">
-          <BorderedList items={Info} bulleted listClassName="font-sm" />
+          <BorderedList items={ContactItems} bulleted listClassName="font-sm" />
           <BorderedList
             classNames="mt-15"
-            items={Menu}
+            items={MenuItems}
             bulleted={false}
             listClassName="font-lg font-bold"
           />
         </div>
       </div>
       <div className="text-left text-xs">
-        <span className="pr-10 py-5">
-          © 2010 AP'ARTE Galeria de Arte Contemporânea
-        </span>
-        <span>Todos os Direitos Reservados</span>
+        <span className="pr-10 py-5">{t("madeby")}</span>
+        <span> {t("rights")}</span>
       </div>
     </footer>
   );

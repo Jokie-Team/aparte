@@ -1,5 +1,8 @@
+import { MouseEventHandler } from "react";
+
 interface Item {
   title: string;
+  onItemClick?: MouseEventHandler<HTMLLIElement>;
 }
 
 interface BorderedListProps<T extends Item> {
@@ -20,8 +23,9 @@ const BorderedList = <T extends Item>({
     <ul className={`${listClassName} text-sm`}>
       {items.map((item) => (
         <li
-          className={`${itemClassName} flex border-t py-1 last:border-b`}
+          className={`${itemClassName} flex border-t py-1 last:border-b cursor-pointer`}
           key={item.title}
+          onClick={item.onItemClick}
         >
           {bulleted && <span className="mr-2 list-disc">•</span>}
           <div>{item.title}</div>

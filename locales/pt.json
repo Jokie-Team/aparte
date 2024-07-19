@@ -5,6 +5,26 @@
     "exhibitions": "Exposições",
     "contacts": "Contactos"
   },
+  "footer": {
+    "title": "Expomos Singularidade",
+    "newsletter": {
+      "input": "Subscrever Newsletter",
+      "form": {
+        "name": "Nome",
+        "email": "Email"
+      },
+      "info": "Manter-se a par das últimas notícias",
+      "cta": "Subscrever"
+    },
+    "info": {
+      "agenda": "Terça - Sábado: 11h - 14h / 14h30 - 19h",
+      "address": "Rua de Miguel Bombarda 221, 4050-381 Porto",
+      "phone": "+351 220 120 184 chamada para rede fixa nacional",
+      "facebook": "Facebook"
+    },
+    "rights": "Todos os Direitos Reservados",
+    "madeby": "© 2010 AP'ARTE Galeria de Arte Contemporânea"
+  },
   "artists": {
     "title": "Artistas"
   },
