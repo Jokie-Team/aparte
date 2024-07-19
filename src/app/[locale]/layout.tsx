@@ -1,21 +1,9 @@
 import "../../styles/globals.css";
-import { CMS_NAME } from "@/lib/constants";
 import localFont from "next/font/local";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
-
-import { dir } from 'i18next';
-
-const languages = ['en', 'de']
-
-export async function generateStaticParams() {
-  return languages.map((lng) => ({ lng }))
-}
-
-export const metadata = {
-  title: `Next.js and ${CMS_NAME} Example`,
-  description: `This is a blog built with Next.js and ${CMS_NAME}.`,
-};
+import { getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 const neueHaas = localFont({
   src: [
@@ -38,26 +26,28 @@ const neueHaas = localFont({
   variable: "--font-neue-haas",
 });
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
-  params: {
-    lng
-  },
+  params: { lng },
 }: {
   children: React.ReactNode;
-  params:
-  {
-    lng: string
-  }
+  params: {
+    lng: string;
+  };
 }) {
+  // Receive messages provided in `i18n.ts`
+  const messages = await getMessages();
+
   return (
-    <html lang={lng} dir={dir(lng)} className={neueHaas.variable}>
+    <html lang={lng} className={neueHaas.variable}>
       <body>
-        <section className="min-h-screen">
-          <Header lng={lng} />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </section>
+        <NextIntlClientProvider messages={messages}>
+          <section className="min-h-screen">
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </section>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
