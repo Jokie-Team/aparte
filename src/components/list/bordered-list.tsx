@@ -21,7 +21,9 @@ const BorderedList = <T extends Item>({
     <ul className="text-base">
       {items.map((item) => (
         <li
-          className="flex border-t py-1 last:border-b cursor-pointer"
+          className={`flex border-t py-1 last:border-b ${
+            item.onItemClick && "cursor-pointer"
+          }`}
           key={item.title}
           onClick={item.onItemClick}
         >
