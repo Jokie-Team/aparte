@@ -23,7 +23,7 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
 
   return (
     <div className="h-full">
-      <nav className="hidden md:block">
+      <nav className="hidden sm:block">
         <ul className="flex pt-10 gap-10 lg:gap-40">
           <li className="h-10 flex flex-row items-center cursor-pointer">
             <Link href="/exhibitions">{t("exhibitions")}</Link>
@@ -46,7 +46,7 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
           </li>
         </ul>
       </nav>
-      <div className="flex md:hidden items-center h-full">
+      <div className="flex sm:hidden items-center h-full">
         <button onClick={toggleMobileMenu}>
           <BurgerMenu />
         </button>

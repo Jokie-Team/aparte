@@ -18,10 +18,8 @@ export default {
       white: "#F9F9F9",
       orange: "#FE531D",
     },
-    extend: {
-      fontFamily: {
-        neue: "var(--font-neue-haas)",
-      },
+    fontFamily: {
+      neue: "var(--font-neue-haas)",
     },
   },
   future: {

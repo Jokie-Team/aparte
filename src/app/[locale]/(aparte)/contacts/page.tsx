@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "@/src/components/buttons/button";
 import DropdownButton from "@/src/components/buttons/dropdown";
-import ForwardButton from "@/src/components/buttons/forward";
 import IconButton from "@/src/components/buttons/icon";
 import TextButton from "@/src/components/buttons/text";
 import { getTranslations } from "next-intl/server";
