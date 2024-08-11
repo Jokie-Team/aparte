@@ -22,16 +22,16 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
   };
 
   return (
-    <div className="h-full">
+    <>
       <nav className="hidden sm:block">
-        <ul className="flex pt-10 gap-10 lg:gap-40">
-          <li className="h-10 flex flex-row items-center cursor-pointer">
+        <ul className="flex gap-10 lg:gap-40">
+          <li className="flex flex-row items-center cursor-pointer">
             <Link href="/exhibitions">{t("exhibitions")}</Link>
           </li>
-          <li className="h-10 flex flex-row items-center cursor-pointer">
+          <li className="flex flex-row items-center cursor-pointer">
             <Link href="/artists">{t("artists")}</Link>
           </li>
-          <li className="h-10 flex flex-row items-center cursor-pointer">
+          <li className="flex flex-row items-center cursor-pointer">
             <Link href="/contacts">{t("contacts")}</Link>
           </li>
           {/* <li className='h-10 flex flex-row items-center hover:text-gray-900'>Pesquisa</a></li> */}
@@ -62,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
                     </ul>
                 </nav>
             )} */}
-    </div>
+    </>
   );
 };
 
