@@ -43,7 +43,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full sm:h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center px-6 py-10  mt-auto">
+    <footer className="sm:static relative w-full bottom-0 h-full sm:h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center px-6 pt-10  mt-auto">
       <Heading1 classnames="text-left mb-10">{t("title")}</Heading1>
       <div className="h-full flex flex-col sm:flex-row gap-20 sm:gap-0">
         <Newsletter />

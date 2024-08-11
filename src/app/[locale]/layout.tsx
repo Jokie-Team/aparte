@@ -42,9 +42,13 @@ export default async function LocaleLayout({
     <html lang={lng} className={neueHaas.variable}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <section className="min-h-screen">
-            <Header />
-            <main>{children}</main>
+          <section className="flex flex-col">
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex flex-1 bg-gray-100 overflow-y-auto">
+                {children}
+              </main>
+            </div>
             <Footer />
           </section>
         </NextIntlClientProvider>
