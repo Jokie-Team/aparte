@@ -1,26 +1,37 @@
 import React from "react";
 import Carousel from "@/src/components/carousel";
+import Sidebar from "@/src/components/sidebar/sidebar";
 import { getTranslations } from "next-intl/server";
 
 const Exhibitions = async () => {
   const t = await getTranslations("exhibitions");
-
-  const images = [
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/150",
+  const exposicoes = [
+    {
+      categoria: 'Atuais',
+      titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+    },
+    {
+      categoria: 'Futuras',
+      titulos: ['Universo, Gesto e Legado', 'Marian Van Der Zwan & Mark', 'Alejandra Majewski'],
+    },
+    {
+      categoria: 'Passadas',
+      anos: [
+        {
+          ano: 2023,
+          titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+        },
+        {
+          ano: 2022,
+          titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+        },
+      ],
+    },
   ];
 
   return (
     <div>
-      <h1>{t("title")}</h1>
-      <Carousel images={images} visibleCount={6} />
+      <Sidebar tipo={"exposicoes"} exposicoes={exposicoes} />
     </div>
   );
 };
