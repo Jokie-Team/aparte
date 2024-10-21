@@ -1,80 +1,123 @@
 "use client";
 import { useState } from 'react';
+import Search from '../search/search';
 
-interface Exposicao {
-  categoria: string;
-  anos?: {
-    ano: number;
-    titulos: string[];
+interface Exhibition {
+  category: string;
+  years?: {
+    year: number;
+    titles: string[];
   }[];
-  titulos?: string[];
+  titles?: string[];
 }
 
-interface Artista {
-  letra: string;
-  nomes: string[];
+interface Artist {
+  letter: string;
+  names: string[];
 }
 
 interface SidebarProps {
-  tipo: 'exposicoes' | 'artistas';
-  exposicoes?: Exposicao[];
-  artistas?: Artista[];
+  type: 'exhibitions' | 'artists';
+  exhibitions?: Exhibition[];
+  artists?: Artist[];
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ tipo, exposicoes, artistas }) => {
-  const [pesquisa, setPesquisa] = useState('');
+const Sidebar: React.FC<SidebarProps> = ({ type, exhibitions, artists }) => {
+  const [search, setSearch] = useState('');
 
-  const handlePesquisa = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPesquisa(e.target.value);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value.toLowerCase());
   };
 
-  const renderExposicoes = () => {
+  const filterTitles = (titles: string[]) => {
+    return titles.filter((title) => title.toLowerCase().includes(search));
+  };
+
+  const renderExhibitions = () => {
     return (
       <div>
-        {exposicoes?.map((expo) => (
-          <div key={expo.categoria} className="mb-8">
-            <h2 className="text-xl font-bold">{expo.categoria}</h2>
-            {expo.anos ? (
-              expo.anos.map((ano) => (
-                <div key={ano.ano} className="ml-4">
-                  <h3 className="text-lg font-semibold">{ano.ano}</h3>
-                  <ul>
-                    {ano.titulos.map((titulo) => (
-                      <li key={titulo} className="ml-4 border-b">
-                        {titulo}
-                      </li>
-                    ))}
-                  </ul>
+        {exhibitions?.map((expo) => (
+          expo.years ? (
+            <div key={expo.category}>
+              <h2 className="text-xl font-bold mb-2">{expo.category}</h2>
+              <div className="mb-12 border-b border-gray-200" />
+              {expo.years.map((year) => (
+                <div key={year.year}>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-lg font-medium mb-1">{year.year}</h3>
+                    <ul>
+                      {filterTitles(year.titles).length > 0 &&
+                        filterTitles(year.titles).map((title, index) => (
+                          <li
+                            key={title}
+                            className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? 'border-t' : ''
+                              }`}
+                          >
+                            {title}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  {expo.years && expo.years.indexOf(year) !== expo.years.length - 1 && (
+                    <div className="my-12 border-b border-gray-200" />
+                  )}
                 </div>
-              ))
-            ) : (
-              <ul className="ml-4">
-                {expo.titulos?.map((titulo) => (
-                  <li key={titulo} className="border-b">
-                    {titulo}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <div key={expo.category} className="flex flex-row justify-between">
+                <h2 className="text-xl font-bold mb-2">{expo.category}</h2>
+                <ul>
+                  {filterTitles(expo.titles || []).length > 0 && (
+                    filterTitles(expo.titles || []).map((title, index) => (
+                      <li
+                        key={title}
+                        className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? 'border-t' : ''
+                          }`}
+                      >
+                        {title}
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+              <div className="my-12 border-b border-gray-300" />
+            </div>
+
+          )
         ))}
       </div>
     );
   };
 
-  const renderArtistas = () => {
+
+  const filterNames = (names: string[]) => {
+    return names.filter((name) => name.toLowerCase().includes(search));
+  };
+
+  const renderArtists = () => {
     return (
       <div>
-        {artistas?.map((artista) => (
-          <div key={artista.letra} className="mb-8">
-            <h2 className="text-xl font-bold">{artista.letra}</h2>
-            <ul className="ml-4">
-              {artista.nomes.map((nome) => (
-                <li key={nome} className="border-b">
-                  {nome}
-                </li>
-              ))}
-            </ul>
+        {artists?.map((artist) => (
+          <div>
+            <div key={artist.letter} className="flex flex-row justify-between">
+              <h2 className="text-lg font-bold mb-2">{artist.letter}</h2>
+              <ul>
+                {filterNames(artist.names).length > 0 && (
+                  filterNames(artist.names).map((name, index) => (
+                    <li
+                      key={name}
+                      className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? 'border-t' : ''
+                        }`}
+                    >
+                      {name}
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+            <div className="my-12 border-b border-gray-300" />
           </div>
         ))}
       </div>
@@ -82,20 +125,10 @@ const Sidebar: React.FC<SidebarProps> = ({ tipo, exposicoes, artistas }) => {
   };
 
   return (
-    <aside className="w-64 bg-gray-100 p-6">
-      {/* Barra de Pesquisa */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Pesquisa"
-          value={pesquisa}
-          onChange={handlePesquisa}
-          className="w-full p-2 border-b"
-        />
-      </div>
+    <aside className="w-96 bg-gray-50 p-6 space-y-12">
+      <Search searchValue={search} handleSearchChange={handleSearchChange} />
 
-      {/* Conteúdo adaptável */}
-      {tipo === 'exposicoes' ? renderExposicoes() : renderArtistas()}
+      {type === 'exhibitions' ? renderExhibitions() : renderArtists()}
     </aside>
   );
 };

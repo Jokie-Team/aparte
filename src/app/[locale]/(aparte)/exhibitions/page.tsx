@@ -5,33 +5,34 @@ import { getTranslations } from "next-intl/server";
 
 const Exhibitions = async () => {
   const t = await getTranslations("exhibitions");
-  const exposicoes = [
+  const exhibitions = [
     {
-      categoria: 'Atuais',
-      titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+      category: 'Atuais',
+      titles: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
     },
     {
-      categoria: 'Futuras',
-      titulos: ['Universo, Gesto e Legado', 'Marian Van Der Zwan & Mark', 'Alejandra Majewski'],
+      category: 'Futuras',
+      titles: ['Universo, Gesto e Legado', 'Marian Van Der Zwan & Mark', 'Alejandra Majewski'],
     },
     {
-      categoria: 'Passadas',
-      anos: [
+      category: 'Passadas',
+      years: [
         {
-          ano: 2023,
-          titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+          year: 2023,
+          titles: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
         },
         {
-          ano: 2022,
-          titulos: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
+          year: 2022,
+          titles: ['Universo, Gesto e Legado', 'Alejandra Majewski', 'Alexandre Cabrita', 'Aline Setton'],
         },
       ],
     },
   ];
 
   return (
-    <div>
-      <Sidebar tipo={"exposicoes"} exposicoes={exposicoes} />
+    <div className="sm:flex sm:flex-row">
+      <Sidebar type={"exhibitions"} exhibitions={exhibitions} />
+      <h1>{t("title")}</h1>
     </div>
   );
 };

@@ -11,8 +11,8 @@ export default function Header() {
   };
 
   return (
-    <div className="flex items-center flex-row justify-between font-neue w-full h-16 border-b border-gray-900 p-4 md:py-0 md:px-10">
-      <a href="/" className="md:pt-12">
+    <div className="fixed top-0 w-full z-50 flex items-center flex-row justify-between font-neue h-16 p-4 md:py-0 md:px-10 bg-[#ffffff]">
+      <a href="/" className="">
         <Logo />
       </a>
       <Menu
