@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    loader: "custom",
+    loader: "default", // Usa o loader padrão do Next.js
     formats: ["image/avif", "image/webp"],
   },
   webpack: (config) => {

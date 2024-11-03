@@ -2,6 +2,7 @@ import React from "react";
 import Carousel from "@/src/components/carousel";
 import Sidebar from "@/src/components/sidebar/sidebar";
 import { getTranslations } from "next-intl/server";
+import { Heading2 } from "@/src/components/headings/headings";
 
 const Exhibitions = async () => {
   const t = await getTranslations("exhibitions");
@@ -32,7 +33,7 @@ const Exhibitions = async () => {
   return (
     <div className="sm:flex sm:flex-row">
       <Sidebar type={"exhibitions"} exhibitions={exhibitions} />
-      <h1>{t("title")}</h1>
+      <Heading2 className="mt-32">{t("title")}</Heading2>
     </div>
   );
 };

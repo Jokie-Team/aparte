@@ -3,7 +3,11 @@ import { useState } from "react";
 import Logo from "./logo/logo";
 import Menu from "./menu";
 
-export default function Header() {
+interface HeaderProps {
+  showBorder: boolean;
+}
+
+export default function Header({ showBorder }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -11,14 +15,14 @@ export default function Header() {
   };
 
   return (
-    <div className="fixed top-0 w-full z-50 flex items-center flex-row justify-between font-neue h-16 p-4 md:py-0 md:px-10 bg-[#ffffff]">
-      <a href="/" className="">
+    <div className={`fixed top-0 w-full z-50 flex flex-row justify-between ${showBorder ? "border-b" : ""} font-neue h-24 px-10 md:py-0 md:px-10 bg-[#ffffff]`} >
+      <a href="/" className="pt-12">
         <Logo />
       </a>
       <Menu
         isMobileMenuOpen={isMobileMenuOpen}
         toggleMobileMenu={toggleMobileMenu}
       />
-    </div>
+    </div >
   );
 }
