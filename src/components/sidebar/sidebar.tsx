@@ -3,13 +3,21 @@ import { useState } from 'react';
 import Search from '../search/search';
 import { Body, Heading4 } from '../headings/headings';
 
+interface ExhibitionItem {
+  title: string;
+  description: string;
+  artists: string;
+  dates: string;
+  imageUrl: string;
+}
+
 interface Exhibition {
   category: string;
   years?: {
     year: number;
-    titles: string[];
+    exhibitions: ExhibitionItem[];
   }[];
-  titles?: string[];
+  exhibitions?: ExhibitionItem[];
 }
 
 interface Artist {
@@ -34,21 +42,52 @@ const Sidebar: React.FC<SidebarProps> = ({ type, exhibitions, artists }) => {
     return titles.filter((title) => title.toLowerCase().includes(search));
   };
 
+  const getTitlesByYear = (exhibitions: Exhibition[]) => {
+    const titlesByYear: Record<number, string[]> = {};
+
+    exhibitions.forEach((expo) => {
+      expo.years?.forEach((yearData) => {
+        if (!titlesByYear[yearData.year]) {
+          titlesByYear[yearData.year] = [];
+        }
+        const titles = yearData.exhibitions.map((exhibition) => exhibition.title);
+        titlesByYear[yearData.year].push(...titles);
+      });
+    });
+
+    return titlesByYear;
+  };
+
+  const getTitlesWithoutYear = (exhibitions: Exhibition[]) => {
+    const titlesWithoutYear: Record<string, string[]> = {};
+
+    exhibitions.forEach((expo) => {
+      if (expo.exhibitions && !expo.years) {
+        titlesWithoutYear[expo.category] = expo.exhibitions.map((exhibition) => exhibition.title);
+      }
+    });
+
+    return titlesWithoutYear;
+  };
+
   const renderExhibitions = () => {
+    const titlesByYear = getTitlesByYear(exhibitions || []);
+    const titlesWithoutYear = getTitlesWithoutYear(exhibitions || []);
+
     return (
       <div>
         {exhibitions?.map((expo) => (
           expo.years ? (
             <div key={expo.category}>
               <Heading4>{expo.category}</Heading4>
-              <div className="mb-12 border-b border-gray-200" />
+              <div className="mt-6 mb-12 border-b border-gray-200" />
               {expo.years.map((year) => (
                 <div key={year.year}>
                   <div className="flex flex-row justify-between">
                     <Body>{year.year}</Body>
                     <ul>
-                      {filterTitles(year.titles).length > 0 &&
-                        filterTitles(year.titles).map((title, index) => (
+                      {filterTitles(titlesByYear[year.year]).length > 0 &&
+                        filterTitles(titlesByYear[year.year]).map((title, index) => (
                           <li
                             key={title}
                             className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? 'border-t' : ''
@@ -70,8 +109,8 @@ const Sidebar: React.FC<SidebarProps> = ({ type, exhibitions, artists }) => {
               <div key={expo.category} className="flex flex-row justify-between">
                 <Heading4>{expo.category}</Heading4>
                 <ul>
-                  {filterTitles(expo.titles || []).length > 0 && (
-                    filterTitles(expo.titles || []).map((title, index) => (
+                  {filterTitles(titlesWithoutYear[expo.category]).length > 0 && (
+                    filterTitles(titlesWithoutYear[expo.category]).map((title, index) => (
                       <li
                         key={title}
                         className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? 'border-t' : ''
@@ -126,7 +165,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type, exhibitions, artists }) => {
   };
 
   return (
-    <aside className="bg-gray-50 my-10 ml-12 mr-24 space-y-12 w-80">
+    <aside className="space-y-12 w-2/5">
       <Search searchValue={search} handleSearchChange={handleSearchChange} />
 
       {type === 'exhibitions' ? renderExhibitions() : renderArtists()}

@@ -12,7 +12,7 @@ const Artists = async ({ params }: { params: { lng: string } }) => {
   ];
 
   return (
-    <div className="sm:flex sm:flex-row">
+    <div className="sm:flex sm:flex-row mt-12">
       <Sidebar type={"artists"} artists={artists} />
       <Heading2>{t("title")}</Heading2>
     </div>
