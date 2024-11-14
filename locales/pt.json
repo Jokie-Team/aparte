@@ -8,13 +8,13 @@
   "footer": {
     "title": "Expomos Singularidade",
     "newsletter": {
-      "input": "Subscrever Newsletter",
+      "input": "SUBSCREVA A NEWSLETTER",
       "form": {
         "name": "Nome",
         "email": "Email"
       },
       "info": "Manter-se a par das últimas notícias",
-      "cta": "Subscrever"
+      "cta": "Subscreva"
     },
     "info": {
       "agenda": "Terça - Sábado: 11h - 14h / 14h30 - 19h",
@@ -32,7 +32,7 @@
     "title": "Exposições"
   },
   "contacts": {
-    "title": "Contactos"
+    "title": "Contacte-nos"
   },
   "homepage": {
     "title": "Página Inicial"

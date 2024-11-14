@@ -4,27 +4,7 @@ import Footer from "../../components/footer";
 import Header from "../../components/header";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-
-const neueHaas = localFont({
-  src: [
-    {
-      path: "../../public/fonts/NeueHaasUnicaPro-XBlack.ttf",
-      weight: "800",
-      style: "extra-bold",
-    },
-    {
-      path: "../../public/fonts/NeueHaasUnicaPro-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasUnicaPro-Medium.ttf",
-      weight: "600",
-      style: "medium",
-    },
-  ],
-  variable: "--font-neue-haas",
-});
+import ScrollUp from "@/src/components/buttons/scrollup";
 
 export default async function LocaleLayout({
   children,
@@ -39,17 +19,18 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={lng} className={neueHaas.variable}>
+    <html lang={lng}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex flex-1 bg-gray-100 overflow-y-auto">
+              <Header showBorder={false} />
+              <main className="pt-24 flex flex-1 bg-gray-100 overflow-y-auto">
                 {children}
               </main>
             </div>
             <Footer />
+            <ScrollUp direction="up" />
           </section>
         </NextIntlClientProvider>
       </body>

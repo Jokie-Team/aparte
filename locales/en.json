@@ -6,15 +6,15 @@
     "contacts": "Contacts"
   },
   "footer": {
-    "title": "Expomos Singularidade",
+    "title": "Exhibiting Singularity",
     "newsletter": {
-      "input": "Subscrever Newsletter",
+      "input": "SUBSCRIBE THE NEWSLETTER",
       "form": {
-        "name": "Nome",
+        "name": "Name",
         "email": "Email"
       },
-      "info": "Manter-se a par das últimas notícias",
-      "cta": "Subscrever"
+      "info": "Keep up to date with the last news.",
+      "cta": "Subscribe"
     },
     "info": {
       "agenda": "Tuesday - Saturday: 11AM - 2AM / 2:30AM - 7PM",
@@ -22,7 +22,7 @@
       "phone": "+351 220 120 184 call to the national fixed network.",
       "facebook": "Facebook"
     },
-    "rights": "Todos os Direitos Reservados",
+    "rights": "All rights reserved.",
     "madeby": "© 2010 AP'ARTE Galeria de Arte Contemporânea"
   },
   "artists": {
@@ -32,7 +32,7 @@
     "title": "Exhibitions"
   },
   "contacts": {
-    "title": "Contacts"
+    "title": "Contact us"
   },
   "homepage": {
     "title": "Homepage"

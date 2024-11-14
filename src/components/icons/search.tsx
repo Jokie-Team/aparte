@@ -1,7 +1,7 @@
 export const SearchIcon = () => (
   <svg
-    width="16"
-    height="16"
+    width="20"
+    height="20"
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -11,10 +11,10 @@ export const SearchIcon = () => (
       maskUnits="userSpaceOnUse"
       x="0"
       y="0"
-      width="16"
-      height="16"
+      width="20"
+      height="20"
     >
-      <rect width="16" height="16" fill="#D9D9D9" />
+      <rect width="20" height="20" fill="#D9D9D9" />
     </mask>
     <g mask="url(#mask0_81_695)">
       <path
