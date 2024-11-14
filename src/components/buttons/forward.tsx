@@ -2,6 +2,7 @@
 import { ReactElement, useState } from "react";
 import { ArrowRight } from "../icons/arrow-right";
 import { Arrow } from "../icons/arrow-down";
+import clsx from "clsx";
 
 const AccordionButton = ({
   text,
@@ -20,11 +21,10 @@ const AccordionButton = ({
 
   return (
     <div
-      style={{
-        fontFamily: "var(--font-neue-haas)",
-        cursor: disabled ? "none" : "pointer",
-      }}
-      className="relative inline-block text-left pb-1 flex flex-col "
+      className={clsx("relative text-left pb-1 flex flex-col", {
+        "cursor-none": disabled,
+        "cursor-pointer": !disabled,
+      })}
     >
       <button
         type="button"
@@ -38,7 +38,10 @@ const AccordionButton = ({
         disabled={disabled}
       >
         <span
-          className={`transition-all duration-300 ${hovered ? "mr-8" : "mr-4"}`}
+          className={clsx("transition-all duration-300", {
+            "mr-8": hovered,
+            "mr-4": !hovered,
+          })}
         >
           {text}
         </span>

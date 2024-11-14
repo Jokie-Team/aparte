@@ -1,79 +1,71 @@
-import { Heading2 } from "@/src/components/headings/headings";
 import Sidebar from "@/src/components/sidebar/sidebar";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 import Section from "@/src/components/section/section";
 
-interface ArtistItem {
-  name: string;
-  bio: string;
-  imageUrl: string;
-  artworks: string[];
-}
-
-const Artists = async ({ params }: { params: { lng: string } }) => {
+const Artists = async () => {
   const t = await getTranslations("artists");
 
   const artists = [
     {
-      letter: 'A',
+      letter: "A",
       artists: [
         {
-          name: 'Alejandra Majewski',
-          bio: 'É impossível saber o caminho pelo qual se percorre a criatividade. É uma receita incerta, cujos ingredientes misturam um tanto de subjetividade, fantasia e sonho, com quantidades elevadas da realidade social, política e económica vivida pelo artista.',
-          imageUrl: '/images/1.jpeg',
+          name: "Alejandra Majewski",
+          bio: "É impossível saber o caminho pelo qual se percorre a criatividade. É uma receita incerta, cujos ingredientes misturam um tanto de subjetividade, fantasia e sonho, com quantidades elevadas da realidade social, política e económica vivida pelo artista.",
+          imageUrl: "/images/1.jpeg",
           artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+          ],
         },
         {
-          name: 'Alexandre Cabrita',
-          bio: 'Artista multifacetado explorando novos estilos e conceitos.',
-          imageUrl: '/images/1.jpeg',
+          name: "Alexandre Cabrita",
+          bio: "Artista multifacetado explorando novos estilos e conceitos.",
+          imageUrl: "/images/1.jpeg",
           artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+          ],
         },
       ],
     },
     {
-      letter: 'M',
+      letter: "M",
       artists: [
         {
-          name: 'Marian Van Der Zwan',
-          bio: 'Exploração artística focada na abstração e colaboração.',
-          imageUrl: '/images/1.jpeg',
+          name: "Marian Van Der Zwan",
+          bio: "Exploração artística focada na abstração e colaboração.",
+          imageUrl: "/images/1.jpeg",
           artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+          ],
         },
         {
-          name: 'Mark Rothko',
-          bio: 'Famoso por suas pinturas de grande escala e uso de cor.',
-          imageUrl: '/images/1.jpeg',
+          name: "Mark Rothko",
+          bio: "Famoso por suas pinturas de grande escala e uso de cor.",
+          imageUrl: "/images/1.jpeg",
           artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+            "/images/1.jpeg",
+          ],
         },
       ],
     },
@@ -81,9 +73,15 @@ const Artists = async ({ params }: { params: { lng: string } }) => {
 
   return (
     <div className="m-12 flex flex-row gap-24">
-      <Sidebar type="artists" artists={artists.map(group => ({ letter: group.letter, names: group.artists.map(artist => artist.name) }))} />
+      <Sidebar
+        type="artists"
+        artists={artists.map((group) => ({
+          letter: group.letter,
+          names: group.artists.map((artist) => artist.name),
+        }))}
+      />
       <div className="w-full">
-        <Heading2 className="mb-8">{t("title")}</Heading2>
+        <h2 className="mb-8">{t("title")}</h2>
         {artists.map((item, index) => (
           <>
             <div key={item.letter}>

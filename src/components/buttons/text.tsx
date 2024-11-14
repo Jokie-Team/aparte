@@ -3,12 +3,7 @@ import { Arrow } from "../icons/arrow-down";
 
 const TextButton = ({ text }: { text: string }) => {
   return (
-    <div
-      style={{
-        fontFamily: "var(--font-neue-haas)",
-      }}
-      className="relative inline-block text-left cursor-pointer pb-1"
-    >
+    <div className="relative inline-block text-left cursor-pointer pb-1">
       <button
         type="button"
         className="inline-flex space-x-14 w-full justify-center gap-x-1.5 py-2"

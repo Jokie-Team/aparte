@@ -9,7 +9,7 @@
             "id": "p5asbbjx1p90"
           }
         },
-        "id": "author",
+        "id": "Artist",
         "type": "ContentType",
         "createdAt": "2020-04-22T09:32:50.535Z",
         "updatedAt": "2020-04-22T09:32:50.885Z",
@@ -48,7 +48,7 @@
         }
       },
       "displayField": "name",
-      "name": "Author",
+      "name": "Artist",
       "description": "",
       "fields": [
         {
@@ -257,14 +257,14 @@
           "omitted": false
         },
         {
-          "id": "author",
-          "name": "Author",
+          "id": "Artist",
+          "name": "Artist",
           "type": "Link",
           "localized": false,
           "required": true,
           "validations": [
             {
-              "linkContentType": ["author"]
+              "linkContentType": ["Artist"]
             }
           ],
           "disabled": false,
@@ -305,7 +305,7 @@
         },
         "contentType": {
           "sys": {
-            "id": "author",
+            "id": "Artist",
             "type": "Link",
             "linkType": "ContentType"
           }
@@ -406,7 +406,7 @@
           "widgetNamespace": "builtin"
         },
         {
-          "fieldId": "author",
+          "fieldId": "Artist",
           "widgetId": "entryLinkEditor",
           "widgetNamespace": "builtin"
         }
@@ -462,7 +462,7 @@
   "webhooks": [],
   "roles": [
     {
-      "name": "Author",
+      "name": "Artist",
       "description": "Allows editing of content",
       "policies": [
         {

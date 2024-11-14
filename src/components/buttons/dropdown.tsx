@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ExpandMoreIcon } from "../icons/expand-more";
+import clsx from "clsx";
 
 const DropdownButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,6 @@ const DropdownButton = () => {
 
   return (
     <div
-      style={{ fontFamily: "var(--font-neue-haas)" }}
       className="relative inline-block text-left cursor-pointer"
       onClick={handleClick}
     >
@@ -25,9 +25,10 @@ const DropdownButton = () => {
         <ExpandMoreIcon rotate180={isOpen} />
       </button>
       <div
-        className={`pt-6 text-left absolute left-0 top-0 z-10 mt-2 w-56 origin-top-right rounded-md ${
-          isOpen ? "block" : "hidden"
-        }`}
+        className={clsx(
+          "pt-6 text-left absolute left-0 top-0 z-10 mt-2 w-56 origin-top-right rounded-md",
+          { block: isOpen, hidden: !isOpen }
+        )}
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="menu-button"

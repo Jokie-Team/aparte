@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export type RotateDirection = "up" | "left" | "down" | "right";
 
 export const Arrow = ({
@@ -15,15 +17,11 @@ export const Arrow = ({
     viewBox="0 0 40 40"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={
-      rotate === "up"
-        ? "rotate-0"        // Set to no rotation for "up"
-        : rotate === "right"
-          ? "rotate-90"       // Rotate 90 degrees for "right"
-          : rotate === "down"
-            ? "rotate-180"      // Rotate 180 degrees for "down"
-            : "-rotate-90"      // Rotate -90 degrees for "left"
-    }
+    className={clsx("-rotate-90", {
+      "rotate-0": rotate === "up",
+      "rotate-90": rotate === "right",
+      "rotate-180": rotate === "down",
+    })}
   >
     <mask
       id="mask0_2404_2560"

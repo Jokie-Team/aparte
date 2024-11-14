@@ -10,7 +10,7 @@ This example showcases Next.js's [Static Generation](https://nextjs.org/docs/bas
 
 Using the Deploy Button below, you'll deploy the Next.js project as well as connect it to your Contentful space using the Vercel Contentful Integration.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fcms-contentful&project-name=nextjs-contentful-blog&repository-name=nextjs-contentful-blog&demo-title=Next.js+Blog&demo-description=Static+blog+with+multiple+authors+using+Draft+Mode&demo-url=https%3A%2F%2Fnext-blog-contentful.vercel.app%2F&demo-image=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1625705016%2Ffront%2Fexamples%2FCleanShot_2021-07-07_at_19.43.15_2x.png&integration-ids=oac_aZtAZpDfT1lX3zrnWy7KT9VA&env=CONTENTFUL_PREVIEW_SECRET&envDescription=Any%20URL%20friendly%20value%20to%20secure%20Draft%20Mode)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fcms-contentful&project-name=nextjs-contentful-blog&repository-name=nextjs-contentful-blog&demo-title=Next.js+Blog&demo-description=Static+blog+with+multiple+artists+using+Draft+Mode&demo-url=https%3A%2F%2Fnext-blog-contentful.vercel.app%2F&demo-image=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1625705016%2Ffront%2Fexamples%2FCleanShot_2021-07-07_at_19.43.15_2x.png&integration-ids=oac_aZtAZpDfT1lX3zrnWy7KT9VA&env=CONTENTFUL_PREVIEW_SECRET&envDescription=Any%20URL%20friendly%20value%20to%20secure%20Draft%20Mode)
 
 ### Related examples
 
@@ -65,7 +65,7 @@ After creating an account, create a new empty **space** from the [dashboard](htt
 
 The [content model](https://www.contentful.com/developers/docs/concepts/data-model/) defines the data structures of your application/websites. The structures are flexible and you can tailor them to your needs.
 
-For this example you need to create a content model that defines an author and a post content type. **You can create these two by running a script or by doing it manually** to familiarize yourself with the Contentful user interface.
+For this example you need to create a content model that defines an Artist and a post content type. **You can create these two by running a script or by doing it manually** to familiarize yourself with the Contentful user interface.
 
 #### Run a script to create the content model
 
@@ -115,11 +115,11 @@ This command will create the needed content structures and set up your Contentfu
 
 #### Create the content model manually
 
-##### Create an `Author` content type
+##### Create an `Artist` content type
 
 From your contentful space, go to **Content model** and add a new content type:
 
-- Give it the **Name** `Author`, the **Api Identifier** should be `author`
+- Give it the **Name** `Artist`, the **Api Identifier** should be `Artist`
 
 Once the content model is saved, add these fields (you don't have to modify the settings unless specified):
 
@@ -142,7 +142,7 @@ Next, add these fields (you don't have to modify the settings unless specified):
 - `coverImage` - **Media** field (type **one file**)
 - `date` - **Date and time** field
 - `slug` - **Text** field. You can optionally go to the settings of this field, and under **Appearance**, select **Slug** to display it as a slug of the `title` field.
-- `author` - **Reference** field (type **one reference**)
+- `Artist` - **Reference** field (type **one reference**)
 
 Save the content type and continue.
 
@@ -156,9 +156,9 @@ After setting up the content model (either manually or by running `npm run setup
 
 ### Step 4. Populate Content
 
-Go to the **Content** section in your space, then click on **Add entry** and select the **Author** content type:
+Go to the **Content** section in your space, then click on **Add entry** and select the **Artist** content type:
 
-- You just need **1 author entry**.
+- You just need **1 Artist entry**.
 - Use dummy data for the text.
 - For the image, you can download one from [Unsplash](https://unsplash.com/).
 
@@ -167,7 +167,7 @@ Next, create another entry with the content type **Post**:
 - We recommend creating at least **2 post entries**.
 - Use dummy data for the text.
 - For images, you can download them from [Unsplash](https://unsplash.com/).
-- Pick the **author** you created earlier.
+- Pick the **Artist** you created earlier.
 
 **Important:** For each entry and asset, you need to click on **Publish**. If not, the entry will be in draft state.
 
@@ -255,7 +255,7 @@ Alternatively, you can deploy using our template by clicking on the Deploy butto
 
 This will deploy the Next.js project as well as connect it to your Contentful space using the Vercel Contentful Integration. If you are using Draft Mode, make sure to add `CONTENTFUL_PREVIEW_SECRET` as an [Environment Variable](https://vercel.com/docs/concepts/projects/environment-variables) as well.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fcms-contentful&project-name=nextjs-contentful-blog&repository-name=nextjs-contentful-blog&demo-title=Next.js+Blog&demo-description=Static+blog+with+multiple+authors+using+Draft+Mode&demo-url=https%3A%2F%2Fnext-blog-contentful.vercel.app%2F&demo-image=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1625705016%2Ffront%2Fexamples%2FCleanShot_2021-07-07_at_19.43.15_2x.png&integration-ids=oac_aZtAZpDfT1lX3zrnWy7KT9VA&env=CONTENTFUL_PREVIEW_SECRET,CONTENTFUL_REVALIDATE_SECRET&envDescription=Any%20URL%20friendly%20value%20to%20secure%20Your%20App)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fcms-contentful&project-name=nextjs-contentful-blog&repository-name=nextjs-contentful-blog&demo-title=Next.js+Blog&demo-description=Static+blog+with+multiple+artists+using+Draft+Mode&demo-url=https%3A%2F%2Fnext-blog-contentful.vercel.app%2F&demo-image=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1625705016%2Ffront%2Fexamples%2FCleanShot_2021-07-07_at_19.43.15_2x.png&integration-ids=oac_aZtAZpDfT1lX3zrnWy7KT9VA&env=CONTENTFUL_PREVIEW_SECRET,CONTENTFUL_REVALIDATE_SECRET&envDescription=Any%20URL%20friendly%20value%20to%20secure%20Your%20App)
 
 ### Step 9. Try using On-Demand Revalidation
 
