@@ -21,7 +21,6 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
     return pathname.replace(`/${currentLocale}`, `/${locale}`);
   };
 
-  // Remove o prefixo de idioma do pathname para comparações
   const normalizedPathname = pathname.replace(`/${currentLocale}`, "");
 
   return (
