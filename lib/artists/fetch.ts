@@ -1,10 +1,9 @@
 import { fetchGraphQL } from "../api";
 
-interface Artist {
+export interface Artist {
   name: string;
   bio: string;
-  image: { url: string };
-  artworks: string[];
+  picture: { url: string };
 }
 
 export async function fetchAllArtists(preview = false): Promise<Artist[]> {
@@ -14,13 +13,17 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
         items {
           name
           picture { url }
+          bio
         }
       }
     }
   `;
 
   const response = await fetchGraphQL(query, preview);
-  if (response.errors) throw new Error("Failed to fetch artists");
+  if (response.errors) {
+    console.log(response.errors);
+    throw new Error("Failed to fetch artists");
+  }
 
   return response.data.artistCollection.items;
 }
