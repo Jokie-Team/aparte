@@ -16,6 +16,13 @@ const Exhibitions = async () => {
           artists: 'Add Fuel, André Saraiva, JonOne, Raquel Belli, Julien Raffin',
           dates: 'Em exposição de 4 de Novembro até 16 de Janeiro',
           imageUrl: '/images/1.jpeg',
+          artworks: [
+            '/images/1.jpeg',
+            '/images/1.jpeg',
+            '/images/1.jpeg',
+            '/images/1.jpeg',
+            '/images/1.jpeg',
+          ]
         },
         {
           title: 'Alejandra Majewski',

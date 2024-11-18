@@ -20,7 +20,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full !mt-10">
       <div className="flex items-center">
         {currentIndex > 0 && (
           <button
