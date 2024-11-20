@@ -9,9 +9,12 @@ export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
 interface SidebarProps {
   artists: Artist[];
+  translations: {
+    emptyState: string;
+  };
 }
 
-const ArtistsSidebar: React.FC<SidebarProps> = ({ artists }) => {
+const ArtistsSidebar: React.FC<SidebarProps> = ({ artists, translations }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -35,7 +38,7 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({ artists }) => {
   const groupedArtists = useMemo(() => groupByFirstLetter(artists), [artists]);
 
   const filteredArtists = useMemo(() => {
-    if (!groupedArtists) return [];
+    if (!artists.length || !groupedArtists) return {};
     if (!searchTerm) return groupedArtists;
 
     const filtered: ArtistsGroupedByLetter = {};
@@ -48,37 +51,32 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({ artists }) => {
     return filtered;
   }, [groupedArtists, searchTerm]);
 
-  const renderArtists = () => {
-    return (
-      <div>
-        {Object.entries(filteredArtists)?.map(([letter, group], index) => (
-          <div key={`${index}-${letter}`}>
-            <div className="flex flex-row justify-between items-center gap-4">
-              <h4>{letter}</h4>
-              <ul>
-                {group.map((artist: Artist, index: number) => (
-                  <li
-                    key={artist.name}
-                    className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                      index === 0 ? "border-t" : ""
-                    }`}
-                  >
-                    {artist.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="my-12 border-b border-gray-300" />
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
-    <aside className="space-y-12 w-2/5">
+    <aside aria-label="Artists Sidebar" className="space-y-12">
       <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} />
-      {renderArtists()}
+      {Object.keys(filteredArtists).length === 0 && (
+        <p className="text-gray-500">{translations.emptyState}</p>
+      )}
+      {Object.entries(filteredArtists)?.map(([letter, group], index) => (
+        <div key={`${index}-${letter}`}>
+          <div className="flex flex-row justify-between items-center gap-3">
+            <h4>{letter}</h4>
+            <ul>
+              {group.map((artist: Artist, index: number) => (
+                <li
+                  key={artist.name}
+                  className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
+                    index === 0 ? "border-t" : ""
+                  }`}
+                >
+                  {artist.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="my-12 border-b border-gray-300" />
+        </div>
+      ))}
     </aside>
   );
 };

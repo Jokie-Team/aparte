@@ -11,8 +11,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(artist);
     } else {
       const artists = await fetchAllArtists();
-      console.log("here");
-
       return NextResponse.json(artists);
     }
   } catch (error) {

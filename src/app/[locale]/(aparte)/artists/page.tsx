@@ -16,13 +16,23 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
   let artists: Artist[] = [];
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/artists`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/artists`,
+      {
+        cache: "no-store",
+        next: { revalidate: 10 },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
 
-    if (!res.ok) throw new Error("Failed to fetch artists");
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to fetch artists: ${res.status} - ${errorText}`);
+    }
     artists = await res.json();
   } catch (error) {
-    console.error(error);
+    console.error("Fetch artists error:", error);
   }
 
   const filteredArtists = artists.filter((artist) =>
@@ -30,32 +40,30 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
   );
 
   return (
-    <div className="m-12 flex flex-row gap-24">
-      <ArtistsSidebar artists={artists} />
+    <div className="m-12 flex flex-row gap-24 w-full">
+      <div className="w-1/3">
+        <ArtistsSidebar
+          artists={artists}
+          translations={{ emptyState: t("sidebar.emptyState") }}
+        />
+      </div>
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {Object.entries(groupByFirstLetter(filteredArtists)).map(
           ([letter, group]) => (
-            <>
-              <div key={letter}>
-                {group.map((artist, index) => (
-                  <React.Fragment key={artist.name}>
-                    <Section
-                      artist={artist}
-                      translations={{
-                        aboutArtists: t("section.about"),
-                      }}
-                    />
-                    {index !== group.length - 1 && (
-                      <div className="my-32 border-b border-gray-200" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-              {/* {index !== artists.length - 1 && (
-                <div className="my-32 border-b border-gray-200" />
-              )} */}
-            </>
+            <div key={letter}>
+              {group.map((artist) => (
+                <React.Fragment key={artist.name}>
+                  <Section
+                    artist={artist}
+                    translations={{
+                      aboutArtists: t("section.aboutArtists"),
+                      aboutExhibitions: t("section.aboutExhibitions"),
+                    }}
+                  />
+                </React.Fragment>
+              ))}
+            </div>
           )
         )}
       </div>

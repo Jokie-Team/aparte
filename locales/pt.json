@@ -27,9 +27,12 @@
   },
   "artists": {
     "title": "Artistas",
+    "sidebar": {
+      "emptyState": "No artists found"
+    },
     "section": {
-      "about": "Sobre o Artista",
-      "aboutExhibitions": "Ver Exposições"
+      "aboutArtists": "Sobre o artista",
+      "aboutExhibitions": "Ver exposições"
     }
   },
   "exhibitions": {
