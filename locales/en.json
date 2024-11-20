@@ -26,7 +26,11 @@
     "madeby": "© 2010 AP'ARTE Galeria de Arte Contemporânea"
   },
   "artists": {
-    "title": "Artists"
+    "title": "Artists",
+    "section": {
+      "about": "About the artist",
+      "aboutExhibitions": "See exhibitions"
+    }
   },
   "exhibitions": {
     "title": "Exhibitions"

@@ -1,7 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
+import { usePathname, useRouter } from "next/navigation";
+import { groupByFirstLetter } from "@/src/utils/artists";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
@@ -11,19 +13,26 @@ interface SidebarProps {
 
 const ArtistsSidebar: React.FC<SidebarProps> = ({ artists }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.toLowerCase());
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    try {
+      const params = new URLSearchParams();
+      if (value) {
+        params.set("search", value);
+      }
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
   };
 
-  const groupedArtists = useMemo(() => {
-    return artists.reduce<ArtistsGroupedByLetter>((acc, artist) => {
-      const firstLetter = artist.name[0].toUpperCase();
-      if (!acc[firstLetter]) acc[firstLetter] = [];
-      acc[firstLetter].push(artist);
-      return acc;
-    }, {});
-  }, [artists]);
+  const groupedArtists = useMemo(() => groupByFirstLetter(artists), [artists]);
 
   const filteredArtists = useMemo(() => {
     if (!groupedArtists) return [];
@@ -42,8 +51,8 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({ artists }) => {
   const renderArtists = () => {
     return (
       <div>
-        {Object.entries(filteredArtists)?.map(([letter, group]) => (
-          <div key={letter}>
+        {Object.entries(filteredArtists)?.map(([letter, group], index) => (
+          <div key={`${index}-${letter}`}>
             <div className="flex flex-row justify-between items-center gap-4">
               <h4>{letter}</h4>
               <ul>

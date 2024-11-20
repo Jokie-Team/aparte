@@ -3,7 +3,14 @@ import { fetchGraphQL } from "../api";
 export interface Artist {
   name: string;
   bio: string;
-  picture: { url: string };
+  picture: {
+    url: string;
+    alt?: string;
+    title?: string;
+    description?: string;
+    width?: number;
+    height?: number;
+  };
 }
 
 export async function fetchAllArtists(preview = false): Promise<Artist[]> {

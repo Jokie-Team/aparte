@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Button from "./buttons/button";
-import AccordionButton from "./buttons/forward";
+import AccordionButton from "./buttons/accordion";
 import Input from "./input/input";
 import { useTranslations } from "next-intl";
 
