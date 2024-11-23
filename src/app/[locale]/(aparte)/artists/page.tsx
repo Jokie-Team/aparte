@@ -43,6 +43,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
     <div className="m-12 flex flex-row gap-24 w-full">
       <div className="w-1/3">
         <ArtistsSidebar
+          searchValue={searchTerm}
           artists={artists}
           translations={{ emptyState: t("sidebar.emptyState") }}
         />
@@ -57,7 +58,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                   <Section
                     artist={artist}
                     translations={{
-                      aboutArtists: t("section.aboutArtists"),
+                      aboutArtist: t("section.aboutArtist"),
                       aboutExhibitions: t("section.aboutExhibitions"),
                     }}
                   />

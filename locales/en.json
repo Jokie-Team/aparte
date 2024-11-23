@@ -31,12 +31,23 @@
       "emptyState": "No artists found"
     },
     "section": {
-      "aboutArtists": "About the artist",
+      "aboutArtist": "About the artist",
       "aboutExhibitions": "See exhibitions"
     }
   },
   "exhibitions": {
-    "title": "Exhibitions"
+    "title": "Exhibitions",
+    "sidebar": {
+      "current": "Current",
+      "past": "Past",
+      "future": "Future",
+      "emptyState": "No exhibitions found"
+    },
+    "section": {
+      "aboutArtworks": "Check artworks",
+      "aboutArtist": "About the artist",
+      "aboutArtists": "About the artists"
+    }
   },
   "contacts": {
     "title": "Contact us"

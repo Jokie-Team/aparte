@@ -12,10 +12,15 @@ interface SidebarProps {
   translations: {
     emptyState: string;
   };
+  searchValue?: string;
 }
 
-const ArtistsSidebar: React.FC<SidebarProps> = ({ artists, translations }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const ArtistsSidebar: React.FC<SidebarProps> = ({
+  artists,
+  translations,
+  searchValue,
+}) => {
+  const [searchTerm, setSearchTerm] = useState<string>(searchValue || "");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -59,13 +64,13 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({ artists, translations }) => {
       )}
       {Object.entries(filteredArtists)?.map(([letter, group], index) => (
         <div key={`${index}-${letter}`}>
-          <div className="flex flex-row justify-between items-center gap-3">
+          <div className="flex flex-row items-center gap-10 w-full">
             <h4>{letter}</h4>
-            <ul>
+            <ul className="w-full">
               {group.map((artist: Artist, index: number) => (
                 <li
                   key={artist.name}
-                  className={`h-12 w-52 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
                     index === 0 ? "border-t" : ""
                   }`}
                 >

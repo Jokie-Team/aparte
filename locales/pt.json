@@ -28,15 +28,26 @@
   "artists": {
     "title": "Artistas",
     "sidebar": {
-      "emptyState": "No artists found"
+      "emptyState": "Artista não encontrado"
     },
     "section": {
-      "aboutArtists": "Sobre o artista",
+      "aboutArtist": "Sobre o artista",
       "aboutExhibitions": "Ver exposições"
     }
   },
   "exhibitions": {
-    "title": "Exposições"
+    "title": "Exposições",
+    "sidebar": {
+      "current": "Atuais",
+      "past": "Passadas",
+      "future": "Futuras",
+      "emptyState": "Exposição não encontrada"
+    },
+    "section": {
+      "aboutArtworks": "Ver obras",
+      "aboutArtist": "Sobre o artista",
+      "aboutArtists": "Sobre os artistas"
+    }
   },
   "contacts": {
     "title": "Contacte-nos"

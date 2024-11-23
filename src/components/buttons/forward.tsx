@@ -4,9 +4,11 @@ import { ArrowRight } from "../icons/arrow-right";
 import clsx from "clsx";
 
 const ForwardButton = ({
+  onClick,
   disabled = false,
   children,
 }: {
+  onClick?: () => void;
   disabled?: boolean;
   children: ReactNode;
 }) => {
@@ -28,6 +30,7 @@ const ForwardButton = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       disabled={disabled}
+      onClick={onClick}
     >
       <span
         className={clsx("transition-all duration-300", {

@@ -5,7 +5,7 @@ import ContentfulImage from "@/lib/contentful-image";
 import ForwardButton from "../buttons/forward";
 
 interface TranslationsObject {
-  aboutArtists: string;
+  aboutArtist: string;
   aboutExhibitions: string;
 }
 
@@ -32,7 +32,7 @@ const Section: React.FC<{
       </div>
     </div>
     <div className="flex flex-row gap-10">
-      <ForwardButton>{translations.aboutArtists}</ForwardButton>
+      <ForwardButton>{translations.aboutArtist}</ForwardButton>
       <ForwardButton>{translations.aboutExhibitions}</ForwardButton>
     </div>
 
