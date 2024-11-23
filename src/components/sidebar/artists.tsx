@@ -3,7 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
-import { groupByFirstLetter } from "@/src/utils/artists";
+import {
+  filterArtistsBySearchTerms,
+  groupByFirstLetter,
+} from "@/src/utils/artists";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
@@ -48,9 +51,7 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
 
     const filtered: ArtistsGroupedByLetter = {};
     for (const [letter, group] of Object.entries(groupedArtists)) {
-      const matchingArtists = group.filter((artist) =>
-        artist.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const matchingArtists = filterArtistsBySearchTerms(group, searchTerm);
       if (matchingArtists.length) filtered[letter] = matchingArtists;
     }
     return filtered;

@@ -2,7 +2,10 @@ import { getTranslations } from "next-intl/server";
 import React, { useMemo } from "react";
 import { Artist } from "@/lib/artists";
 import { ArtistsSidebar } from "@/src/components/sidebar/artists";
-import { groupByFirstLetter } from "@/src/utils/artists";
+import {
+  filterArtistsBySearchTerms,
+  groupByFirstLetter,
+} from "@/src/utils/artists";
 import Section from "@/src/components/section/artists";
 
 type ArtistsProps = {
@@ -35,16 +38,14 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
     console.error("Fetch artists error:", error);
   }
 
-  const filteredArtists = artists.filter((artist) =>
-    artist.name.toLowerCase().includes(searchTerm)
-  );
+  const filteredArtists = filterArtistsBySearchTerms(artists, searchTerm);
 
   return (
     <div className="m-12 flex flex-row gap-24 w-full">
       <div className="w-1/3">
         <ArtistsSidebar
           searchValue={searchTerm}
-          artists={artists}
+          artists={filteredArtists}
           translations={{ emptyState: t("sidebar.emptyState") }}
         />
       </div>

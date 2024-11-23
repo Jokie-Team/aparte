@@ -10,3 +10,12 @@ export function groupByFirstLetter(artists: Artist[]): ArtistsGroupedByLetter {
     return acc;
   }, {});
 }
+
+export const filterArtistsBySearchTerms = (
+  artists: Artist[],
+  searchInputTerm: string
+) =>
+  artists.filter((artist) => {
+    const tokens = searchInputTerm.split(" ");
+    return tokens.some((token) => artist.name.toLowerCase().includes(token));
+  });

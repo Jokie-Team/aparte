@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Exhibition } from "@/lib/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhbitions";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];
@@ -19,6 +20,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
   translations,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const groupedExhibitions = useMemo(
     () => groupExhibitionsByDate(exhibitions),
@@ -26,7 +29,19 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.toLowerCase());
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    try {
+      const params = new URLSearchParams();
+      if (value) {
+        params.set("search", value);
+      }
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
   };
 
   const filteredExhibitions = useMemo(() => {
@@ -103,27 +118,31 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       )}
       {Object.keys(filteredExhibitions.past).length > 0 &&
         Object.entries(filteredExhibitions.past).map(
-          ([year, exhibitionsByYear]) => (
-            <div key={year} className="flex flex-row items-center gap-10">
-              <h4>{year}</h4>
-              <ul className="w-full">
-                {exhibitionsByYear.map(
-                  (exhibitionByYear: Exhibition, indexItem: number) => {
-                    return (
-                      <li
-                        key={exhibitionByYear.title}
-                        className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${
-                          indexItem === 0 ? "border-t" : ""
-                        }`}
-                      >
-                        {exhibitionByYear.title}
-                      </li>
-                    );
-                  }
-                )}
-              </ul>
-            </div>
-          )
+          ([year, exhibitionsByYear]) => {
+            if (exhibitionsByYear.length > 0) {
+              return (
+                <div key={year} className="flex flex-row items-center gap-10">
+                  <h4>{year}</h4>
+                  <ul className="w-full">
+                    {exhibitionsByYear.map(
+                      (exhibitionByYear: Exhibition, indexItem: number) => {
+                        return (
+                          <li
+                            key={exhibitionByYear.title}
+                            className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${
+                              indexItem === 0 ? "border-t" : ""
+                            }`}
+                          >
+                            {exhibitionByYear.title}
+                          </li>
+                        );
+                      }
+                    )}
+                  </ul>
+                </div>
+              );
+            }
+          }
         )}
     </aside>
   );

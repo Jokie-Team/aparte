@@ -24,8 +24,23 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
   const handleArtistsClick = () => {
     const artistNames = exhibition.artists
       .map((artist) => artist.name)
-      .join(",");
+      .join(" ");
     router.push(`/artists?search=${encodeURIComponent(artistNames)}`);
+  };
+
+  const mapArtistsToArtistsList = (artists: Artist[]) => {
+    let artistsList = "";
+
+    if (artists.length === 1) return artists[0].name;
+
+    artists.map((artist, index) => {
+      if (index === artists.length - 1) {
+        artistsList = artistsList + artist.name;
+      } else {
+        artistsList = artistsList + artist.name + ", ";
+      }
+    });
+    return artistsList;
   };
 
   return (
@@ -44,10 +59,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             <div className="border-t border-gray-300 !mt-10" />
             <p className="text-gray-800 font-medium !my-3">
               {exhibition.artists.length > 0 &&
-                exhibition.artists.reduce(
-                  (acc: string, artist: Artist) => acc + artist.name,
-                  ""
-                )}
+                mapArtistsToArtistsList(exhibition.artists)}
             </p>
             <div className="border-t border-gray-300 !m-0" />
             <p className="text-gray-500 !my-3">
