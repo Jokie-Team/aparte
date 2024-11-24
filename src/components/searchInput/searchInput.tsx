@@ -1,19 +1,22 @@
 "use client";
-import React from 'react';
-import { SearchIcon } from '../icons/search';
+import React from "react";
+import { SearchIcon } from "../icons/search";
 
-interface SearchProps {
-  searchValue: string;
+interface SearchInputProps {
+  value: string;
   handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ searchValue, handleSearchChange }) => {
+const SearchInput: React.FC<SearchInputProps> = ({
+  value,
+  handleSearchChange,
+}) => {
   return (
     <div className="pb-1.5 pt-1.5 flex items-center border-b">
       <input
         type="text"
         placeholder="Search"
-        value={searchValue}
+        value={value}
         onChange={handleSearchChange}
         className="w-full focus:outline-none"
       />
@@ -22,4 +25,4 @@ const Search: React.FC<SearchProps> = ({ searchValue, handleSearchChange }) => {
   );
 };
 
-export default Search;
+export { SearchInput };

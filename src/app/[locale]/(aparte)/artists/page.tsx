@@ -1,106 +1,73 @@
-import { Heading2 } from "@/src/components/headings/headings";
-import Sidebar from "@/src/components/sidebar/sidebar";
 import { getTranslations } from "next-intl/server";
-import React from "react";
-import Section from "@/src/components/section/section";
+import React, { useMemo } from "react";
+import { Artist } from "@/lib/artists";
+import { ArtistsSidebar } from "@/src/components/sidebar/artists";
+import {
+  filterArtistsBySearchTerms,
+  groupByFirstLetter,
+} from "@/src/utils/artists";
+import Section from "@/src/components/section/artists";
 
-interface ArtistItem {
-  name: string;
-  bio: string;
-  imageUrl: string;
-  artworks: string[];
-}
+type ArtistsProps = {
+  searchParams: { search?: string };
+};
 
-const Artists = async ({ params }: { params: { lng: string } }) => {
+const Artists = async ({ searchParams }: ArtistsProps) => {
   const t = await getTranslations("artists");
+  const searchTerm = searchParams.search?.toLowerCase() || "";
 
-  const artists = [
-    {
-      letter: 'A',
-      artists: [
-        {
-          name: 'Alejandra Majewski',
-          bio: 'É impossível saber o caminho pelo qual se percorre a criatividade. É uma receita incerta, cujos ingredientes misturam um tanto de subjetividade, fantasia e sonho, com quantidades elevadas da realidade social, política e económica vivida pelo artista.',
-          imageUrl: '/images/1.jpeg',
-          artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
+  let artists: Artist[] = [];
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/artists`,
+      {
+        cache: "no-store",
+        next: { revalidate: 10 },
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          name: 'Alexandre Cabrita',
-          bio: 'Artista multifacetado explorando novos estilos e conceitos.',
-          imageUrl: '/images/1.jpeg',
-          artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
-        },
-      ],
-    },
-    {
-      letter: 'M',
-      artists: [
-        {
-          name: 'Marian Van Der Zwan',
-          bio: 'Exploração artística focada na abstração e colaboração.',
-          imageUrl: '/images/1.jpeg',
-          artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
-        },
-        {
-          name: 'Mark Rothko',
-          bio: 'Famoso por suas pinturas de grande escala e uso de cor.',
-          imageUrl: '/images/1.jpeg',
-          artworks: [
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-            '/images/1.jpeg',
-          ]
-        },
-      ],
-    },
-  ];
+      }
+    );
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to fetch artists: ${res.status} - ${errorText}`);
+    }
+    artists = await res.json();
+  } catch (error) {
+    console.error("Fetch artists error:", error);
+  }
+
+  const filteredArtists = filterArtistsBySearchTerms(artists, searchTerm);
 
   return (
-    <div className="m-12 flex flex-row gap-24">
-      <Sidebar type="artists" artists={artists.map(group => ({ letter: group.letter, names: group.artists.map(artist => artist.name) }))} />
+    <div className="m-12 flex flex-row gap-24 w-full">
+      <div className="w-1/3">
+        <ArtistsSidebar
+          searchValue={searchTerm}
+          artists={filteredArtists}
+          translations={{ emptyState: t("sidebar.emptyState") }}
+        />
+      </div>
       <div className="w-full">
-        <Heading2 className="mb-8">{t("title")}</Heading2>
-        {artists.map((item, index) => (
-          <>
-            <div key={item.letter}>
-              {item.artists.map((artist, index) => (
+        <h2 className="mb-8">{t("title")}</h2>
+        {Object.entries(groupByFirstLetter(filteredArtists)).map(
+          ([letter, group]) => (
+            <div key={letter}>
+              {group.map((artist) => (
                 <React.Fragment key={artist.name}>
-                  <Section artistItem={artist} />
-                  {index !== item.artists.length - 1 && (
-                    <div className="my-32 border-b border-gray-200" />
-                  )}
+                  <Section
+                    artist={artist}
+                    translations={{
+                      aboutArtist: t("section.aboutArtist"),
+                      aboutExhibitions: t("section.aboutExhibitions"),
+                    }}
+                  />
                 </React.Fragment>
               ))}
             </div>
-            {index !== artists.length - 1 && (
-              <div className="my-32 border-b border-gray-200" />
-            )}
-          </>
-        ))}
+          )
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import BorderedList from "./list/bordered-list";
 import Newsletter from "./newsletter";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { Heading1 } from "./headings/headings";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -26,7 +25,7 @@ export default function Footer() {
         window.location.href = `tel:+351220120184`;
       },
     },
-    { title: t("info.facebook"), onItemClick: () => { } },
+    { title: t("info.facebook"), onItemClick: () => {} },
   ];
 
   const MenuItems = [
@@ -43,8 +42,8 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full sm:h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center p-10 mt-32">
-      <Heading1 className="text-left mb-32">{t("title")}</Heading1>
+    <footer className="sm:static relative w-full bottom-0 h-full sm:h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center px-6 pt-10  mt-auto">
+      <h1 className="text-left mb-10">{t("title")}</h1>
       <div className="h-full flex flex-col sm:flex-row gap-20 sm:gap-0">
         <Newsletter />
         <div className="flex flex-col flex-1 justify-around sm:gap-20 gap-60">

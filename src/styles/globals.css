@@ -6,13 +6,36 @@
   --font-neue-haas: "Neue Haas Unica", sans-serif;
 }
 
-body {
-  @apply font-neue;
-}
-
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+@layer components {
+  html,
+  body {
+    @apply font-neue;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl lg:text-8xl font-extrabold;
+  }
+
+  h2 {
+    @apply text-4xl md:text-6xl font-bold;
+  }
+
+  h3 {
+    @apply text-4xl md:text-5xl font-normal;
+  }
+
+  h4 {
+    @apply text-2xl font-normal;
+  }
+
+  p {
+    @apply text-base leading-[1.5];
+  }
 }

@@ -26,10 +26,28 @@
     "madeby": "© 2010 AP'ARTE Galeria de Arte Contemporânea"
   },
   "artists": {
-    "title": "Artists"
+    "title": "Artists",
+    "sidebar": {
+      "emptyState": "No artists found"
+    },
+    "section": {
+      "aboutArtist": "About the artist",
+      "aboutExhibitions": "See exhibitions"
+    }
   },
   "exhibitions": {
-    "title": "Exhibitions"
+    "title": "Exhibitions",
+    "sidebar": {
+      "current": "Current",
+      "past": "Past",
+      "future": "Future",
+      "emptyState": "No exhibitions found"
+    },
+    "section": {
+      "aboutArtworks": "Check artworks",
+      "aboutArtist": "About the artist",
+      "aboutArtists": "About the artists"
+    }
   },
   "contacts": {
     "title": "Contact us"

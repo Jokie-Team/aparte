@@ -1,5 +1,7 @@
 "use client";
 
+import clsx from "clsx";
+
 const Button = ({
   text,
   filled = false,
@@ -15,17 +17,16 @@ const Button = ({
 }) => {
   return (
     <button
-      style={{
-        fontFamily: "var(--font-neue-haas)",
-      }}
-      className={`${classnames} font-medium px-6 
-      ${uppercase ? "py-4" : "py-3"} 
-      ${
-        filled
-          ? "bg-black text-white border-none"
-          : "transparent text-black border border-1 border-black"
-      } 
-      hover:opacity-75 disabled:opacity-25 hover:border-opacity-75 disabled:border-opacity-25`}
+      className={clsx(
+        "font-medium px-6 hover:opacity-75 disabled:opacity-25 hover:border-opacity-75 disabled:border-opacity-25",
+        {
+          "py-4": uppercase,
+          "py-3": !uppercase,
+          "bg-black text-white border-none": filled,
+          "transparent text-black border border-1 border-black": !filled,
+        },
+        classnames
+      )}
       disabled={disabled}
     >
       {uppercase ? text.toUpperCase() : text.toLowerCase()}

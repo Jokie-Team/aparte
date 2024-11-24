@@ -13,12 +13,7 @@ const ScrollUp = ({ direction }: { direction: RotateDirection }) => {
   };
 
   return (
-    <div
-      style={{
-        fontFamily: "var(--font-neue-haas)",
-      }}
-      className="fixed bottom-10 right-10 z-50 w-20 h-20 flex items-center justify-center"
-    >
+    <div className="fixed bottom-10 right-10 z-50 w-20 h-20 flex items-center justify-center">
       <button
         type="button"
         onClick={scrollToTop}

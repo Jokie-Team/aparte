@@ -7,9 +7,6 @@ export default {
     "./src/lib/**/*.{ts,tsx}",
   ],
   theme: {
-    screens: {
-      sm: "768px",
-    },
     colors: {
       black: "#2B2B2B",
       grey75: "#5F5F5F",
