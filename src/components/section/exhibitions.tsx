@@ -6,6 +6,7 @@ import ContentfulImage from "@/lib/contentful-image";
 import { Artist } from "@/lib/artists";
 import ForwardButton from "../buttons/forward";
 import { useRouter } from "next/navigation";
+import Carousel from "../carousel";
 
 interface TranslationsObject {
   aboutArtworks: string;
@@ -90,10 +91,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
         </ForwardButton>
         <ForwardButton>{translations.aboutArtworks}</ForwardButton>
       </div>
-      {/* <Carousel
-        images={exhibition?.artworks || artistItem?.artworks || []}
-        visibleCount={3}
-      /> */}
+      <Carousel images={exhibition?.artworks || []} visibleCount={3} />
     </div>
   );
 };

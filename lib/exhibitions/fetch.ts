@@ -1,15 +1,15 @@
 import { fetchGraphQL } from "../api";
 import { Artist } from "../artists";
-import { ContentfulImageProps } from "../contentful-image";
+import { PictureProps } from "../types";
 
 export interface Exhibition {
   title: string;
   description: string;
-  picture: ContentfulImageProps;
+  picture: PictureProps;
   artists: Artist[];
   startDate: string;
   endDate: string;
-  artworks: ContentfulImageProps[];
+  artworks: PictureProps[];
 }
 
 export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
