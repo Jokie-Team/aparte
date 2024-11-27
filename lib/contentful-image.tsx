@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export interface ContentfulImageProps {
+interface ContentfulImageProps {
   src: string;
   width?: number;
   quality?: number;

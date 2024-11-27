@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
     if (id) {
     } else {
       const exhibitions = await fetchAllExhibitions();
+
       return NextResponse.json(exhibitions);
     }
   } catch (error) {

@@ -1,8 +1,10 @@
 "use client";
+import ContentfulImage from "@/lib/contentful-image";
+import { PictureProps } from "@/lib/types";
 import React, { useState } from "react";
-
+import { ArrowRight } from "./icons/arrow-right";
 interface CarouselProps {
-  images: string[];
+  images: PictureProps[];
   visibleCount: number;
 }
 
@@ -21,15 +23,24 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
 
   return (
     <div className="relative w-full !mt-10">
-      <div className="flex items-center">
-        {currentIndex > 0 && (
-          <button
-            onClick={handlePrev}
-            className="absolute left-0 z-10 p-2 bg-white rounded-full shadow-md"
-          >
-            ←
-          </button>
-        )}
+      <div className="flex flex-col items-center">
+        <div className="flex flex-row justify-between w-full">
+          {currentIndex < images.length - visibleCount ? (
+            <button onClick={handleNext} className="rotate-180">
+              <ArrowRight />
+            </button>
+          ) : (
+            <div></div>
+          )}
+          {currentIndex > 0 ? (
+            <button onClick={handlePrev}>
+              <ArrowRight />
+            </button>
+          ) : (
+            <div></div>
+          )}
+        </div>
+
         <div className="overflow-hidden w-full">
           <div
             className="flex transition-transform duration-300"
@@ -43,23 +54,16 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
                 className="flex-none w-1/6 p-2"
                 style={{ flex: `0 0 ${100 / visibleCount}%` }}
               >
-                <img
-                  src={image}
-                  alt={`Slide ${index}`}
-                  className="w-full h-full object-cover"
+                <ContentfulImage
+                  alt={image.alt || ""}
+                  src={image.url}
+                  width={500}
+                  height={500}
                 />
               </div>
             ))}
           </div>
         </div>
-        {currentIndex < images.length - visibleCount && (
-          <button
-            onClick={handleNext}
-            className="absolute right-0 z-10 p-2 bg-white rounded-full shadow-md"
-          >
-            →
-          </button>
-        )}
       </div>
     </div>
   );
