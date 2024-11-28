@@ -1,7 +1,6 @@
 "use client";
 import { ReactElement, useState } from "react";
-import { ArrowRight } from "../icons/arrow-right";
-import { Arrow } from "../icons/arrow-down";
+import { Arrow } from "../icons/arrow";
 import clsx from "clsx";
 
 const AccordionButton = ({
@@ -45,7 +44,7 @@ const AccordionButton = ({
         >
           {text}
         </span>
-        {clicked ? <Arrow /> : <ArrowRight />}
+        {clicked ? <Arrow direction="down" /> : <Arrow direction="right" />}
       </button>
       {clicked ? <div className="my-5">{children}</div> : null}
     </div>
