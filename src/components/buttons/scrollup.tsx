@@ -1,8 +1,12 @@
 "use client";
 import { useState } from "react";
-import { Arrow, RotateDirection } from "../icons/arrow-down";
+import { Arrow } from "../icons/arrow";
 
-const ScrollUp = ({ direction }: { direction: RotateDirection }) => {
+interface ScrollUpProps {
+  direction: "up" | "down" | "left" | "right";
+}
+
+const ScrollUp: React.FC<ScrollUpProps> = ({ direction }) => {
   const [hovered, setHovered] = useState<boolean | null>(null);
 
   const scrollToTop = () => {
@@ -23,9 +27,9 @@ const ScrollUp = ({ direction }: { direction: RotateDirection }) => {
       >
         <div className="w-10 h-10 flex items-center justify-center">
           <Arrow
+            size={32}
+            direction={direction}
             fill={hovered ? "#fff" : "#000"}
-            rotate={direction}
-            size="40"
           />
         </div>
       </button>

@@ -1,5 +1,5 @@
 "use client";
-import { Arrow } from "../icons/arrow-down";
+import { Arrow } from "../icons/arrow";
 
 const TextButton = ({ text }: { text: string }) => {
   return (
@@ -11,7 +11,7 @@ const TextButton = ({ text }: { text: string }) => {
         aria-haspopup="true"
       >
         <span>{text}</span>
-        <Arrow rotate="right" />
+        <Arrow direction="right" />
       </button>
     </div>
   );

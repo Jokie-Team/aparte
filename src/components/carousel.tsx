@@ -2,7 +2,8 @@
 import ContentfulImage from "@/lib/contentful-image";
 import { PictureProps } from "@/lib/types";
 import React, { useState } from "react";
-import { ArrowRight } from "./icons/arrow-right";
+import { Arrow } from "./icons/arrow";
+
 interface CarouselProps {
   images: PictureProps[];
   visibleCount: number;
@@ -22,47 +23,46 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
   };
 
   return (
-    <div className="relative w-full !mt-10">
-      <div className="flex flex-col items-center">
-        <div className="flex flex-row justify-between w-full">
-          {currentIndex < images.length - visibleCount ? (
-            <button onClick={handleNext} className="rotate-180">
-              <ArrowRight />
-            </button>
-          ) : (
-            <div></div>
-          )}
-          {currentIndex > 0 ? (
-            <button onClick={handlePrev}>
-              <ArrowRight />
-            </button>
-          ) : (
-            <div></div>
-          )}
-        </div>
+    <div className="relative w-full mt-10">
+      {currentIndex > 0 && (
+        <button
+          onClick={handlePrev}
+          className="absolute left-0 top-0"
+        >
+          <Arrow size={28} direction="left" />
+        </button>
+      )}
 
-        <div className="overflow-hidden w-full">
-          <div
-            className="flex transition-transform duration-300"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-            }}
-          >
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className="flex-none w-1/6 p-2"
-                style={{ flex: `0 0 ${100 / visibleCount}%` }}
-              >
-                <ContentfulImage
-                  alt={image.alt || ""}
-                  src={image.url}
-                  width={500}
-                  height={500}
-                />
-              </div>
-            ))}
-          </div>
+      {currentIndex < images.length - visibleCount && (
+        <button
+          onClick={handleNext}
+          className="absolute right-6 top-0"
+        >
+          <Arrow size={28} direction="right" />
+        </button>
+      )}
+
+      <div className="overflow-hidden w-full mt-16">
+        <div
+          className="flex transition-transform duration-300"
+          style={{
+            transform: `translateX(-calc(${currentIndex * (100 / visibleCount)}%-8px))`,
+            gap: "24px"
+          }}
+        >
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className="flex-none w-1/6"
+              style={{ flex: `0 0 calc(${100 / visibleCount}% - 24px)` }}
+            >
+              <img
+                src={image}
+                alt={`Slide ${index}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

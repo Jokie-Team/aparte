@@ -1,6 +1,6 @@
 "use client";
 import { ReactNode, useState } from "react";
-import { ArrowRight } from "../icons/arrow-right";
+import { Arrow } from "../icons/arrow";
 import clsx from "clsx";
 
 const ForwardButton = ({
@@ -40,7 +40,7 @@ const ForwardButton = ({
       >
         {children}
       </span>
-      <ArrowRight />
+      <Arrow direction="right" />
     </button>
   );
 };
