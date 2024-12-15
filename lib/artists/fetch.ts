@@ -1,6 +1,8 @@
 import { fetchGraphQL } from "../api";
+import { Exhibition } from "../exhibitions";
 
 export interface Artist {
+  exhibitions: Exhibition[];
   name: string;
   bio: string;
   picture: {
@@ -21,6 +23,13 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
           name
           picture { url }
           bio
+          exhibitionsCollection {
+            items {
+              ... on Exhibition {
+                title
+              }
+            }
+          }
         }
       }
     }
