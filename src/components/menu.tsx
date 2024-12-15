@@ -17,10 +17,16 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
   const currentLocale = useLocale();
 
   const otherLocale = currentLocale === "en" ? "pt" : "en";
+
+  // Função para manter o caminho correto ao trocar de locale
   const localizedPathname = (locale: string) => {
+    if (pathname === `/${currentLocale}`) {
+      return `/${locale}`;
+    }
     return pathname.replace(`/${currentLocale}`, `/${locale}`);
   };
 
+  // Remover o locale atual para normalizar os links
   const normalizedPathname = pathname.replace(`/${currentLocale}`, "");
 
   return (
@@ -28,32 +34,28 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
       <nav className="hidden sm:block pt-10">
         <ul className="flex gap-40">
           <li className="flex flex-row items-center cursor-pointer">
-            <Link href="/exhibitions">
+            <Link href={`/${currentLocale}/exhibitions`}>
               <Body className={normalizedPathname === "/exhibitions" ? "font-extrabold" : ""}>
                 {t("exhibitions")}
               </Body>
             </Link>
           </li>
           <li className="flex flex-row items-center cursor-pointer">
-            <Link href="/artists">
+            <Link href={`/${currentLocale}/artists`}>
               <Body className={normalizedPathname === "/artists" ? "font-extrabold" : ""}>
                 {t("artists")}
               </Body>
             </Link>
           </li>
           <li className="flex flex-row items-center cursor-pointer">
-            <Link href="/contacts">
+            <Link href={`/${currentLocale}/contacts`}>
               <Body className={normalizedPathname === "/contacts" ? "font-extrabold" : ""}>
                 {t("contacts")}
               </Body>
             </Link>
           </li>
           <li className="h-10 flex flex-row items-center">
-            <Link
-              href={localizedPathname(otherLocale)}
-              locale={false}
-              className="hover:text-gray-900"
-            >
+            <Link href={localizedPathname(otherLocale)} locale={false}>
               <Body>{otherLocale.toUpperCase()}</Body>
             </Link>
           </li>

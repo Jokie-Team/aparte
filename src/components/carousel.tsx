@@ -46,7 +46,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
         <div
           className="flex transition-transform duration-300"
           style={{
-            transform: `translateX(-calc(${currentIndex * (100 / visibleCount)}%-8px))`,
+            transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
             gap: "24px"
           }}
         >
@@ -57,9 +57,9 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
               style={{ flex: `0 0 calc(${100 / visibleCount}% - 24px)` }}
             >
               <img
-                src={image}
+                src={image.url}
                 alt={`Slide ${index}`}
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
           ))}
