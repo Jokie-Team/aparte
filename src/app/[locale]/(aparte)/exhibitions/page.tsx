@@ -41,8 +41,8 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
   );
 
   return (
-    <div className="m-12 flex flex-row gap-24 w-full">
-      <div className="w-1/3">
+    <div className="m-12 flex flex-row w-full gap-24">
+      <div className="w-2/5">
         <ExhibitionsSidebar
           exhibitions={exhibitions}
           translations={{
@@ -50,6 +50,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
             current: t("sidebar.current"),
             future: t("sidebar.future"),
             past: t("sidebar.past"),
+            search: t("sidebar.search"),
           }}
         />
       </div>

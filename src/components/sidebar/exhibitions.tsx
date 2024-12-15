@@ -12,6 +12,7 @@ interface ExhibitionsSidebarProps {
     current: string;
     future: string;
     past: string;
+    search: string;
   };
 }
 
@@ -65,85 +66,75 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
 
   return (
     <aside className="space-y-12">
-      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} />
+      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} search={translations.search} />
+
       {filteredExhibitions.current.length === 0 &&
         filteredExhibitions.future.length === 0 &&
-        Object.keys(filteredExhibitions.current).length === 0 && (
+        Object.keys(filteredExhibitions.past).length === 0 && (
           <p className="text-gray-500">{translations.emptyState}</p>
         )}
+
       {filteredExhibitions.current.length > 0 && (
-        <>
-          <div className="flex flex-row items-center gap-10">
+        <div>
+          <div className="flex flex-row justify-between gap-10">
             <h4>{translations.current}</h4>
-            <ul className="w-full">
-              {filteredExhibitions.current.map((exhibition, index) => {
-                return (
-                  <li
-                    key={exhibition.title}
-                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${
-                      index === 0 ? "border-t" : ""
-                    }`}
-                  >
-                    {exhibition.title}
-                  </li>
-                );
-              })}
+            <ul className="w-2/3">
+              {filteredExhibitions.current.map((exhibition, index) => (
+                <li
+                  key={exhibition.title}
+                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""}`}
+                >
+                  <span className="truncate w-full">{exhibition.title}</span>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="mt-6 mb-12 border-b border-gray-200" />
-        </>
+          <div className="my-12 border-b border-gray-200" />
+        </div>
       )}
 
       {filteredExhibitions.future.length > 0 && (
-        <>
-          <div className="flex flex-row items-center gap-10">
+        <div>
+          <div className="flex flex-row justify-between gap-10">
             <h4>{translations.future}</h4>
-            <ul className="w-full">
-              {filteredExhibitions.future.map((exhibition, index) => {
-                return (
-                  <li
-                    key={exhibition.title}
-                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${
-                      index === 0 ? "border-t" : ""
-                    }`}
-                  >
-                    {exhibition.title}
-                  </li>
-                );
-              })}
+            <ul className="w-2/3">
+              {filteredExhibitions.future.map((exhibition, index) => (
+                <li
+                  key={exhibition.title}
+                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""}`}
+                >
+                  <span className="truncate w-full">{exhibition.title}</span>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="mt-6 mb-12 border-b border-gray-200" />
-        </>
+          <div className="my-12 border-b border-gray-200" />
+        </div>
       )}
-      {Object.keys(filteredExhibitions.past).length > 0 &&
-        Object.entries(filteredExhibitions.past).map(
-          ([year, exhibitionsByYear]) => {
-            if (exhibitionsByYear.length > 0) {
-              return (
-                <div key={year} className="flex flex-row items-center gap-10">
-                  <h4>{year}</h4>
-                  <ul className="w-full">
-                    {exhibitionsByYear.map(
-                      (exhibitionByYear: Exhibition, indexItem: number) => {
-                        return (
-                          <li
-                            key={exhibitionByYear.title}
-                            className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${
-                              indexItem === 0 ? "border-t" : ""
-                            }`}
-                          >
-                            {exhibitionByYear.title}
-                          </li>
-                        );
-                      }
-                    )}
-                  </ul>
-                </div>
-              );
-            }
-          }
-        )}
+
+      {Object.keys(filteredExhibitions.past).length > 0 && (
+        <div>
+          <h4>{translations.past}</h4>
+          <div className="border-b border-gray-200 mt-6 mb-12"></div>
+          {Object.entries(filteredExhibitions.past).map(
+            ([year, exhibitionsByYear]) => (
+              <div key={year} className="flex flex-row justify-between gap-10">
+                <h5>{year}</h5>
+                <ul className="w-2/3">
+                  {exhibitionsByYear.map((exhibitionByYear, indexItem) => (
+                    <li
+                      key={exhibitionByYear.title}
+                      className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${indexItem === 0 ? "border-t" : ""}`}
+                    >
+                      <span className="truncate w-full">{exhibitionByYear.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          )}
+        </div>
+      )}
     </aside>
   );
 };

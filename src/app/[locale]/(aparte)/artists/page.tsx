@@ -41,12 +41,12 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
   const filteredArtists = filterArtistsBySearchTerms(artists, searchTerm);
 
   return (
-    <div className="m-12 flex flex-row gap-24 w-full">
-      <div className="w-1/3">
+    <div className="m-12 flex flex-row w-full gap-24">
+      <div className="w-2/5">
         <ArtistsSidebar
           searchValue={searchTerm}
           artists={filteredArtists}
-          translations={{ emptyState: t("sidebar.emptyState") }}
+          translations={{ emptyState: t("sidebar.emptyState"), search: t("sidebar.search") }}
         />
       </div>
       <div className="w-full">
