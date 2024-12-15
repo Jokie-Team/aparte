@@ -3,12 +3,16 @@ import { useState } from "react";
 import Logo from "./logo/logo";
 import Menu from "./menu";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 interface HeaderProps {
   showBorder: boolean;
 }
 
 export default function Header({ showBorder }: HeaderProps) {
+  const currentLocale = useLocale();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -24,7 +28,7 @@ export default function Header({ showBorder }: HeaderProps) {
         }
       )}
     >
-      <a href="/" className="pt-12">
+      <a href={`/${currentLocale}`} className="pt-12">
         <Logo />
       </a>
       <Menu
