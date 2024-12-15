@@ -14,6 +14,7 @@ interface SidebarProps {
   artists: Artist[];
   translations: {
     emptyState: string;
+    search: string;
   };
   searchValue?: string;
 }
@@ -59,23 +60,22 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside aria-label="Artists Sidebar" className="space-y-12">
-      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} />
+      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} search={translations.search} />
       {Object.keys(filteredArtists).length === 0 && (
         <p className="text-gray-500">{translations.emptyState}</p>
       )}
       {Object.entries(filteredArtists)?.map(([letter, group], index) => (
         <div key={`${index}-${letter}`}>
-          <div className="flex flex-row items-center gap-10 w-full">
+          <div className="flex flex-row gap-10 justify-between">
             <h4>{letter}</h4>
-            <ul className="w-full">
+            <ul className="w-2/3">
               {group.map((artist: Artist, index: number) => (
                 <li
                   key={artist.name}
-                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                    index === 0 ? "border-t" : ""
-                  }`}
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                    }`}
                 >
-                  {artist.name}
+                  <span className="truncate w-full">{artist.name}</span>
                 </li>
               ))}
             </ul>

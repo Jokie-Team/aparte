@@ -28,7 +28,8 @@
   "artists": {
     "title": "Artists",
     "sidebar": {
-      "emptyState": "No artists found"
+      "emptyState": "No artists found",
+      "search": "Search"
     },
     "section": {
       "aboutArtist": "About the artist",
@@ -41,7 +42,8 @@
       "current": "Current",
       "past": "Past",
       "future": "Future",
-      "emptyState": "No exhibitions found"
+      "emptyState": "No exhibitions found",
+      "search": "Search"
     },
     "section": {
       "aboutArtworks": "Check artworks",
