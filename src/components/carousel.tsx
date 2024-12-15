@@ -59,7 +59,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
               <img
                 src={image.url}
                 alt={`Slide ${index}`}
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
           ))}
