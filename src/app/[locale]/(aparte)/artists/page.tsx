@@ -52,9 +52,9 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {Object.entries(groupByFirstLetter(filteredArtists)).map(
-          ([letter, group]) => (
+          ([letter, group], groupIndex, allGroups) => (
             <div key={letter}>
-              {group.map((artist) => (
+              {group.map((artist, index) => (
                 <React.Fragment key={artist.name}>
                   <Section
                     artist={artist}
@@ -63,6 +63,9 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                       aboutExhibitions: t("section.aboutExhibitions"),
                     }}
                   />
+                  {!(index === group.length - 1 && groupIndex === allGroups.length - 1) && (
+                    <div className="my-32 border-b border-gray-200" />
+                  )}
                 </React.Fragment>
               ))}
             </div>
