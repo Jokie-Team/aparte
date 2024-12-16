@@ -23,9 +23,10 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
           name
           picture { url }
           bio
-          exhibitionsCollection {
+          exhibitionsCollection(limit: 5) {
             items {
               ... on Exhibition {
+                sys { id }
                 title
               }
             }
@@ -41,7 +42,12 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
     throw new Error("Failed to fetch artists");
   }
 
-  return response.data.artistCollection.items;
+  return response.data.artistCollection.items.map((artist: any) => ({
+    name: artist.name,
+    picture: artist.picture,
+    bio: artist.bio,
+    exhibitions: artist.exhibitionsCollection?.items || [], // Garante que exhibitions é sempre um array
+  }));
 }
 
 export async function fetchArtistById(id: string, preview = false) {

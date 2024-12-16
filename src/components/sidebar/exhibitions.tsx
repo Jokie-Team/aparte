@@ -4,6 +4,7 @@ import { SearchInput } from "../searchInput/searchInput";
 import { Exhibition } from "@/lib/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhbitions";
 import { usePathname, useRouter } from "next/navigation";
+import { fi } from "date-fns/locale";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];
@@ -14,13 +15,15 @@ interface ExhibitionsSidebarProps {
     past: string;
     search: string;
   };
+  searchValue?: string;
 }
 
 const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
   exhibitions,
   translations,
+  searchValue,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>(searchValue || "");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -112,7 +115,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
         </div>
       )}
 
-      {Object.keys(filteredExhibitions.past).length > 0 && (
+      {Object.entries(filteredExhibitions.past).some(([year, exhibitionsByYear]) => exhibitionsByYear.length > 0) && (
         <div>
           <h4>{translations.past}</h4>
           <div className="border-b border-gray-200 mt-6 mb-12"></div>
