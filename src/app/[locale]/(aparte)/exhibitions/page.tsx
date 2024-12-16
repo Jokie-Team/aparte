@@ -52,6 +52,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
             past: t("sidebar.past"),
             search: t("sidebar.search"),
           }}
+          searchValue={searchTerm}
         />
       </div>
       <div className="w-full">
