@@ -3,8 +3,7 @@ import { useState } from "react";
 import Logo from "./logo/logo";
 import Menu from "./menu";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 interface HeaderProps {
   showBorder: boolean;
