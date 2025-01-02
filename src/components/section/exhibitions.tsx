@@ -74,8 +74,8 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
 
         <div className="sm:w-1/3 w-full">
           <ContentfulImage
-            src={exhibition.picture.url}
-            alt={exhibition.title}
+            src={exhibition?.picture?.url || "../../../public/placeholder.png"}
+            alt={exhibition?.title || "Exhibition"}
             width={400}
             height={400}
             className="rounded object-cover"

@@ -17,6 +17,8 @@
     "autoprefixer": "10.4.15",
     "clsx": "^2.1.1",
     "contentful-import": "^9.0.4",
+    "contentful-management": "^11.40.3",
+    "csv-parser": "^3.1.0",
     "date-fns": "2.30.0",
     "i18next": "^23.11.1",
     "i18next-resources-to-backend": "^1.2.1",

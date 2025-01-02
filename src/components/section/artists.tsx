@@ -33,22 +33,21 @@ const Section: React.FC<{
         <div className="flex flex-col gap-2 w-2/3">
           <h3 className="text-gray-900">{artist?.name}</h3>
           <p className="text-gray-600">
-            {artist?.bio.length > MAX_NO_CHARACTERS_BIO
-              ? artist?.bio.slice(0, MAX_NO_CHARACTERS_BIO) + "..."
-              : artist?.bio}
+            {artist?.bio && artist.bio.length > MAX_NO_CHARACTERS_BIO
+              ? artist.bio.slice(0, MAX_NO_CHARACTERS_BIO) + "..."
+              : artist?.bio || "Biography not available"}
           </p>
+
         </div>
         <div className="w-1/3">
           <ContentfulImage
-            src={artist.picture.url}
-            alt={artist.picture.alt || `${artist.name}'s picture`}
+            src={artist?.picture?.url || "../../../public/placeholder.png"}
+            alt={artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`}
             width={500}
             height={500}
-            className="rounded object-cover"
-            priority={false}
-            quality={75}
           />
         </div>
+
       </div>
       <div className="flex flex-row gap-10">
         <ForwardButton>{translations.aboutArtist}</ForwardButton>
