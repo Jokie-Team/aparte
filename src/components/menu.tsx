@@ -47,13 +47,13 @@ const Menu: React.FC<MenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
               </Body>
             </Link>
           </li>
-          <li className="flex flex-row items-center cursor-pointer">
+          {/*           <li className="flex flex-row items-center cursor-pointer">
             <Link href={`/${currentLocale}/contacts`}>
               <Body className={normalizedPathname === "/contacts" ? "font-extrabold" : ""}>
                 {t("contacts")}
               </Body>
             </Link>
-          </li>
+          </li> */}
           <li className="h-10 flex flex-row items-center">
             <Link href={localizedPathname(otherLocale)} locale={false}>
               <Body>{otherLocale.toUpperCase()}</Body>
