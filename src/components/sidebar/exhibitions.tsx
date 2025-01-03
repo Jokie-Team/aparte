@@ -136,20 +136,23 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
           <h4>{translations.past}</h4>
           <div className="border-b border-gray-200 mt-6 mb-12"></div>
           {filteredExhibitions.past.map(
-            ([year, exhibitionsByYear]) => (
-              <div key={year} className="flex flex-row justify-between gap-10">
-                <h5>{year}</h5>
-                <ul className="w-2/3">
-                  {exhibitionsByYear.map((exhibitionByYear, indexItem) => (
-                    <li
-                      key={exhibitionByYear.title}
-                      className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${indexItem === 0 ? "border-t" : ""}`}
-                    >
-                      <span className="truncate w-full">{exhibitionByYear.title}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            ([year, exhibitionsByYear]) => exhibitionsByYear.length > 0 && (
+              <>
+                <div key={year} className="flex flex-row justify-between gap-10">
+                  <h5>{year}</h5>
+                  <ul className="w-2/3">
+                    {exhibitionsByYear.map((exhibitionByYear, indexItem) => (
+                      <li
+                        key={exhibitionByYear.title}
+                        className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${indexItem === 0 ? "border-t" : ""}`}
+                      >
+                        <span className="truncate w-full">{exhibitionByYear.title}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border-b border-gray-200 mt-6 mb-12"></div>
+              </>
             )
           )}
         </div>

@@ -89,7 +89,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             ? translations.aboutArtists
             : translations.aboutArtist}
         </ForwardButton>
-        <ForwardButton>{translations.aboutArtworks}</ForwardButton>
+        {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
       </div>
       <Carousel images={exhibition?.artworks || []} visibleCount={3} />
     </div>
