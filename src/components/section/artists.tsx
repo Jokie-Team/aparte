@@ -34,7 +34,7 @@ const Section: React.FC<{
           <p className="text-gray-600">
             {artist?.bio && artist.bio.length > MAX_NO_CHARACTERS_BIO
               ? artist.bio.slice(0, MAX_NO_CHARACTERS_BIO) + "..."
-              : artist?.bio || "Biography not available"}
+              : artist?.bio || "Biography not available."}
           </p>
 
         </div>

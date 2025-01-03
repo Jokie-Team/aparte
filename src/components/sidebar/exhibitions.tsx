@@ -59,8 +59,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
           )
           .sort(
             (a, b) =>
-              new Date(a.startDate || 0).getTime() -
-              new Date(b.startDate || 0).getTime()
+              new Date(b.startDate || 0).getTime() -
+              new Date(a.startDate || 0).getTime()
           );
         return [year, filteredAndSorted];
       });
