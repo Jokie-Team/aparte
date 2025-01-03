@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Exhibition } from "@/lib/exhibitions";
 import ExhibitionsSidebar from "@/src/components/sidebar/exhibitions";
 import Section from "@/src/components/section/exhibitions";
+import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 
 type ExhibitionsProps = {
   searchParams: { search?: string };
@@ -36,13 +37,26 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
     console.error("Fetch exhibitions error:", error);
   }
 
-  const filteredExhibitions = exhibitions.filter((exhibition) =>
+  const groupedExhibitions = groupExhibitionsByDate(exhibitions);
+  const orderedExhibitions = [
+    ...groupedExhibitions.current,
+    ...groupedExhibitions.future,
+    ...Object.entries(groupedExhibitions.past)
+      .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
+      .flatMap(([, exhibitions]) =>
+        exhibitions.sort(
+          (a, b) =>
+            new Date(b.startDate || 0).getTime() -
+            new Date(a.startDate || 0).getTime()
+        )
+      ),
+  ].filter((exhibition) =>
     exhibition.title.toLowerCase().includes(searchTerm)
   );
 
   return (
     <div className="m-12 flex flex-row w-full gap-24">
-      <div className="w-2/5">
+      <div className="w-1/4 flex-shrink-0">
         <ExhibitionsSidebar
           exhibitions={exhibitions}
           translations={{
@@ -55,9 +69,10 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
           searchValue={searchTerm}
         />
       </div>
+
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
-        {filteredExhibitions.map((exhibitionItem, index) => (
+        {orderedExhibitions.map((exhibitionItem, index) => (
           <div key={exhibitionItem.title}>
             <Section
               exhibition={exhibitionItem}
@@ -67,7 +82,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
                 aboutArtists: t("section.aboutArtists"),
               }}
             />
-            {index !== filteredExhibitions.length - 1 && (
+            {index !== orderedExhibitions.length - 1 && (
               <div className="my-32 border-b border-gray-200" />
             )}
           </div>

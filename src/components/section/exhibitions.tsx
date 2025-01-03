@@ -46,11 +46,11 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="inline-flex h-auto w-fit px-4 py-2.5 rounded-3xl border border-[#2b2b2b]">
+      {/* <div className="inline-flex h-auto w-fit px-4 py-2.5 rounded-3xl border border-[#2b2b2b]">
         <div className="text-[#2b2b2b] text-base font-extrabold font-['Neue Haas Unica']">
           ✴ Coleção / Série X
         </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-row justify-between">
         <div className="flex flex-col space-y-4 w-1/2">
@@ -72,10 +72,10 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
           </div>
         </div>
 
-        <div className="sm:w-1/3 w-full">
+        <div className="sm:w-2/5">
           <ContentfulImage
-            src={exhibition.picture.url}
-            alt={exhibition.title}
+            src={exhibition?.picture?.url || "/images/placeholder.jpeg"}
+            alt={exhibition?.title || "Exhibition"}
             width={400}
             height={400}
             className="rounded object-cover"
@@ -89,7 +89,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             ? translations.aboutArtists
             : translations.aboutArtist}
         </ForwardButton>
-        <ForwardButton>{translations.aboutArtworks}</ForwardButton>
+        {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
       </div>
       <Carousel images={exhibition?.artworks || []} visibleCount={3} />
     </div>

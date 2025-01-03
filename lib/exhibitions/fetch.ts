@@ -15,7 +15,7 @@ export interface Exhibition {
 export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
   const query = `
   query {
-    exhibitionCollection(limit: 10) {
+    exhibitionCollection(limit: 200) {
       items {
         title
         picture { 

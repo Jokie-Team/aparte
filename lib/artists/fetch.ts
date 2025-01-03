@@ -18,7 +18,7 @@ export interface Artist {
 export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   const query = `
     {
-      artistCollection {
+      artistCollection(limit: 400) {
         items {
           name
           picture { url }
