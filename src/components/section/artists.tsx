@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Carousel from "../carousel";
 import { Artist } from "@/lib/artists";
 import ContentfulImage from "@/lib/contentful-image";
 import ForwardButton from "../buttons/forward";
@@ -41,7 +40,7 @@ const Section: React.FC<{
         </div>
         <div className="w-1/3">
           <ContentfulImage
-            src={artist?.picture?.url || "../../../public/placeholder.png"}
+            src={artist?.picture?.url || "/images/placeholder.jpeg"}
             alt={artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`}
             width={500}
             height={500}
@@ -50,15 +49,10 @@ const Section: React.FC<{
 
       </div>
       <div className="flex flex-row gap-10">
-        <ForwardButton>{translations.aboutArtist}</ForwardButton>
+        {/*<ForwardButton>{translations.aboutArtist}</ForwardButton>*/}
         {artist.exhibitions.length > 0 &&
           <ForwardButton onClick={handleExhibitionsClick}>{translations.aboutExhibitions}</ForwardButton>}
       </div>
-
-      {/* <Carousel
-            images={exhibitionItem?.artworks || artistItem?.artworks || []}
-            visibleCount={3}
-          /> */}
     </div>
   )
 };
