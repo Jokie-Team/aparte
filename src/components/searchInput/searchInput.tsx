@@ -8,7 +8,7 @@ interface SearchInputProps {
   search: string;
 }
 
-const SearchInput: React.FC<SearchInputProps> = async ({
+const SearchInput: React.FC<SearchInputProps> = ({
   value,
   handleSearchChange,
   search,
