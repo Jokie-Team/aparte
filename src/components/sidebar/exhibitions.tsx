@@ -2,9 +2,8 @@
 import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Exhibition } from "@/lib/exhibitions";
-import { groupExhibitionsByDate } from "@/src/utils/exhbitions";
+import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { usePathname, useRouter } from "next/navigation";
-import { fi } from "date-fns/locale";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];
@@ -49,6 +48,23 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
   };
 
   const filteredExhibitions = useMemo(() => {
+    const sortedPast: [string, Exhibition[]][] = Object.entries(
+      groupedExhibitions.past
+    )
+      .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
+      .map(([year, exhibitions]) => {
+        const filteredAndSorted = exhibitions
+          .filter((exhibition) =>
+            exhibition.title.toLowerCase().includes(searchTerm)
+          )
+          .sort(
+            (a, b) =>
+              new Date(a.startDate || 0).getTime() -
+              new Date(b.startDate || 0).getTime()
+          );
+        return [year, filteredAndSorted];
+      });
+
     return {
       current: groupedExhibitions.current.filter((exhibition) =>
         exhibition.title.toLowerCase().includes(searchTerm)
@@ -56,20 +72,18 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       future: groupedExhibitions.future.filter((exhibition) =>
         exhibition.title.toLowerCase().includes(searchTerm)
       ),
-      past: Object.fromEntries(
-        Object.entries(groupedExhibitions.past).map(([year, exhibitions]) => [
-          year,
-          exhibitions.filter((exhibition) =>
-            exhibition.title.toLowerCase().includes(searchTerm)
-          ),
-        ])
-      ),
+      past: sortedPast,
     };
   }, [groupedExhibitions, searchTerm]);
 
+
   return (
     <aside className="space-y-12">
-      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} search={translations.search} />
+      <SearchInput
+        value={searchTerm}
+        handleSearchChange={handleSearchChange}
+        search={translations.search}
+      />
 
       {filteredExhibitions.current.length === 0 &&
         filteredExhibitions.future.length === 0 &&
@@ -85,7 +99,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.current.map((exhibition, index) => (
                 <li
                   key={exhibition.title}
-                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""}`}
+                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""
+                    }`}
                 >
                   <span className="truncate w-full">{exhibition.title}</span>
                 </li>
@@ -104,7 +119,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.future.map((exhibition, index) => (
                 <li
                   key={exhibition.title}
-                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""}`}
+                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""
+                    }`}
                 >
                   <span className="truncate w-full">{exhibition.title}</span>
                 </li>
@@ -115,11 +131,11 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
         </div>
       )}
 
-      {Object.entries(filteredExhibitions.past).some(([year, exhibitionsByYear]) => exhibitionsByYear.length > 0) && (
+      {filteredExhibitions.past.some(([year, exhibitionsByYear]) => year && exhibitionsByYear.length > 0) && (
         <div>
           <h4>{translations.past}</h4>
           <div className="border-b border-gray-200 mt-6 mb-12"></div>
-          {Object.entries(filteredExhibitions.past).map(
+          {filteredExhibitions.past.map(
             ([year, exhibitionsByYear]) => (
               <div key={year} className="flex flex-row justify-between gap-10">
                 <h5>{year}</h5>
@@ -141,5 +157,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
     </aside>
   );
 };
+
+
 
 export default ExhibitionsSidebar;

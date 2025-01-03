@@ -44,8 +44,17 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  const groupedArtists = useMemo(() => groupByFirstLetter(artists), [artists]);
+  // Group artists by the first letter
+  const groupedArtists = useMemo(() => {
+    const grouped = groupByFirstLetter(artists);
+    // Sort each group of artists alphabetically
+    for (const letter in grouped) {
+      grouped[letter].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return grouped;
+  }, [artists]);
 
+  // Filter artists by search term and sort alphabetically
   const filteredArtists = useMemo(() => {
     if (!artists.length || !groupedArtists) return {};
     if (!searchTerm) return groupedArtists;
@@ -60,29 +69,36 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside aria-label="Artists Sidebar" className="space-y-12">
-      <SearchInput value={searchTerm} handleSearchChange={handleSearchChange} search={translations.search} />
+      <SearchInput
+        value={searchTerm}
+        handleSearchChange={handleSearchChange}
+        search={translations.search}
+      />
       {Object.keys(filteredArtists).length === 0 && (
         <p className="text-gray-500">{translations.emptyState}</p>
       )}
-      {Object.entries(filteredArtists)?.map(([letter, group], index) => (
-        <div key={`${index}-${letter}`}>
-          <div className="flex flex-row gap-10 justify-between">
-            <h4>{letter}</h4>
-            <ul className="w-2/3">
-              {group.map((artist: Artist, index: number) => (
-                <li
-                  key={artist.name}
-                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
-                    }`}
-                >
-                  <span className="truncate w-full">{artist.name}</span>
-                </li>
-              ))}
-            </ul>
+      {/* List sorted alphabetically */}
+      {Object.entries(filteredArtists)
+        .sort(([a], [b]) => a.localeCompare(b)) // Sort groups alphabetically by the letter
+        .map(([letter, group], index) => (
+          <div key={`${index}-${letter}`}>
+            <div className="flex flex-row gap-10 justify-between">
+              <h4>{letter}</h4>
+              <ul className="w-2/3">
+                {group.map((artist: Artist, index: number) => (
+                  <li
+                    key={artist.name}
+                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                      }`}
+                  >
+                    <span className="truncate w-full">{artist.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="my-12 border-b border-gray-300" />
           </div>
-          <div className="my-12 border-b border-gray-300" />
-        </div>
-      ))}
+        ))}
     </aside>
   );
 };
