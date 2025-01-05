@@ -44,17 +44,38 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  // Group artists by the first letter
+  const normalizeName = (name: string) => {
+    return name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toLowerCase();
+  };
+
   const groupedArtists = useMemo(() => {
-    const grouped = groupByFirstLetter(artists);
-    // Sort each group of artists alphabetically
-    for (const letter in grouped) {
-      grouped[letter].sort((a, b) => a.name.localeCompare(b.name));
-    }
-    return grouped;
+    const grouped: Record<string, Artist[]> = {};
+
+    artists.forEach((artist) => {
+      const normalizedFirstLetter = normalizeName(artist.name)[0].toUpperCase() || "#";
+      if (!grouped[normalizedFirstLetter]) {
+        grouped[normalizedFirstLetter] = [];
+      }
+      grouped[normalizedFirstLetter].push(artist);
+    });
+
+    const sortedGrouped: Record<string, Artist[]> = {};
+    Object.keys(grouped)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) => {
+        sortedGrouped[key] = grouped[key].sort((a, b) =>
+          normalizeName(a.name).localeCompare(normalizeName(b.name))
+        );
+      });
+
+    return sortedGrouped;
   }, [artists]);
 
-  // Filter artists by search term and sort alphabetically
+
   const filteredArtists = useMemo(() => {
     if (!artists.length || !groupedArtists) return {};
     if (!searchTerm) return groupedArtists;
@@ -77,9 +98,8 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
       {Object.keys(filteredArtists).length === 0 && (
         <p className="text-gray-500">{translations.emptyState}</p>
       )}
-      {/* List sorted alphabetically */}
       {Object.entries(filteredArtists)
-        .sort(([a], [b]) => a.localeCompare(b)) // Sort groups alphabetically by the letter
+        .sort(([a], [b]) => a.localeCompare(b))
         .map(([letter, group], index) => (
           <div key={`${index}-${letter}`}>
             <div className="flex flex-row gap-10 justify-between">
