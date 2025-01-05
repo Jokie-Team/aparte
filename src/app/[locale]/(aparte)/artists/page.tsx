@@ -3,6 +3,7 @@ import React from "react";
 import { Artist } from "@/lib/artists";
 import { ArtistsSidebar } from "@/src/components/sidebar/artists";
 import Section from "@/src/components/section/artists";
+import { Divider } from "@/src/components/Divider";
 
 const normalizeName = (name: string) => {
   return name
@@ -70,8 +71,8 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
   const groupedArtists = groupArtistsByFirstLetter(filteredArtists);
 
   return (
-    <div className="m-12 flex flex-row w-full gap-24">
-      <div className="w-1/4 flex-shrink-0">
+    <div className="p-12 flex flex-row w-full gap-24">
+      <div className="w-1/4 flex-shrink-0 hidden md:block">
         <ArtistsSidebar
           artists={filteredArtists}
           translations={{
@@ -98,17 +99,15 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                     readMore: t("section.readMore"),
                   }}
                 />
-                {!(artistIndex === group.length - 1 &&
-                  groupIndex === Object.entries(groupedArtists).length - 1) && (
-                    <div className="my-32 border-b border-gray-200" />
-                  )}
+                {!(
+                  artistIndex === group.length - 1 &&
+                  groupIndex === Object.entries(groupedArtists).length - 1
+                ) && <div className="my-32 border-b border-gray-200" />}
               </React.Fragment>
             ))}
-
           </div>
         ))}
       </div>
-
     </div>
   );
 };
