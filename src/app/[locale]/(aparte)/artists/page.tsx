@@ -62,6 +62,8 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
               translations={{
                 aboutArtist: t("section.aboutArtist"),
                 aboutExhibitions: t("section.aboutExhibitions"),
+                readLess: t("section.readLess"),
+                readMore: t("section.readMore"),
               }}
             />
             {index < filteredArtists.length - 1 && (
