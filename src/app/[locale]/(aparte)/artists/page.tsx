@@ -4,6 +4,35 @@ import { Artist } from "@/lib/artists";
 import { ArtistsSidebar } from "@/src/components/sidebar/artists";
 import Section from "@/src/components/section/artists";
 
+const normalizeName = (name: string) => {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toLowerCase();
+};
+
+const groupArtistsByFirstLetter = (artists: Artist[]) => {
+  const grouped: Record<string, Artist[]> = {};
+
+  artists.forEach((artist) => {
+    const firstLetter = normalizeName(artist.name)[0]?.toUpperCase() || "#";
+    if (!grouped[firstLetter]) grouped[firstLetter] = [];
+    grouped[firstLetter].push(artist);
+  });
+
+  const sortedGrouped: Record<string, Artist[]> = {};
+  Object.keys(grouped)
+    .sort((a, b) => a.localeCompare(b))
+    .forEach((key) => {
+      sortedGrouped[key] = grouped[key].sort((a, b) =>
+        normalizeName(a.name).localeCompare(normalizeName(b.name))
+      );
+    });
+
+  return sortedGrouped;
+};
+
 type ArtistsProps = {
   searchParams: { search?: string };
 };
@@ -34,11 +63,11 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
     console.error("Fetch artists error:", error);
   }
 
-  const filteredArtists = artists
-    .filter((artist) =>
-      artist.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const filteredArtists = artists.filter((artist) =>
+    normalizeName(artist.name).includes(normalizeName(searchTerm))
+  );
+
+  const groupedArtists = groupArtistsByFirstLetter(filteredArtists);
 
   return (
     <div className="m-12 flex flex-row w-full gap-24">
@@ -55,19 +84,26 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
 
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
-        {filteredArtists.map((artist, index) => (
-          <React.Fragment key={artist.name}>
-            <Section
-              artist={artist}
-              translations={{
-                aboutArtist: t("section.aboutArtist"),
-                aboutExhibitions: t("section.aboutExhibitions"),
-              }}
-            />
-            {index < filteredArtists.length - 1 && (
-              <div className="my-32 border-b border-gray-200" />
-            )}
-          </React.Fragment>
+        {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
+          <div key={letter}>
+            {group.map((artist, artistIndex) => (
+              <React.Fragment key={artist.name}>
+                <Section
+                  artist={artist}
+                  translations={{
+                    aboutArtist: t("section.aboutArtist"),
+                    aboutExhibitions: t("section.aboutExhibitions"),
+                    readLess: t("section.readLess"),
+                    readMore: t("section.readMore"),
+                  }}
+                />
+                {!(
+                  artistIndex === group.length - 1 &&
+                  groupIndex === Object.entries(groupedArtists).length - 1
+                ) && <div className="my-32 border-b border-gray-200" />}
+              </React.Fragment>
+            ))}
+          </div>
         ))}
       </div>
     </div>

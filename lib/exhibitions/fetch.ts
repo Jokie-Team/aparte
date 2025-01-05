@@ -22,7 +22,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
           url 
         }
         description
-        artistsCollection(limit: 5) {
+        artistsCollection(limit: 40) {
           items {
             sys { id }
             name
