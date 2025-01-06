@@ -4,6 +4,7 @@ import { SearchInput } from "../searchInput/searchInput";
 import { Exhibition } from "@/lib/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { usePathname, useRouter } from "next/navigation";
+import { Arrow } from "../icons/arrow";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];
@@ -76,7 +77,6 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
     };
   }, [groupedExhibitions, searchTerm]);
 
-
   return (
     <aside className="space-y-12">
       <SearchInput
@@ -99,10 +99,38 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.current.map((exhibition, index) => (
                 <li
                   key={exhibition.title}
-                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""
-                    }`}
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                    } group transition-all duration-300 hover:py-6`}
                 >
-                  <span className="truncate w-full">{exhibition.title}</span>
+                  <button
+                    onClick={() => {
+                      const element = document.getElementById(
+                        `exhibition-${exhibition.title
+                          .replaceAll(" ", "-")
+                          .toLowerCase()}`
+                      );
+                      const headerOffset = 128;
+                      const elementPosition =
+                        element?.getBoundingClientRect().top || 0;
+                      const offsetPosition =
+                        elementPosition + window.pageYOffset - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }}
+                    className="w-full text-left flex flex-row justify-between items-center"
+                  >
+                    <span
+                      className="truncate group-hover:overflow-visible group-hover:whitespace-normal"
+                    >
+                      {exhibition.title}
+                    </span>
+                    <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <Arrow size={24} direction="right" fill="#000" />
+                    </span>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -119,48 +147,108 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.future.map((exhibition, index) => (
                 <li
                   key={exhibition.title}
-                  className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${index === 0 ? "border-t" : ""
-                    }`}
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                    } group transition-all duration-300 hover:py-6`}
                 >
-                  <span className="truncate w-full">{exhibition.title}</span>
+                  <button
+                    onClick={() => {
+                      const element = document.getElementById(
+                        `exhibition-${exhibition.title
+                          .replaceAll(" ", "-")
+                          .toLowerCase()}`
+                      );
+                      const headerOffset = 128;
+                      const elementPosition =
+                        element?.getBoundingClientRect().top || 0;
+                      const offsetPosition =
+                        elementPosition + window.pageYOffset - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }}
+                    className="w-full text-left flex flex-row justify-between items-center"
+                  >
+                    <span
+                      className="truncate group-hover:overflow-visible group-hover:whitespace-normal"
+                    >
+                      {exhibition.title}
+                    </span>
+                    <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <Arrow size={24} direction="right" fill="#000" />
+                    </span>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
           <div className="my-12 border-b border-gray-200" />
         </div>
-      )}
+      )
+      }
 
-      {filteredExhibitions.past.some(([year, exhibitionsByYear]) => year && exhibitionsByYear.length > 0) && (
-        <div>
-          <h4>{translations.past}</h4>
-          <div className="border-b border-gray-200 mt-6 mb-12"></div>
-          {filteredExhibitions.past.map(
-            ([year, exhibitionsByYear]) => exhibitionsByYear.length > 0 && (
-              <>
-                <div key={year} className="flex flex-row justify-between gap-10">
-                  <h5>{year}</h5>
-                  <ul className="w-2/3">
-                    {exhibitionsByYear.map((exhibitionByYear, indexItem) => (
-                      <li
-                        key={exhibitionByYear.title}
-                        className={`w-full max-w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black ${indexItem === 0 ? "border-t" : ""}`}
-                      >
-                        <span className="truncate w-full">{exhibitionByYear.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="border-b border-gray-200 mt-6 mb-12"></div>
-              </>
-            )
-          )}
-        </div>
-      )}
-    </aside>
+      {
+        filteredExhibitions.past.some(([year, exhibitionsByYear]) => year && exhibitionsByYear.length > 0) && (
+          <div>
+            <h4>{translations.past}</h4>
+            <div className="border-b border-gray-200 mt-6 mb-12"></div>
+            {filteredExhibitions.past.map(([year, exhibitionsByYear]) =>
+              exhibitionsByYear.length > 0 ? (
+                <>
+                  <div key={year} className="flex flex-row justify-between gap-10">
+                    <h5>{year}</h5>
+                    <ul className="w-2/3">
+                      {exhibitionsByYear.map((exhibition, index) => (
+                        <li
+                          key={exhibition.title}
+                          className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                            } group transition-all duration-300 hover:py-6`}
+                        >
+                          <button
+                            onClick={() => {
+                              const element = document.getElementById(
+                                `exhibition-${exhibition.title
+                                  .replaceAll(" ", "-")
+                                  .toLowerCase()}`
+                              );
+                              const headerOffset = 128;
+                              const elementPosition =
+                                element?.getBoundingClientRect().top || 0;
+                              const offsetPosition =
+                                elementPosition +
+                                window.pageYOffset -
+                                headerOffset;
+
+                              window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth",
+                              });
+                            }}
+                            className="w-full text-left flex flex-row justify-between items-center"
+                          >
+                            <span
+                              className="truncate group-hover:overflow-visible group-hover:whitespace-normal"
+                            >
+                              {exhibition.title}
+                            </span>
+                            <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                              <Arrow size={24} direction="right" fill="#000" />
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="my-12 border-b border-gray-200" />
+                </>
+              ) : null
+            )}
+          </div>
+        )
+      }
+    </aside >
   );
 };
-
-
 
 export default ExhibitionsSidebar;

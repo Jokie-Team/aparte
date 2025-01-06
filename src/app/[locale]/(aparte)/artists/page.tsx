@@ -85,10 +85,11 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
-          <div key={letter}>
+          <div key={letter} id={`group-${letter}`}>
             {group.map((artist, artistIndex) => (
               <React.Fragment key={artist.name}>
                 <Section
+                  id={`artist-${artist.name.replaceAll(" ", "-").toLowerCase()}`}
                   artist={artist}
                   translations={{
                     aboutArtist: t("section.aboutArtist"),
@@ -97,15 +98,17 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                     readMore: t("section.readMore"),
                   }}
                 />
-                {!(
-                  artistIndex === group.length - 1 &&
-                  groupIndex === Object.entries(groupedArtists).length - 1
-                ) && <div className="my-32 border-b border-gray-200" />}
+                {!(artistIndex === group.length - 1 &&
+                  groupIndex === Object.entries(groupedArtists).length - 1) && (
+                    <div className="my-32 border-b border-gray-200" />
+                  )}
               </React.Fragment>
             ))}
+
           </div>
         ))}
       </div>
+
     </div>
   );
 };
