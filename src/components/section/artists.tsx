@@ -19,7 +19,8 @@ const MAX_NO_CHARACTERS_BIO = 500;
 const Section: React.FC<{
   artist: Artist;
   translations: TranslationsObject;
-}> = ({ artist, translations }) => {
+  id: string;
+}> = ({ artist, translations, id }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
 
@@ -35,14 +36,14 @@ const Section: React.FC<{
   };
 
   const getCroppedText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text; // Retorna o texto completo se estiver dentro do limite
-    const cropped = text.slice(0, maxLength); // Corta o texto até o limite máximo
-    const lastPeriodIndex = cropped.lastIndexOf("."); // Encontra o último ponto final dentro do corte
-    return lastPeriodIndex !== -1 ? cropped.slice(0, lastPeriodIndex + 1) : cropped + "..."; // Garante que termina em um ponto final
+    if (text.length <= maxLength) return text;
+    const cropped = text.slice(0, maxLength);
+    const lastPeriodIndex = cropped.lastIndexOf(".");
+    return lastPeriodIndex !== -1 ? cropped.slice(0, lastPeriodIndex + 1) : cropped + "...";
   };
 
   return (
-    <div className="flex flex-col gap-20 my-20 w-full">
+    <div id={id} className="flex flex-col gap-20 my-20 w-full">
       <div className="flex flex-row justify-between gap-36 w-full">
         <div className="flex flex-col gap-2 w-2/3">
           <h3 className="text-gray-900">{artist?.name}</h3>

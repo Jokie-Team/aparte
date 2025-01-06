@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
 import {
   filterArtistsBySearchTerms,
-  groupByFirstLetter,
 } from "@/src/utils/artists";
+import { Arrow } from "../icons/arrow";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
@@ -109,10 +109,39 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
                   <li
                     key={artist.name}
                     className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
-                      }`}
+                      } group transition-all duration-300 hover:py-6`}
                   >
-                    <span className="truncate w-full">{artist.name}</span>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById(
+                          `artist-${artist.name.replaceAll(" ", "-").toLowerCase()}`
+                        );
+                        const headerOffset = 128;
+                        const elementPosition = element?.getBoundingClientRect().top || 0;
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }}
+                      className="w-full text-left flex flex-row justify-between items-center"
+                    >
+                      <span
+                        className="truncate group-hover:overflow-visible group-hover:whitespace-normal group-hover:truncate-none"
+                      >
+                        {artist.name}
+                      </span>
+
+                      <span
+                        className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                      >
+                        <Arrow size={24} direction="right" fill="#000" />
+                      </span>
+                    </button>
                   </li>
+
                 ))}
               </ul>
             </div>

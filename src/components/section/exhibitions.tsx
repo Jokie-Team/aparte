@@ -63,7 +63,12 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-8">
+    <div
+      id={`exhibition-${exhibition.title
+        .replaceAll(" ", "-")
+        .toLowerCase()}`}
+      className="flex flex-col space-y-8"
+    >
       <div className="flex flex-row justify-between">
         <div className="flex flex-col space-y-4 w-1/2">
           <h3 className="text-gray-900">{exhibition.title}</h3>
@@ -102,23 +107,6 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                 mapArtistsToArtistsList(exhibition.artists)}
             </p>
             <div className="border-t border-gray-300 !m-0" />
-            <p className="text-gray-500 !my-3">
-              {`${new Intl.DateTimeFormat(useLocale(), {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }).format(new Date(exhibition.startDate))} - ${new Intl.DateTimeFormat(
-                useLocale(),
-                {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                }
-              ).format(new Date(exhibition.endDate))}`}
-            </p>
-
-
-            <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
 
