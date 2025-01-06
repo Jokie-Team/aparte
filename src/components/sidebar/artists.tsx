@@ -107,15 +107,13 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
               <ul className="w-2/3">
                 {group.map((artist: Artist, index: number) => (
                   <li
-                    key={artist.name}
+                    key={artist.id}
                     className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
                       } group transition-all duration-300 hover:py-6`}
                   >
                     <button
                       onClick={() => {
-                        const element = document.getElementById(
-                          `artist-${artist.name.replaceAll(" ", "-").toLowerCase()}`
-                        );
+                        const element = document.getElementById(artist.id);
                         const headerOffset = 128;
                         const elementPosition = element?.getBoundingClientRect().top || 0;
                         const offsetPosition =

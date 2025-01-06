@@ -98,7 +98,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
             <ul className="w-2/3">
               {filteredExhibitions.current.map((exhibition, index) => (
                 <li
-                  key={exhibition.title}
+                  key={exhibition.id}
                   className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
                     } group transition-all duration-300 hover:py-6`}
                 >
@@ -113,7 +113,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                       const elementPosition =
                         element?.getBoundingClientRect().top || 0;
                       const offsetPosition =
-                        elementPosition + window.pageYOffset - headerOffset;
+                        elementPosition + window.scrollY - headerOffset;
 
                       window.scrollTo({
                         top: offsetPosition,
@@ -146,7 +146,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
             <ul className="w-2/3">
               {filteredExhibitions.future.map((exhibition, index) => (
                 <li
-                  key={exhibition.title}
+                  key={exhibition.id}
                   className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
                     } group transition-all duration-300 hover:py-6`}
                 >
@@ -161,7 +161,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                       const elementPosition =
                         element?.getBoundingClientRect().top || 0;
                       const offsetPosition =
-                        elementPosition + window.pageYOffset - headerOffset;
+                        elementPosition + window.scrollY - headerOffset;
 
                       window.scrollTo({
                         top: offsetPosition,
@@ -201,23 +201,19 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                     <ul className="w-2/3">
                       {exhibitionsByYear.map((exhibition, index) => (
                         <li
-                          key={exhibition.title}
+                          key={exhibition.id}
                           className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
                             } group transition-all duration-300 hover:py-6`}
                         >
                           <button
                             onClick={() => {
-                              const element = document.getElementById(
-                                `exhibition-${exhibition.title
-                                  .replaceAll(" ", "-")
-                                  .toLowerCase()}`
-                              );
+                              const element = document.getElementById(exhibition.id);
                               const headerOffset = 128;
                               const elementPosition =
                                 element?.getBoundingClientRect().top || 0;
                               const offsetPosition =
                                 elementPosition +
-                                window.pageYOffset -
+                                window.scrollY -
                                 headerOffset;
 
                               window.scrollTo({

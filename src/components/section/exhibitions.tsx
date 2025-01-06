@@ -107,6 +107,12 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                 mapArtistsToArtistsList(exhibition.artists)}
             </p>
             <div className="border-t border-gray-300 !m-0" />
+            <p className="text-gray-500 !my-3">
+              {`${new Date(exhibition.startDate).toDateString()} - ${new Date(
+                exhibition.endDate
+              ).toDateString()}`}
+            </p>
+            <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
 
