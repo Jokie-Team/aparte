@@ -74,10 +74,8 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
         <h2 className="mb-8">{t("title")}</h2>
         {orderedExhibitions.map((exhibitionItem, index) => (
           <div
-            key={exhibitionItem.title}
-            id={`exhibition-${exhibitionItem.title
-              .replaceAll(" ", "-")
-              .toLowerCase()}`}
+            key={exhibitionItem.id}
+            id={exhibitionItem.id}
           >
             <Section
               exhibition={exhibitionItem}

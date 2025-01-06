@@ -28,6 +28,7 @@ const MAX_NO_CHARACTERS_DESCRIPTION = 300;
 const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
+  const locale = useLocale();
 
   const handleArtistsClick = () => {
     const artistNames = exhibition.artists
@@ -64,9 +65,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
 
   return (
     <div
-      id={`exhibition-${exhibition.title
-        .replaceAll(" ", "-")
-        .toLowerCase()}`}
+      id={exhibition.id}
       className="flex flex-col space-y-8"
     >
       <div className="flex flex-row justify-between">
@@ -81,7 +80,10 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                     <br />
                   </React.Fragment>
                 ))
-                : getCroppedText(exhibition.description, MAX_NO_CHARACTERS_DESCRIPTION)
+                : getCroppedText(
+                  exhibition.description,
+                  MAX_NO_CHARACTERS_DESCRIPTION
+                )
                   .split("\n")
                   .map((line, index) => (
                     <React.Fragment key={index}>
@@ -107,6 +109,21 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                 mapArtistsToArtistsList(exhibition.artists)}
             </p>
             <div className="border-t border-gray-300 !m-0" />
+            <p className="text-gray-500 !my-3">
+              {`${new Intl.DateTimeFormat(locale, {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              }).format(new Date(exhibition.startDate))} - ${new Intl.DateTimeFormat(
+                locale,
+                {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                }
+              ).format(new Date(exhibition.endDate))}`}
+            </p>
+            <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
 

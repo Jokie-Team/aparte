@@ -10,6 +10,7 @@ export interface Exhibition {
   startDate: string;
   endDate: string;
   artworks: PictureProps[];
+  id: string;
 }
 
 export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
@@ -17,6 +18,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
   query {
     exhibitionCollection(limit: 200) {
       items {
+        sys { id }
         title
         picture { 
           url 
@@ -47,6 +49,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Artist[]> {
   }
 
   return response.data.exhibitionCollection.items.map((item: any) => ({
+    id: item.sys.id,
     title: item.title,
     description: item.description,
     picture: item.picture,

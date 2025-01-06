@@ -85,11 +85,11 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
-          <div key={letter} id={`group-${letter}`}>
+          <div key={letter} id={letter}>
             {group.map((artist, artistIndex) => (
-              <React.Fragment key={artist.name}>
+              <React.Fragment key={artist.id}>
                 <Section
-                  id={`artist-${artist.name.replaceAll(" ", "-").toLowerCase()}`}
+                  id={artist.id}
                   artist={artist}
                   translations={{
                     aboutArtist: t("section.aboutArtist"),

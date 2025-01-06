@@ -2,6 +2,7 @@ import { fetchGraphQL } from "../api";
 import { Exhibition } from "../exhibitions";
 
 export interface Artist {
+  id: string;
   exhibitions: Exhibition[];
   name: string;
   bio: string;
@@ -20,6 +21,7 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
     {
       artistCollection(limit: 400) {
         items {
+          sys { id }
           name
           picture { url }
           bio
@@ -43,6 +45,7 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   }
 
   return response.data.artistCollection.items.map((artist: any) => ({
+    id: artist.sys.id,
     name: artist.name,
     picture: artist.picture,
     bio: artist.bio,
