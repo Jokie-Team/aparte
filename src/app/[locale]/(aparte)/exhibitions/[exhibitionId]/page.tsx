@@ -1,29 +1,31 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+"use client";
 
-const ArtistPage = () => {
-    const router = useRouter();
-    const { artistId } = router.query; // Obtendo o ID do artista da URL
-    const [artist, setArtist] = useState(null);
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-    useEffect(() => {
-        if (artistId) {
-            const fetchArtist = async () => {
-            };
+const ExhibitionPage = () => {
+  const params = useParams();
+  const exhibitionId = params.exhibitionId as string;
+  const [exhibition, setExhibition] = useState(null);
 
-            fetchArtist();
-        }
-    }, [artistId]);
+  useEffect(() => {
+    if (exhibitionId) {
+      const fetchExhibition = async () => {
+        // Your fetch logic here
+      };
 
-    if (!artist) return <div>Loading...</div>;
+      fetchExhibition();
+    }
+  }, [exhibitionId]);
 
-    return (
-        <div>
-            <h1>{"artist.name"}</h1>
-            <p>{"artist.bio"}</p>
-            {/* Adicione mais informações sobre o artista aqui */}
-        </div>
-    );
+  if (!exhibition) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h1>{"exhibition.name"}</h1>
+      <p>{"exhibition.description"}</p>
+    </div>
+  );
 };
 
-export default ArtistPage;
+export default ExhibitionPage;
