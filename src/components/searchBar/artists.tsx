@@ -46,18 +46,38 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  // Group artists by the first letter
-  const groupedArtists = useMemo(() => {
-    const grouped = groupByFirstLetter(artists);
-    // Sort each group of artists alphabetically
-    for (const letter in grouped) {
-      grouped[letter].sort((a, b) => a.name.localeCompare(b.name));
-    }
+  const normalizeName = (name: string) => {
+    return name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toLowerCase();
+  };
 
-    return grouped;
+  const groupedArtists = useMemo(() => {
+    const grouped: Record<string, Artist[]> = {};
+
+    artists.forEach((artist) => {
+      const normalizedFirstLetter =
+        normalizeName(artist.name)[0].toUpperCase() || "#";
+      if (!grouped[normalizedFirstLetter]) {
+        grouped[normalizedFirstLetter] = [];
+      }
+      grouped[normalizedFirstLetter].push(artist);
+    });
+
+    const sortedGrouped: Record<string, Artist[]> = {};
+    Object.keys(grouped)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) => {
+        sortedGrouped[key] = grouped[key].sort((a, b) =>
+          normalizeName(a.name).localeCompare(normalizeName(b.name))
+        );
+      });
+
+    return sortedGrouped;
   }, [artists]);
 
-  // Filter artists by search term and sort alphabetically
   const filteredArtists = useMemo(() => {
     if (!artists.length || !groupedArtists) return {};
     if (!searchTerm) return groupedArtists;
@@ -67,7 +87,6 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
       const matchingArtists = filterArtistsBySearchTerms(group, searchTerm);
       if (matchingArtists.length) filtered[letter] = matchingArtists;
     }
-
     return filtered;
   }, [groupedArtists, searchTerm]);
 
@@ -103,7 +122,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
             </div>
           ))}
       </div>
-      <div className="pt-3 flex flex-row gap-3 justify-between overflow-x-scroll">
+      <div className="pt-3 flex flex-row gap-3 overflow-x-scroll">
         {selectedLetter &&
           filteredArtists[selectedLetter]?.map((artist: Artist) => (
             <span key={artist.name} className="whitespace-nowrap">

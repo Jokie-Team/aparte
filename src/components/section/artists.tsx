@@ -47,8 +47,18 @@ const Section: React.FC<{
   return (
     <div id={id} className="flex flex-col gap-20 my-20 w-full">
       <div className="flex flex-row justify-between gap-36 w-full">
-        <div className="flex flex-col gap-2 w-2/3">
-          <h3 className="text-gray-900">{artist?.name}</h3>
+        <div className="flex flex-col gap-2 w-full md:w-2/3">
+          <div className="block md:hidden w-full ">
+            <ContentfulImage
+              src={artist?.picture?.url || "/images/placeholder.jpeg"}
+              alt={
+                artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`
+              }
+              width={500}
+              height={500}
+            />
+          </div>
+          <h3 className="text-gray-900 pt-10 md:pt-0">{artist?.name}</h3>
           <p className="text-gray-600">
             {artist?.bio &&
               (isExpanded

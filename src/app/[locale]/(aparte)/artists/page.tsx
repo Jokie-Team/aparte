@@ -85,6 +85,14 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       </div>
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
+        <ArtistsSearchBar
+          artists={filteredArtists}
+          translations={{
+            emptyState: t("sidebar.emptyState"),
+            search: t("sidebar.search"),
+          }}
+          searchValue={searchTerm}
+        />
         {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
           <div key={letter} id={letter}>
             {group.map((artist, artistIndex) => (
