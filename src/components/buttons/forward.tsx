@@ -1,16 +1,18 @@
 "use client";
 import { ReactNode, useState } from "react";
 import { Arrow } from "../icons/arrow";
-import clsx from "clsx";
+import clsx, { ClassValue } from "clsx";
 
 const ForwardButton = ({
   onClick,
   disabled = false,
   children,
+  className,
 }: {
   onClick?: () => void;
   disabled?: boolean;
   children: ReactNode;
+  className?: ClassValue;
 }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -23,7 +25,8 @@ const ForwardButton = ({
         {
           "cursor-none": disabled,
           "cursor-pointer": !disabled,
-        }
+        },
+        className
       )}
       id="menu-button"
       aria-haspopup="true"

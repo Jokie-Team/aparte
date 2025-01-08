@@ -50,13 +50,11 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
             new Date(a.startDate || 0).getTime()
         )
       ),
-  ].filter((exhibition) =>
-    exhibition.title.toLowerCase().includes(searchTerm)
-  );
+  ].filter((exhibition) => exhibition.title.toLowerCase().includes(searchTerm));
 
   return (
     <div className="m-12 flex flex-row w-full gap-24">
-      <div className="w-1/4 flex-shrink-0">
+      <div className="hidden md:block w-1/4 flex-shrink-0">
         <ExhibitionsSidebar
           exhibitions={exhibitions}
           translations={{

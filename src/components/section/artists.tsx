@@ -39,7 +39,9 @@ const Section: React.FC<{
     if (text.length <= maxLength) return text;
     const cropped = text.slice(0, maxLength);
     const lastPeriodIndex = cropped.lastIndexOf(".");
-    return lastPeriodIndex !== -1 ? cropped.slice(0, lastPeriodIndex + 1) : cropped + "...";
+    return lastPeriodIndex !== -1
+      ? cropped.slice(0, lastPeriodIndex + 1)
+      : cropped + "...";
   };
 
   return (
@@ -51,19 +53,19 @@ const Section: React.FC<{
             {artist?.bio &&
               (isExpanded
                 ? artist.bio.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))
-                : getCroppedText(artist.bio, MAX_NO_CHARACTERS_BIO)
-                  .split("\n")
-                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  )))}
+                  ))
+                : getCroppedText(artist.bio, MAX_NO_CHARACTERS_BIO)
+                    .split("\n")
+                    .map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    )))}
           </p>
           {artist?.bio && artist.bio.length > MAX_NO_CHARACTERS_BIO && (
             <span
@@ -75,10 +77,12 @@ const Section: React.FC<{
             </span>
           )}
         </div>
-        <div className="w-1/3">
+        <div className="hidden md:block w-full md:w-1/3 ">
           <ContentfulImage
             src={artist?.picture?.url || "/images/placeholder.jpeg"}
-            alt={artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`}
+            alt={
+              artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`
+            }
             width={500}
             height={500}
           />

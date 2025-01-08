@@ -3,9 +3,7 @@ import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  filterArtistsBySearchTerms,
-} from "@/src/utils/artists";
+import { filterArtistsBySearchTerms } from "@/src/utils/artists";
 import { Arrow } from "../icons/arrow";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
@@ -56,7 +54,8 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
     const grouped: Record<string, Artist[]> = {};
 
     artists.forEach((artist) => {
-      const normalizedFirstLetter = normalizeName(artist.name)[0].toUpperCase() || "#";
+      const normalizedFirstLetter =
+        normalizeName(artist.name)[0].toUpperCase() || "#";
       if (!grouped[normalizedFirstLetter]) {
         grouped[normalizedFirstLetter] = [];
       }
@@ -74,7 +73,6 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
 
     return sortedGrouped;
   }, [artists]);
-
 
   const filteredArtists = useMemo(() => {
     if (!artists.length || !groupedArtists) return {};
@@ -104,18 +102,20 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
           <div key={`${index}-${letter}`}>
             <div className="flex flex-row gap-10 justify-between">
               <h4>{letter}</h4>
-              <ul className="w-2/3">
+              <ul key={letter} className="w-2/3">
                 {group.map((artist: Artist, index: number) => (
                   <li
                     key={artist.id}
-                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
-                      } group transition-all duration-300 hover:py-6`}
+                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
+                      index === 0 ? "border-t" : ""
+                    } group transition-all duration-300 hover:py-6`}
                   >
                     <button
                       onClick={() => {
                         const element = document.getElementById(artist.id);
                         const headerOffset = 128;
-                        const elementPosition = element?.getBoundingClientRect().top || 0;
+                        const elementPosition =
+                          element?.getBoundingClientRect().top || 0;
                         const offsetPosition =
                           elementPosition + window.pageYOffset - headerOffset;
 
@@ -126,20 +126,15 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
                       }}
                       className="w-full text-left flex flex-row justify-between items-center"
                     >
-                      <span
-                        className="truncate group-hover:overflow-visible group-hover:whitespace-normal group-hover:truncate-none"
-                      >
+                      <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal group-hover:truncate-none">
                         {artist.name}
                       </span>
 
-                      <span
-                        className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-                      >
+                      <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                         <Arrow size={24} direction="right" fill="#000" />
                       </span>
                     </button>
                   </li>
-
                 ))}
               </ul>
             </div>

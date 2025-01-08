@@ -1,7 +1,7 @@
 import "@/src/styles/globals.css";
 import localFont from "next/font/local";
 import Footer from "../../components/footer";
-import Header from "../../components/header";
+import Header from "../../components/header/header";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import ScrollUp from "@/src/components/buttons/scrollup";
