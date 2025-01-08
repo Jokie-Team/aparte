@@ -102,7 +102,7 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
           <div key={`${index}-${letter}`}>
             <div className="flex flex-row gap-10 justify-between">
               <h4>{letter}</h4>
-              <ul className="w-2/3">
+              <ul key={letter} className="w-2/3">
                 {group.map((artist: Artist, index: number) => (
                   <li
                     key={artist.id}

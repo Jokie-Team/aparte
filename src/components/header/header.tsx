@@ -37,7 +37,7 @@ export default function Header({ showBorder }: HeaderProps) {
         <Logo />
       </a>
       <Navbar />
-      <div className="sm:hidden flex items-center">
+      <div className="md:hidden flex items-center">
         {!isMobileMenuOpen ? (
           <button onClick={toggleMobileMenu}>
             <BurgerMenu />

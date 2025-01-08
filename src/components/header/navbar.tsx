@@ -57,8 +57,8 @@ const Navbar = ({
   };
 
   const renderNavItem = ({ path, translationKey }: NavItem) => (
-    <div>
-      <li key={path} className={navStyles.item} onClick={onClick}>
+    <div key={path}>
+      <li className={navStyles.item} onClick={onClick}>
         <Link href={`/${currentLocale}${path}`}>
           <span
             className={clsx({

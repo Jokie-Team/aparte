@@ -22,13 +22,18 @@ const BorderedList = <T extends Item>({
     <ul className="text-base">
       {items.map((item) => (
         <li
-          className={`flex items-center border-t h-12 py-1 last:border-b ${item.onItemClick && "cursor-pointer"
-            }`}
+          className={`flex items-center border-t h-12 py-1 last:border-b ${
+            item.onItemClick && "cursor-pointer"
+          }`}
           key={item.title}
           onClick={item.onItemClick}
         >
           {bulleted && <span className="mr-2 list-disc">•</span>}
-          {itemClassName == "body" ? <Body>{item.title}</Body> : <Subtitle>{item.title}</Subtitle>}
+          {itemClassName == "body" ? (
+            <Body>{item.title}</Body>
+          ) : (
+            <Subtitle>{item.title}</Subtitle>
+          )}
         </li>
       ))}
     </ul>

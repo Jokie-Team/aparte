@@ -4,6 +4,7 @@ import { Artist } from "@/lib/artists";
 import { ArtistsSidebar } from "@/src/components/sidebar/artists";
 import Section from "@/src/components/section/artists";
 import { Divider } from "@/src/components/Divider";
+import { ArtistsSearchBar } from "@/src/components/searchBar/artists";
 
 const normalizeName = (name: string) => {
   return name
@@ -82,7 +83,6 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
           searchValue={searchTerm}
         />
       </div>
-
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
