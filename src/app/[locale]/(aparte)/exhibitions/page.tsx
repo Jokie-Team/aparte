@@ -19,7 +19,6 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`,
       {
         cache: "no-store",
-        next: { revalidate: 10 },
         headers: {
           "Content-Type": "application/json",
         },

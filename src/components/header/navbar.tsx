@@ -18,8 +18,8 @@ type NavbarProps = {
 const NAV_ITEMS: NavItem[] = [
   { path: "/exhibitions", translationKey: "exhibitions" },
   { path: "/artists", translationKey: "artists" },
-  { path: "/contacts", translationKey: "contacts" },
-];
+/*   { path: "/contacts", translationKey: "contacts" },
+ */];
 
 const Navbar = ({
   isMobile = false,
