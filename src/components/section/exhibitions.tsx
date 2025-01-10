@@ -146,7 +146,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
         </ForwardButton>
         {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
       </div>
-      <Carousel images={exhibition?.artworks || []} visibleCount={3} />
+      <Carousel images={exhibition?.artworks.map((artwork) => artwork.images[0]) || []} visibleCount={3} />
     </div>
   );
 };

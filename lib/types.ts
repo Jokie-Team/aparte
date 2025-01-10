@@ -6,3 +6,9 @@ export interface PictureProps {
   width?: number;
   height?: number;
 }
+
+export interface MediaProps {
+  url: string;
+  title: string;
+  description?: string;
+}

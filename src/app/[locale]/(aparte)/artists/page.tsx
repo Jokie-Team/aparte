@@ -49,7 +49,6 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/artists`,
       {
         cache: "no-store",
-        next: { revalidate: 10 },
         headers: {
           "Content-Type": "application/json",
         },

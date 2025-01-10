@@ -19,7 +19,6 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`,
       {
         cache: "no-store",
-        next: { revalidate: 10 },
         headers: {
           "Content-Type": "application/json",
         },
@@ -32,7 +31,13 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
         `Failed to fetch exhibitions: ${res.status} - ${errorText}`
       );
     }
-    exhibitions = await res.json();
+
+    // Valida se o JSON retornado é válido
+    const data = await res.json();
+    if (!data || !Array.isArray(data)) {
+      throw new Error("Invalid data format received from API");
+    }
+    exhibitions = data;
   } catch (error) {
     console.error("Fetch exhibitions error:", error);
   }
@@ -71,10 +76,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
         {orderedExhibitions.map((exhibitionItem, index) => (
-          <div
-            key={exhibitionItem.id}
-            id={exhibitionItem.id}
-          >
+          <div key={exhibitionItem.id} id={exhibitionItem.id}>
             <Section
               exhibition={exhibitionItem}
               translations={{
