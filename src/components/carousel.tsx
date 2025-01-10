@@ -1,11 +1,10 @@
 "use client";
-import ContentfulImage from "@/lib/contentful-image";
-import { PictureProps } from "@/lib/types";
+import { MediaProps } from "@/lib/types";
 import React, { useState } from "react";
 import { Arrow } from "./icons/arrow";
 
 interface CarouselProps {
-  images: PictureProps[];
+  images: MediaProps[];
   visibleCount: number;
 }
 
