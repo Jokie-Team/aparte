@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Carousel from "../carousel";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import { useLocale } from "next-intl";
+import MobileGallery from "../MobileGallery";
 
 interface TranslationsObject {
   readMore: string;
@@ -60,37 +61,45 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
     if (text.length <= maxLength) return text;
     const cropped = text.slice(0, maxLength);
     const lastPeriodIndex = cropped.lastIndexOf(".");
-    return lastPeriodIndex !== -1 ? cropped.slice(0, lastPeriodIndex + 1) : cropped + "...";
+    return lastPeriodIndex !== -1
+      ? cropped.slice(0, lastPeriodIndex + 1)
+      : cropped + "...";
   };
 
   return (
-    <div
-      id={exhibition.id}
-      className="flex flex-col space-y-8"
-    >
+    <div id={exhibition.id} className="flex flex-col space-y-8">
+      <div className="block pt-10 md:hidden">
+        <MobileGallery
+          images={
+            exhibition?.artworks
+              .map((artwork) => artwork.images[0])
+              .slice(0, 5) || []
+          }
+        />
+      </div>
       <div className="flex flex-row justify-between">
-        <div className="flex flex-col space-y-4 w-1/2">
+        <div className="flex flex-col space-y-4 w-full md:w-1/2">
           <h3 className="text-gray-900">{exhibition.title}</h3>
           <p className="text-gray-600">
             {exhibition?.description &&
               (isExpanded
                 ? exhibition.description.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))
-                : getCroppedText(
-                  exhibition.description,
-                  MAX_NO_CHARACTERS_DESCRIPTION
-                )
-                  .split("\n")
-                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  )))}
+                  ))
+                : getCroppedText(
+                    exhibition.description,
+                    MAX_NO_CHARACTERS_DESCRIPTION
+                  )
+                    .split("\n")
+                    .map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    )))}
           </p>
           {exhibition?.description &&
             exhibition.description.length > MAX_NO_CHARACTERS_DESCRIPTION && (
@@ -114,20 +123,19 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
-              }).format(new Date(exhibition.startDate))} - ${new Intl.DateTimeFormat(
-                locale,
-                {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                }
-              ).format(new Date(exhibition.endDate))}`}
+              }).format(
+                new Date(exhibition.startDate)
+              )} - ${new Intl.DateTimeFormat(locale, {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              }).format(new Date(exhibition.endDate))}`}
             </p>
             <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
 
-        <div className="sm:w-2/5">
+        <div className="hidden md:block md:w-2/5">
           <ContentfulImage
             src={exhibition?.picture?.url || "/images/placeholder.jpeg"}
             alt={exhibition?.title || "Exhibition"}
@@ -139,14 +147,21 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
       </div>
 
       <div className="flex flex-row gap-10">
-        <ForwardButton onClick={handleArtistsClick}>
+        <ForwardButton onClick={handleArtistsClick} className="w-full md:w">
           {exhibition.artists.length > 1
             ? translations.aboutArtists
             : translations.aboutArtist}
         </ForwardButton>
         {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
       </div>
-      <Carousel images={exhibition?.artworks.map((artwork) => artwork.images[0]) || []} visibleCount={3} />
+      <div className="hidden md:block">
+        <Carousel
+          images={
+            exhibition?.artworks.map((artwork) => artwork.images[0]) || []
+          }
+          visibleCount={3}
+        />
+      </div>
     </div>
   );
 };

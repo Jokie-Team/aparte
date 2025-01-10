@@ -8,6 +8,7 @@ const nextConfig = {
   images: {
     loader: "default", // Usa o loader padrão do Next.js
     formats: ["image/avif", "image/webp"],
+    domains: ['images.ctfassets.net']
   },
   webpack: (config) => {
     // Grab the existing rule that handles SVG imports
