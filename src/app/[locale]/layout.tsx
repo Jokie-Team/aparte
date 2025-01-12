@@ -15,7 +15,6 @@ export default async function LocaleLayout({
     lng: string;
   };
 }) {
-  // Receive messages provided in `i18n.ts`
   const messages = await getMessages();
 
   return (
