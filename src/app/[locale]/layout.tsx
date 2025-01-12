@@ -1,5 +1,4 @@
 import "@/src/styles/globals.css";
-import localFont from "next/font/local";
 import Footer from "../../components/footer";
 import Header from "../../components/header/header";
 import { getMessages } from "next-intl/server";
@@ -8,20 +7,23 @@ import ScrollUp from "@/src/components/buttons/scrollup";
 
 export default async function LocaleLayout({
   children,
-  params: { lng },
+  params,
 }: {
   children: React.ReactNode;
-  params: {
-    lng: string;
-  };
+  params: { locale: string };
 }) {
-  // Receive messages provided in `i18n.ts`
-  const messages = await getMessages();
+  const { locale } = params;
+
+  if (!locale) {
+    throw new Error("Locale parameter is required.");
+  }
+
+  const messages = await getMessages({ locale });
 
   return (
-    <html lang={lng}>
+    <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
               <Header showBorder={false} />

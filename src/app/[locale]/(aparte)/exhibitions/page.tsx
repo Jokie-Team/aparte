@@ -7,13 +7,13 @@ import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { ExhibitionsSearchBar } from "@/src/components/searchBar/exhibitions";
 
 type ExhibitionsProps = {
-  searchParams: { search?: string; group?: string };
+  searchParams: Promise<{ search?: string; group?: string }>;
 };
 
 const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
   const t = await getTranslations("exhibitions");
-  const searchTerm = searchParams.search?.toLowerCase() || "";
-  const group = searchParams.group?.toLowerCase() || "";
+  const searchTerm = (await searchParams).search?.toLowerCase() || "";
+  const group = (await searchParams).group?.toLowerCase() || "";
 
   let exhibitions: Exhibition[] = [];
 
