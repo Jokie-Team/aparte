@@ -92,7 +92,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
         )}
 
       {filteredExhibitions.current.length > 0 && (
-        <div key="current">
+        <div>
           <div className="flex flex-row justify-between gap-10">
             <h4>{translations.current}</h4>
             <ul className="w-2/3">
@@ -139,7 +139,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       )}
 
       {filteredExhibitions.future.length > 0 && (
-        <div key="future">
+        <div>
           <div className="flex flex-row justify-between gap-10">
             <h4>{translations.future}</h4>
             <ul className="w-2/3">
@@ -188,18 +188,17 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       {filteredExhibitions.past.some(
         ([year, exhibitionsByYear]) => year && exhibitionsByYear.length > 0
       ) && (
-          <div key="past">
+          <div>
             <h4>{translations.past}</h4>
             <div className="border-b border-gray-200 mt-6 mb-12"></div>
             {filteredExhibitions.past.map(([year, exhibitionsByYear]) =>
               exhibitionsByYear.length > 0 ? (
-                <>
+                <React.Fragment key={year}>
                   <div
-                    key={year}
                     className="flex flex-row justify-between gap-10"
                   >
                     <h5>{year}</h5>
-                    <ul key={year} className="w-2/3">
+                    <ul className="w-2/3">
                       {exhibitionsByYear.map((exhibition, index) => (
                         <li
                           key={exhibition.id}
@@ -237,7 +236,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                     </ul>
                   </div>
                   <div className="my-12 border-b border-gray-200" />
-                </>
+                </React.Fragment>
               ) : null
             )}
           </div>
