@@ -87,7 +87,12 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
   }, [groupedArtists, searchTerm]);
 
   return (
-    <aside aria-label="Artists Sidebar" className="space-y-12">
+    <aside
+      id="artists-sidebar"
+      aria-label="Artists Sidebar"
+      className="space-y-12 relative overflow-y-auto max-h-screen"
+      style={{ scrollBehavior: "smooth" }}
+    >
       <SearchInput
         value={searchTerm}
         handleSearchChange={handleSearchChange}
@@ -106,24 +111,37 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
                 {group.map((artist: Artist, index: number) => (
                   <li
                     key={artist.id}
-                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                      index === 0 ? "border-t" : ""
-                    } group transition-all duration-300 hover:py-6`}
+                    id={'list-item-' + artist.id}
+                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                      } group transition-all duration-300 hover:py-6`}
                   >
                     <button
                       onClick={() => {
-                        const element = document.getElementById(artist.id);
-                        const headerOffset = 128;
-                        const elementPosition =
-                          element?.getBoundingClientRect().top || 0;
-                        const offsetPosition =
-                          elementPosition + window.pageYOffset - headerOffset;
+                        const sidebar = document.querySelector(
+                          "aside[aria-label='Artists Sidebar']"
+                        );
+                        const listItem = document.getElementById('list-item-' + artist.id);
 
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
+                        if (sidebar && listItem) {
+                          const sidebarRect = sidebar.getBoundingClientRect();
+                          const listItemRect = listItem.getBoundingClientRect();
+
+                          const offset =
+                            listItemRect.top - sidebarRect.top;
+                          sidebar.scrollTop += offset;
+                        }
+
+                        const element = document.getElementById(artist.id);
+                        const sections = document.getElementById("sections");
+
+                        if (element && sections) {
+                          const elementPosition = element.getBoundingClientRect().top;
+                          const headerOffset = document.querySelector("header")?.offsetHeight || 200;
+                          const offsetPosition = elementPosition - headerOffset;
+                          sections.scrollTop += offsetPosition;
+                        }
                       }}
+
                       className="w-full text-left flex flex-row justify-between items-center"
                     >
                       <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal group-hover:truncate-none">

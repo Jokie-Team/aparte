@@ -82,7 +82,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
           searchValue={searchTerm}
         />
       </div>
-      <div className="w-full">
+      <div id="sections" className="overflow-y-scroll max-h-screen w-full">
         <h2 className="mb-8">{t("title")}</h2>
         <ArtistsSearchBar
           artists={filteredArtists}
