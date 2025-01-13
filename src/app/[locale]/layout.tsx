@@ -1,27 +1,30 @@
 import "@/src/styles/globals.css";
-import localFont from "next/font/local";
 import Footer from "../../components/footer";
 import Header from "../../components/header/header";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import ScrollUp from "@/src/components/buttons/scrollup";
+import React from "react";
 
 export default async function LocaleLayout({
   children,
-  params: { lng },
+  params,
 }: {
   children: React.ReactNode;
-  params: {
-    lng: string;
-  };
+  params: { locale?: string };
 }) {
-  // Receive messages provided in `i18n.ts`
-  const messages = await getMessages();
+  const locale = params?.locale;
+
+  if (!locale || typeof locale !== "string") {
+    throw new Error("Locale parameter is required and must be a valid string.");
+  }
+
+  const messages = await getMessages({ locale });
 
   return (
-    <html lang={lng}>
+    <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
               <Header showBorder={false} />
@@ -32,6 +35,7 @@ export default async function LocaleLayout({
             <Footer />
             <ScrollUp direction="up" />
           </section>
+          <ScrollUp direction={"up"} />
         </NextIntlClientProvider>
       </body>
     </html>

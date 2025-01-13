@@ -19,8 +19,6 @@ const MobileGallery: React.FC<MobileGalleryProps> = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  console.log(images);
-
   if (!images.length) return null;
 
   return (

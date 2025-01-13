@@ -36,12 +36,12 @@ const groupArtistsByFirstLetter = (artists: Artist[]) => {
 };
 
 type ArtistsProps = {
-  searchParams: { search?: string };
+  searchParams: Promise<{ search?: string }>;
 };
 
 const Artists = async ({ searchParams }: ArtistsProps) => {
   const t = await getTranslations("artists");
-  const searchTerm = searchParams.search?.toLowerCase() || "";
+  const searchTerm = (await searchParams).search?.toLowerCase() || "";
 
   let artists: Artist[] = [];
   try {

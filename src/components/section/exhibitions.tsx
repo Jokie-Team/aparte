@@ -84,22 +84,22 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             {exhibition?.description &&
               (isExpanded
                 ? exhibition.description.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))
+                : getCroppedText(
+                  exhibition.description,
+                  MAX_NO_CHARACTERS_DESCRIPTION
+                )
+                  .split("\n")
+                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  ))
-                : getCroppedText(
-                    exhibition.description,
-                    MAX_NO_CHARACTERS_DESCRIPTION
-                  )
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    )))}
+                  )))}
           </p>
           {exhibition?.description &&
             exhibition.description.length > MAX_NO_CHARACTERS_DESCRIPTION && (
@@ -147,14 +147,14 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
       </div>
 
       <div className="flex flex-row gap-10">
-        <ForwardButton onClick={handleArtistsClick} className="w-full md:w">
+        <ForwardButton onClick={handleArtistsClick} className="w-full md:w-auto">
           {exhibition.artists.length > 1
             ? translations.aboutArtists
             : translations.aboutArtist}
         </ForwardButton>
         {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
       </div>
-      <div className="hidden md:block">
+      <div className="hidden md:flex">
         <Carousel
           images={
             exhibition?.artworks.map((artwork) => artwork.images[0]) || []

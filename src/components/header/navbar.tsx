@@ -31,7 +31,7 @@ const Navbar = ({
   const currentLocale = useLocale();
   const otherLocale = currentLocale === "en" ? "pt" : "en";
 
-  const localizedPathname = (locale: string) => {
+  const localizedPathname = (locale: string | undefined) => {
     if (pathname === `/${currentLocale}`) {
       return `/${locale}`;
     }
