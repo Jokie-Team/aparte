@@ -5,6 +5,7 @@ import { Exhibition } from "@/lib/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { usePathname, useRouter } from "next/navigation";
 import { Arrow } from "../icons/arrow";
+import React from "react";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];

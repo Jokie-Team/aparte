@@ -15,13 +15,15 @@ const images = [
     "/images/10.jpeg",
 ];
 
-const shuffleArray = (array: string[]) => {
-    return array.sort(() => Math.random() - 0.5);
-};
-
-
 const RandomGallery = () => {
-    const shuffledImages = useMemo(() => shuffleArray([...images]), []);
+    const shuffledImages = useMemo(() => {
+        const seed = 42;
+        return [...images].sort((a, b) => {
+            const hashA = a.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed);
+            const hashB = b.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed);
+            return hashA - hashB;
+        });
+    }, []);
 
     return (
         <div className="grid grid-cols-12 gap-4 w-full h-[50vh] pb-5">

@@ -5,9 +5,12 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    loader: "default",
-    formats: ["image/avif", "image/webp"],
-    domains: ['images.ctfassets.net'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net",
+      },
+    ],
   },
   webpack: (config) => {
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -33,5 +36,6 @@ const nextConfig = {
     return config;
   },
 };
+
 
 module.exports = withNextIntl(nextConfig); // Exportação CommonJS

@@ -4,18 +4,19 @@ import Header from "../../components/header/header";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import ScrollUp from "@/src/components/buttons/scrollup";
+import React from "react";
 
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale?: string };
 }) {
-  const { locale } = params;
+  const locale = params?.locale;
 
-  if (!locale) {
-    throw new Error("Locale parameter is required.");
+  if (!locale || typeof locale !== "string") {
+    throw new Error("Locale parameter is required and must be a valid string.");
   }
 
   const messages = await getMessages({ locale });
@@ -34,6 +35,7 @@ export default async function LocaleLayout({
             <Footer />
             <ScrollUp direction="up" />
           </section>
+          <ScrollUp direction={"up"} />
         </NextIntlClientProvider>
       </body>
     </html>
