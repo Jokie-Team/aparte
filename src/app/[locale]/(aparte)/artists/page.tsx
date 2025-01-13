@@ -64,9 +64,15 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
     console.error("Fetch artists error:", error);
   }
 
-  const filteredArtists = artists.filter((artist) =>
-    normalizeName(artist.name).includes(normalizeName(searchTerm))
-  );
+  const splitSearchTerms = () => {
+    return searchTerm.split(",").map((word) => normalizeName(word));
+  };
+
+  const filteredArtists = artists.filter((artist) => {
+    return splitSearchTerms().some((term) =>
+      normalizeName(artist.name).includes(term)
+    );
+  });
 
   const groupedArtists = groupArtistsByFirstLetter(filteredArtists);
 
