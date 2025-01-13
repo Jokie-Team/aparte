@@ -35,7 +35,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
   }
 
   const total = countResponse.data.exhibitionCollection.total;
-  
+
   while (hasMore) {
     const query = `
     query {
@@ -49,17 +49,17 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
             title
             description
           }
-          artistsCollection(limit: 10) {
+          artistsCollection(limit: 23) {
             items {
               sys { id }
               name
             }
           }
-          artworksCollection(limit: 5) {
+          artworksCollection(limit: 15) {
             items {
               sys { id }
               name
-              imagesCollection(limit: 5) {
+              imagesCollection(limit: 1) {
                 items {
                   url
                   title
@@ -109,7 +109,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
       }));
 
       allExhibitions = [...allExhibitions, ...exhibitions];
-      
+
       skip += CHUNK_SIZE;
       hasMore = skip < total;
 

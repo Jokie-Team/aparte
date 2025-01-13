@@ -4,7 +4,7 @@ export default createMiddleware({
   // Lista de locais suportados
   locales: ["en", "pt"],
   // Idioma padrão se não for especificado
-  defaultLocale: "en",
+  defaultLocale: "pt",
   // Personalize o comportamento do redirecionamento (opcional)
   localeDetection: true, // Habilita a detecção automática do idioma com base nos cabeçalhos do navegador
 });
