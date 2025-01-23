@@ -1,3 +1,4 @@
+import { fetchArtworks } from "@/lib/artworks";
 import RandomGallery from "@/src/components/random-gallery";
 import { getTranslations } from "next-intl/server";
 import React from "react";
@@ -5,9 +6,11 @@ import React from "react";
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
 
+  const randomArtworks = await fetchArtworks(false, 9);
+
   return (
     <div className="px-10 py-16 w-full overflow-x-hidden overflow-y-hidden">
-      <RandomGallery />
+      <RandomGallery artworks={randomArtworks} />
 
       <h1 className="bottom-0 left-0">{t("title")}</h1>
     </div>
