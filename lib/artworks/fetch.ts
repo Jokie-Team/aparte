@@ -13,10 +13,10 @@ export interface Artwork {
   images: MediaProps[];
 }
 
-export async function fetchAllArtworks(preview = false): Promise<Artwork[]> {
+export async function fetchArtworks(preview = false, limit?: number): Promise<Artwork[]> {
   const query = `
   query {
-    artworkCollection {
+    artworkCollection(limit: ${limit}) {
       items {
         sys {
           id
@@ -36,9 +36,7 @@ export async function fetchAllArtworks(preview = false): Promise<Artwork[]> {
         }
         imagesCollection {
           items {
-            file {
-              url
-            }
+            url
             title
             description
           }
@@ -66,7 +64,7 @@ export async function fetchAllArtworks(preview = false): Promise<Artwork[]> {
       id: artist.sys.id,
     })) || [],
     images: item.imagesCollection?.items.map((image: any) => ({
-      url: image.file.url,
+      url: image.url,
       title: image.title || "",
       description: image.description || "",
     })) || [],

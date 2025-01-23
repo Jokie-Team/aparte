@@ -14,6 +14,38 @@ export interface Exhibition {
   id: string;
 }
 
+async function fetchArtistsForExhibition(exhibitionId: string, preview = false): Promise<Artist[]> {
+  const ARTIST_CHUNK_SIZE = 100;
+  let skip = 0;
+
+  const artistsQuery = `
+    query {
+      exhibition(id: "${exhibitionId}") {
+        artistsCollection(limit: ${ARTIST_CHUNK_SIZE}, skip: ${skip}) {
+          total
+          items {
+            sys { id }
+            name
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await fetchGraphQL(artistsQuery, preview);
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error(`Failed to fetch artists for exhibition ${exhibitionId}`);
+  }
+
+  const artists = response.data.exhibition.artistsCollection.items.map((artist: any) => ({
+    id: artist.sys.id,
+    name: artist.name || "",
+  }));
+
+  return artists;
+}
+
 export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]> {
   const CHUNK_SIZE = 200;
   let allExhibitions: Exhibition[] = [];
@@ -49,12 +81,6 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
             title
             description
           }
-          artistsCollection(limit: 23) {
-            items {
-              sys { id }
-              name
-            }
-          }
           artworksCollection(limit: 15) {
             items {
               sys { id }
@@ -82,31 +108,34 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
         throw new Error("Failed to fetch exhibitions chunk");
       }
 
-      const exhibitions = response.data.exhibitionCollection.items.map((item: any) => ({
-        id: item.sys.id,
-        title: item.title || "",
-        description: item.description || "",
-        picture: {
-          url: item.picture?.url || "",
-          title: item.picture?.title || "",
-          description: item.picture?.description || "",
-        },
-        artists: item.artistsCollection?.items.map((artist: any) => ({
-          id: artist.sys.id,
-          name: artist.name || "",
-        })) || [],
-        artworks: item.artworksCollection?.items.map((artwork: any) => ({
-          id: artwork.sys.id,
-          name: artwork.name || "",
-          images: artwork.imagesCollection?.items.map((image: any) => ({
-            url: image.url,
-            title: image.title || "",
-            description: image.description || "",
-          })) || [],
-        })) || [],
-        startDate: item.startDate || "",
-        endDate: item.endDate || "",
-      }));
+      const exhibitions = await Promise.all(
+        response.data.exhibitionCollection.items.map(async (item: any) => {
+          const artists = await fetchArtistsForExhibition(item.sys.id, preview);
+          
+          return {
+            id: item.sys.id,
+            title: item.title || "",
+            description: item.description || "",
+            picture: {
+              url: item.picture?.url || "",
+              title: item.picture?.title || "",
+              description: item.picture?.description || "",
+            },
+            artists,
+            artworks: item.artworksCollection?.items.map((artwork: any) => ({
+              id: artwork.sys.id,
+              name: artwork.name || "",
+              images: artwork.imagesCollection?.items.map((image: any) => ({
+                url: image.url,
+                title: image.title || "",
+                description: image.description || "",
+              })) || [],
+            })) || [],
+            startDate: item.startDate || "",
+            endDate: item.endDate || "",
+          };
+        })
+      );
 
       allExhibitions = [...allExhibitions, ...exhibitions];
 
