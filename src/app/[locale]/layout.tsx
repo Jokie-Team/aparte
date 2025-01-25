@@ -13,7 +13,7 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale?: string };
 }) {
-  const locale = params?.locale;
+  const { locale } = await params;
 
   if (!locale || typeof locale !== "string") {
     throw new Error("Locale parameter is required and must be a valid string.");
@@ -27,7 +27,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
-              <Header showBorder={false} />
+              <Header showBorder={true} />
               <main className="pt-24 flex flex-1 bg-gray-100 overflow-y-auto">
                 {children}
               </main>

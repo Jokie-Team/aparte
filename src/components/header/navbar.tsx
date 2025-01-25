@@ -18,8 +18,9 @@ type NavbarProps = {
 const NAV_ITEMS: NavItem[] = [
   { path: "/exhibitions", translationKey: "exhibitions" },
   { path: "/artists", translationKey: "artists" },
-/*   { path: "/contacts", translationKey: "contacts" },
- */];
+  /*   { path: "/contacts", translationKey: "contacts" },
+   */
+];
 
 const Navbar = ({
   isMobile = false,
@@ -78,7 +79,7 @@ const Navbar = ({
       <ul className={navStyles.list}>
         {NAV_ITEMS.map(renderNavItem)}
         <li className={navStyles.item}>
-          <Link href={localizedPathname(otherLocale)} locale={false}>
+          <Link href={localizedPathname(otherLocale)}>
             <span>{otherLocale.toUpperCase()}</span>
           </Link>
         </li>

@@ -29,7 +29,7 @@ export default function Header({ showBorder }: HeaderProps) {
       className={clsx(
         "fixed top-0 w-full z-50 flex flex-row justify-between font-neue h-14 items-center md:p-10 p-3 bg-[#ffffff]",
         {
-          showBorder: "border-b",
+          "border-b": showBorder,
         }
       )}
     >
@@ -51,9 +51,9 @@ export default function Header({ showBorder }: HeaderProps) {
           <div className="absolute inset-x-0 top-14 w-full flex flex-col h-screen">
             <Divider />
             <div className="flex-1 bg-[#ffffff] py-5">
-              <div className="px-5">
+              {/* <div className="px-5">
                 <RandomGallery />
-              </div>
+              </div> neeed to receive artworks to achieve this - or refactor random gallery*/}
               <Navbar isMobile isMobileMenuOpen onClick={closeMobileMenu} />
             </div>
           </div>
