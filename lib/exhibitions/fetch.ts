@@ -19,18 +19,19 @@ async function fetchArtistsForExhibition(exhibitionId: string, preview = false):
   let skip = 0;
 
   const artistsQuery = `
-    query {
-      exhibition(id: "${exhibitionId}") {
-        artistsCollection(limit: ${ARTIST_CHUNK_SIZE}, skip: ${skip}) {
-          total
-          items {
-            sys { id }
-            name
-          }
+  query {
+    exhibition(id: "${exhibitionId}") {
+      artistsCollection(where: {sys: {publishedAt_exists: true}}, limit: ${ARTIST_CHUNK_SIZE}, skip: ${skip}) {
+        total
+        items {
+          sys { id }
+          name
         }
       }
     }
-  `;
+  }
+`;
+
 
   const response = await fetchGraphQL(artistsQuery, preview);
   if (response.errors) {
@@ -111,7 +112,7 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
       const exhibitions = await Promise.all(
         response.data.exhibitionCollection.items.map(async (item: any) => {
           const artists = await fetchArtistsForExhibition(item.sys.id, preview);
-          
+
           return {
             id: item.sys.id,
             title: item.title || "",
