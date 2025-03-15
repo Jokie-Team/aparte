@@ -42,7 +42,7 @@ const Navbar = ({
   const normalizedPathname = pathname.replace(`/${currentLocale}`, "");
 
   const navStyles = {
-    nav: clsx("md:p-10 transition-all duration-300", {
+    nav: clsx("transition-all duration-300", {
       "block md:hidden h-full": isMobile && isMobileMenuOpen,
       "hidden md:hidden h-14": isMobile && !isMobileMenuOpen,
       "hidden md:block": !isMobile && !isMobileMenuOpen,

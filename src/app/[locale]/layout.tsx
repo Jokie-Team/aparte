@@ -1,10 +1,10 @@
 import "@/src/styles/globals.css";
 import Footer from "../../components/footer";
-import Header from "../../components/header/header";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import ScrollUp from "@/src/components/buttons/scrollup";
 import React from "react";
+import Header from "@/src/components/header/header";
 
 export default async function LocaleLayout({
   children,
@@ -27,8 +27,8 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
-              <Header showBorder={true} />
-              <main className="pt-24 flex flex-1 bg-gray-100 overflow-y-auto">
+              <main className="mt-16 flex flex-1 bg-gray-100 overflow-y-auto">
+                <Header showBorder={true} />
                 {children}
               </main>
             </div>

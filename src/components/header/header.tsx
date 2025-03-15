@@ -7,7 +7,6 @@ import { Navbar } from "./navbar";
 import BurgerMenu from "../icons/burger-menu";
 import Cross from "../icons/cross";
 import { Divider } from "../Divider";
-import RandomGallery from "../random-gallery";
 
 interface HeaderProps {
   showBorder: boolean;

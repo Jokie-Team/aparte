@@ -5,7 +5,7 @@ import { Artwork } from "@/lib/artworks";
 
 const RandomGallery = ({ artworks }: { artworks: Artwork[] }) => {
   return (
-    <div className="grid grid-cols-12 gap-4 w-full h-[70vh] pb-5">
+    <div className="grid grid-cols-12 gap-4 w-full h-[65vh] pb-5">
       <div className="relative col-span-3 row-span-1 h-full">
         <Image
           src={artworks[0].images[0].url}

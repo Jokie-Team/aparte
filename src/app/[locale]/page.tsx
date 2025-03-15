@@ -9,9 +9,8 @@ export default async function LocalePage() {
   const randomArtworks = await fetchArtworks(false, 9);
 
   return (
-    <div className="px-10 py-16 w-full overflow-x-hidden overflow-y-hidden">
+    <div className="px-6 py-10 w-full overflow-x-hidden overflow-y-hidden">
       <RandomGallery artworks={randomArtworks} />
-
       <h1 className="bottom-0 left-0">{t("title")}</h1>
     </div>
   );
