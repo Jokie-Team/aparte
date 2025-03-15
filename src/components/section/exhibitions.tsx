@@ -113,11 +113,14 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             )}
           <div>
             <div className="border-t border-gray-300 !mt-10" />
-            <p className="text-gray-800 font-medium !my-3">
-              {exhibition.artists.length > 0 &&
-                mapArtistsToArtistsList(exhibition.artists)}
-            </p>
-            <div className="border-t border-gray-300 !m-0" />
+            {exhibition.artists.length > 0 && (
+              <>
+                <p className="text-gray-800 font-medium !my-3">
+                  {mapArtistsToArtistsList(exhibition.artists)}
+                </p>
+                <div className="border-t border-gray-300 !m-0" />
+              </>
+            )}
             <p className="text-gray-500 !my-3">
               {`${new Intl.DateTimeFormat(locale, {
                 day: "2-digit",
@@ -135,27 +138,30 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
           </div>
         </div>
 
-        <div className="hidden md:block md:w-2/5">
-          <ContentfulImage
-            src={exhibition?.picture?.url || "/images/placeholder.jpeg"}
-            alt={exhibition?.title || "Exhibition"}
-            width={400}
-            height={400}
-            className="rounded object-cover"
-          />
-        </div>
+        {exhibition?.picture?.url && (
+          <div className="hidden md:block md:w-2/5">
+            <ContentfulImage
+              src={exhibition?.picture?.url}
+              alt={exhibition?.title || "Exhibition"}
+              width={400}
+              height={400}
+              className="rounded object-cover"
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-row gap-10">
-        <ForwardButton
-          onClick={handleArtistsClick}
-          className="w-full md:w-auto"
-        >
-          {exhibition.artists.length > 1
-            ? translations.aboutArtists
-            : translations.aboutArtist}
-        </ForwardButton>
-        {/* <ForwardButton>{translations.aboutArtworks}</ForwardButton> */}
+        {exhibition.artists.length > 0 && (
+          <ForwardButton
+            onClick={handleArtistsClick}
+            className="w-full md:w-auto"
+          >
+            {exhibition.artists.length > 1
+              ? translations.aboutArtists
+              : translations.aboutArtist}
+          </ForwardButton>
+        )}
       </div>
       <div className="hidden md:flex">
         <Carousel
