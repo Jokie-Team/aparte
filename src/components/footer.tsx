@@ -25,7 +25,7 @@ export default function Footer() {
         window.location.href = `tel:+351220120184`;
       },
     },
-    { title: t("info.facebook"), onItemClick: () => {} },
+    { title: t("info.facebook"), onItemClick: () => { window.open("https://www.facebook.com/apartegaleriaa") } },
   ];
 
   const MenuItems = [
