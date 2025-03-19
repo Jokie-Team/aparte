@@ -1,4 +1,4 @@
-import { fetchAllExhibitions } from "@/lib/exhibitions";
+import { fetchAllExhibitions, fetchExhibitionDetails } from "@/lib/exhibitions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -7,8 +7,10 @@ export async function GET(req: NextRequest) {
 
   try {
     if (id) {
+      const exhibition = await fetchExhibitionDetails(id, false);
+      return NextResponse.json(exhibition);
     } else {
-      const exhibitions = await fetchAllExhibitions();
+      const exhibitions = await fetchAllExhibitions(false);
 
       return NextResponse.json(exhibitions);
     }

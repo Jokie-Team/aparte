@@ -4,17 +4,17 @@ import Image from "next/image";
 
 const artworks = [
   {
-    src: "/images/1.jpeg",
+    src: "/images/6.jpg",
     style: "col-start-1 col-span-1 row-start-2 row-span-1 h-50",
     alt: "Artwork 1",
   },
   {
-    src: "/images/2.jpeg",
+    src: "/images/2.jpg",
     style: "col-start-2 col-span-1 row-start-1 row-span-1 h-50",
     alt: "Artwork 1",
   },
   {
-    src: "/images/3.jpeg",
+    src: "/images/9.jpg",
     style: "col-start-3 col-span-2 row-start-1 row-span-2 h-[100%]",
     alt: "Artwork 2",
   },
@@ -24,27 +24,27 @@ const artworks = [
     alt: "Artwork 3",
   },
   {
-    src: "/images/5.jpeg",
+    src: "/images/5.jpg",
     style: "col-start-5 col-span-2 row-start-2 row-span-1 h-30",
     alt: "Artwork 4",
   },
   {
-    src: "/images/6.jpeg",
+    src: "/images/1.jpeg",
     style: "col-start-5 col-span-2 row-start-3 row-span-1 h-20",
     alt: "Artwork 5",
   },
   {
-    src: "/images/7.jpeg",
+    src: "/images/7.jpg",
     style: "col-start-2 col-span-1 row-start-2 row-span-1 h-40",
     alt: "Artwork 6",
   },
   {
-    src: "/images/8.jpeg",
+    src: "/images/8.jpg",
     style: "col-start-7 col-span-3 row-start-1 row-span-1 h-64",
     alt: "Artwork 7",
   },
   {
-    src: "/images/9.jpeg",
+    src: "/images/3.jpeg",
     style: "col-start-7 col-span-3 row-start-2 row-span-1 h-64",
     alt: "Artwork 8",
   },

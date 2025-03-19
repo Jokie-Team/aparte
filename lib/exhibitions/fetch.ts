@@ -14,7 +14,10 @@ export interface Exhibition {
   id: string;
 }
 
-async function fetchArtistsForExhibition(exhibitionId: string, preview = false): Promise<Artist[]> {
+async function fetchArtistsForExhibition(
+  exhibitionId: string,
+  preview = false
+): Promise<Artist[]> {
   const ARTIST_CHUNK_SIZE = 100;
   let skip = 0;
 
@@ -32,22 +35,34 @@ async function fetchArtistsForExhibition(exhibitionId: string, preview = false):
   }
 `;
 
-
   const response = await fetchGraphQL(artistsQuery, preview);
   if (response.errors) {
     console.error(response.errors);
     throw new Error(`Failed to fetch artists for exhibition ${exhibitionId}`);
   }
 
-  const artists = response.data.exhibition.artistsCollection.items.map((artist: any) => ({
-    id: artist.sys.id,
-    name: artist.name || "",
-  }));
+  const artists = response.data.exhibition.artistsCollection.items.map(
+    (artist: any) => ({
+      id: artist.sys.id,
+      name: artist.name || "",
+    })
+  );
 
   return artists;
 }
 
-export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]> {
+const exhibitionsCache: { [key: string]: Exhibition[] } = {};
+const exhibitionDetailsCache: { [key: string]: Partial<Exhibition> } = {};
+
+export async function fetchAllExhibitions(
+  preview = false
+): Promise<Exhibition[]> {
+  const cacheKey = preview ? "preview" : "production";
+
+  if (exhibitionsCache[cacheKey]) {
+    return exhibitionsCache[cacheKey];
+  }
+
   const CHUNK_SIZE = 200;
   let allExhibitions: Exhibition[] = [];
   let hasMore = true;
@@ -77,24 +92,6 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
           sys { id }
           title
           description
-          picture {
-            url
-            title
-            description
-          }
-          artworksCollection(limit: 15) {
-            items {
-              sys { id }
-              name
-              imagesCollection(limit: 1) {
-                items {
-                  url
-                  title
-                  description
-                }
-              }
-            }
-          }
           startDate
           endDate
         }
@@ -109,32 +106,16 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
         throw new Error("Failed to fetch exhibitions chunk");
       }
 
-      const exhibitions = await Promise.all(
-        response.data.exhibitionCollection.items.map(async (item: any) => {
-          const artists = await fetchArtistsForExhibition(item.sys.id, preview);
-
-          return {
-            id: item.sys.id,
-            title: item.title || "",
-            description: item.description || "",
-            picture: {
-              url: item.picture?.url || "",
-              title: item.picture?.title || "",
-              description: item.picture?.description || "",
-            },
-            artists,
-            artworks: item.artworksCollection?.items.map((artwork: any) => ({
-              id: artwork.sys.id,
-              name: artwork.name || "",
-              images: artwork.imagesCollection?.items.map((image: any) => ({
-                url: image.url,
-                title: image.title || "",
-                description: image.description || "",
-              })) || [],
-            })) || [],
-            startDate: item.startDate || "",
-            endDate: item.endDate || "",
-          };
+      const exhibitions = response.data.exhibitionCollection.items.map(
+        (item: any) => ({
+          id: item.sys.id,
+          title: item.title || "",
+          description: item.description || "",
+          startDate: item.startDate || "",
+          endDate: item.endDate || "",
+          picture: null,
+          artists: [],
+          artworks: [],
         })
       );
 
@@ -144,14 +125,90 @@ export async function fetchAllExhibitions(preview = false): Promise<Exhibition[]
       hasMore = skip < total;
 
       if (hasMore) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
-
     } catch (error) {
       console.error(`Error fetching chunk at skip ${skip}:`, error);
       throw error;
     }
   }
 
+  exhibitionsCache[cacheKey] = allExhibitions;
   return allExhibitions;
+}
+
+export async function fetchExhibitionDetails(
+  exhibitionId: string,
+  preview = false
+): Promise<Partial<Exhibition>> {
+  if (exhibitionDetailsCache[exhibitionId]) {
+    return exhibitionDetailsCache[exhibitionId];
+  }
+
+  const detailsQuery = `
+  query {
+    exhibition(id: "${exhibitionId}") {
+      picture {
+        url(transform: { quality: 30 }) 
+        title
+        description
+      }
+      artworksCollection(limit: 15) {
+        items {
+          sys { id }
+          name
+          imagesCollection(limit: 1) {
+            items {
+              url(transform: { quality: 30 }) 
+              title
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
+
+  try {
+    const [detailsResponse, artists] = await Promise.all([
+      fetchGraphQL(detailsQuery, preview),
+      fetchArtistsForExhibition(exhibitionId, preview),
+    ]);
+
+    if (detailsResponse.errors) {
+      console.error(detailsResponse.errors);
+      throw new Error(`Failed to fetch details for exhibition ${exhibitionId}`);
+    }
+
+    const details = detailsResponse.data.exhibition;
+    const exhibitionDetails = {
+      picture: {
+        url: details.picture?.url || "",
+        title: details.picture?.title || "",
+        description: details.picture?.description || "",
+      },
+      artworks:
+        details.artworksCollection?.items.map((artwork: any) => ({
+          id: artwork.sys.id,
+          name: artwork.name || "",
+          images:
+            artwork.imagesCollection?.items.map((image: any) => ({
+              url: image.url,
+              title: image.title || "",
+              description: image.description || "",
+            })) || [],
+        })) || [],
+      artists,
+    };
+
+    exhibitionDetailsCache[exhibitionId] = exhibitionDetails;
+    return exhibitionDetails;
+  } catch (error) {
+    console.error(
+      `Error fetching details for exhibition ${exhibitionId}:`,
+      error
+    );
+    throw error;
+  }
 }
