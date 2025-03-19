@@ -59,6 +59,13 @@
     "title": "Contact us"
   },
   "homepage": {
-    "title": "We are Ap'Art(e)"
+    "title": "We are Ap'Art(e)",
+    "section": {
+      "aboutArtworks": "Exhibition artworks",
+      "aboutArtist": "About the artist",
+      "aboutArtists": "About the artists",
+      "readMore": "Read More",
+      "readLess": "Read Less"
+    }
   }
 }

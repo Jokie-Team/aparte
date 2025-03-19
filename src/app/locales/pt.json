@@ -59,6 +59,13 @@
     "title": "Contacte-nos"
   },
   "homepage": {
-    "title": "Somos Ap'Arte"
+    "title": "Somos Ap'Arte",
+    "section": {
+      "aboutArtworks": "Obras da exposição",
+      "aboutArtist": "Sobre o artista",
+      "aboutArtists": "Sobre os artistas",
+      "readMore": "Ler Mais",
+      "readLess": "Ler Menos"
+    }
   }
 }
