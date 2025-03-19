@@ -1,92 +1,69 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Artwork } from "@/lib/artworks";
 
-const RandomGallery = ({ artworks }: { artworks: Artwork[] }) => {
+const artworks = [
+  {
+    src: "/images/1.jpeg",
+    style: "col-start-1 col-span-1 row-start-2 row-span-1 h-50",
+    alt: "Artwork 1",
+  },
+  {
+    src: "/images/2.jpeg",
+    style: "col-start-2 col-span-1 row-start-1 row-span-1 h-50",
+    alt: "Artwork 1",
+  },
+  {
+    src: "/images/3.jpeg",
+    style: "col-start-3 col-span-2 row-start-1 row-span-2 h-[100%]",
+    alt: "Artwork 2",
+  },
+  {
+    src: "/images/4.jpeg",
+    style: "col-start-5 col-span-2 row-start-1 row-span-1 h-50",
+    alt: "Artwork 3",
+  },
+  {
+    src: "/images/5.jpeg",
+    style: "col-start-5 col-span-2 row-start-2 row-span-1 h-30",
+    alt: "Artwork 4",
+  },
+  {
+    src: "/images/6.jpeg",
+    style: "col-start-5 col-span-2 row-start-3 row-span-1 h-20",
+    alt: "Artwork 5",
+  },
+  {
+    src: "/images/7.jpeg",
+    style: "col-start-2 col-span-1 row-start-2 row-span-1 h-40",
+    alt: "Artwork 6",
+  },
+  {
+    src: "/images/8.jpeg",
+    style: "col-start-7 col-span-3 row-start-1 row-span-1 h-64",
+    alt: "Artwork 7",
+  },
+  {
+    src: "/images/9.jpeg",
+    style: "col-start-7 col-span-3 row-start-2 row-span-1 h-64",
+    alt: "Artwork 8",
+  },
+];
+
+const RandomGallery = () => {
   return (
-    <div className="grid grid-cols-12 gap-4 w-full h-[65vh] pb-5">
-      <div className="relative col-span-3 row-span-1 h-full">
-        <Image
-          src={artworks[0].images[0].url}
-          alt="Artwork 1"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-3 row-span-2 h-full">
-        <Image
-          src={artworks[1].images[0].url}
-          alt="Artwork 2"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-3 row-span-3 h-full">
-        <Image
-          src={artworks[2].images[0].url}
-          alt="Artwork 3"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-3 row-span-4 h-full">
-        <Image
-          src={artworks[3].images[0].url}
-          alt="Artwork 4"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-6 row-span-2 h-full">
-        <Image
-          src={artworks[4].images[0].url}
-          alt="Artwork 5"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-6 row-span-1 h-full">
-        <Image
-          src={artworks[5].images[0].url}
-          alt="Artwork 6"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-9 row-span-3 h-full">
-        <Image
-          src={artworks[6].images[0].url}
-          alt="Artwork 7"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-3 row-span-2 h-full">
-        <Image
-          src={artworks[7].images[0].url}
-          alt="Artwork 8"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
-      <div className="relative col-span-3 row-span-1 h-full">
-        <Image
-          src={artworks[8].images[0].url}
-          alt="Artwork 9"
-          fill
-          style={{ objectFit: "cover" }}
-          className="rounded"
-        />
-      </div>
+    <div className="grid grid-cols-9 grid-rows-2 py-5 gap-2 w-full max-w-full mx-auto h-full">
+      {artworks.map((artwork, index) => (
+        <div key={index} className={`relative ${artwork.style}`}>
+          <Image
+            src={artwork.src}
+            alt={artwork.alt}
+            fill
+            style={{ objectFit: "cover" }}
+            className="rounded-lg"
+          />
+        </div>
+      ))}
     </div>
   );
 };

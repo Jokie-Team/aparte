@@ -8,17 +8,20 @@ import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
 
-  const randomArtworks = await fetchArtworks(false, 9);
-
   let exhibitions = [];
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`, {
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`,
+      {
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch exhibitions: ${res.status} - ${await res.text()}`);
+      throw new Error(
+        `Failed to fetch exhibitions: ${res.status} - ${await res.text()}`
+      );
     }
 
     const data = await res.json();
@@ -30,7 +33,6 @@ export default async function LocalePage() {
   } catch (error) {
     console.error("Fetch exhibitions error:", error);
   }
-
 
   const groupedExhibitions = groupExhibitionsByDate(exhibitions);
 
@@ -54,7 +56,7 @@ export default async function LocalePage() {
   return (
     <div className="flex flex-col">
       <div className="px-6 py-10 w-full overflow-x-hidden overflow-y-hidden">
-        <RandomGallery artworks={randomArtworks} />
+        <RandomGallery />
         <h1 className="bottom-0 left-0">{t("title")}</h1>
       </div>
 
