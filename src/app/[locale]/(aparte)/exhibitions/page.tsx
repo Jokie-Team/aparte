@@ -67,7 +67,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
   })();
 
   return (
-    <div className="m-12 flex flex-row w-full gap-24">
+    <div className="p-12 flex flex-row w-full gap-24">
       <div className="hidden md:block w-1/4 flex-shrink-0">
         <ExhibitionsSidebar
           exhibitions={exhibitions}
