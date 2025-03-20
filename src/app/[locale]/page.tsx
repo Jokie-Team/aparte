@@ -55,9 +55,9 @@ export default async function LocalePage() {
 
   return (
     <div className="flex flex-col">
-      <div className="px-6 py-10 w-full overflow-x-hidden overflow-y-hidden">
+      <div className="px-6 py-10 w-full overflow-x-hidden">
         <RandomGallery />
-        <h1 className="bottom-0 left-0">{t("title")}</h1>
+        <h1>{t("title")}</h1>
       </div>
 
       {exhibitionsToShow.length > 0 && (

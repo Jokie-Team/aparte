@@ -52,7 +52,7 @@ const artworks = [
 
 const RandomGallery = () => {
   return (
-    <div className="grid grid-cols-9 grid-rows-2 py-5 gap-2 w-full max-w-full mx-auto h-full">
+    <div className="grid grid-cols-9 grid-rows-2 py-5 gap-2 w-full max-w-full mx-auto">
       {artworks.map((artwork, index) => (
         <div key={index} className={`relative ${artwork.style}`}>
           <Image
