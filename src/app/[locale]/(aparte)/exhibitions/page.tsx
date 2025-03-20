@@ -10,7 +10,7 @@ import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { ExhibitionsSearchBar } from "@/src/components/searchBar/exhibitions";
 
 type ExhibitionsProps = {
-  searchParams: { search?: string; group?: string };
+  searchParams: Promise<{ search?: string; group?: string }>;
 };
 
 const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {

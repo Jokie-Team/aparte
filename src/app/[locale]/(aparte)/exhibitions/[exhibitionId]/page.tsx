@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const ExhibitionPage = () => {
   const params = useParams();
-  const exhibitionId = params.exhibitionId as string;
+  const exhibitionId = params?.exhibitionId as string;
   const [exhibition, setExhibition] = useState(null);
 
   useEffect(() => {

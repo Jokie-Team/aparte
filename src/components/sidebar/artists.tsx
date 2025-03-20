@@ -131,7 +131,11 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
                       </span>
 
                       <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        <Arrow size={24} direction="right" fill="#000" />
+                        <Arrow
+                          size={24}
+                          direction="right"
+                          className="fill-black"
+                        />
                       </span>
                     </button>
                   </li>
