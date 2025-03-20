@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
-import { filterArtistsBySearchTerms } from "@/src/utils/artists";
+import { filterArtistsBySearchTerms, normalizeName } from "@/src/utils/artists";
 import { Arrow } from "../icons/arrow";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
@@ -40,14 +40,6 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
     } catch (error) {
       console.error("Navigation error:", error);
     }
-  };
-
-  const normalizeName = (name: string) => {
-    return name
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .toLowerCase();
   };
 
   const groupedArtists = useMemo(() => {

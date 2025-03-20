@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useLocale } from "next-intl";
 import { Navbar } from "./navbar";
 import BurgerMenu from "../icons/burger-menu";
-import Cross from "../icons/cross";
+import { CrossIcon } from "../icons/cross";
 import { Divider } from "../Divider";
 
 interface HeaderProps {
@@ -43,7 +43,7 @@ export default function Header({ showBorder }: HeaderProps) {
           </button>
         ) : (
           <button onClick={toggleMobileMenu}>
-            <Cross />
+            <CrossIcon />
           </button>
         )}
         {isMobileMenuOpen && (

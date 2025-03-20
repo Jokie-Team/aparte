@@ -5,6 +5,7 @@ import { ArtistsSidebar } from "@/src/components/sidebar/artists";
 import Section from "@/src/components/section/artists";
 import { Divider } from "@/src/components/Divider";
 import { ArtistsSearchBar } from "@/src/components/searchBar/artists";
+import { filterArtistsBySearchTerms } from "@/src/utils/artists";
 
 const normalizeName = (name: string) => {
   return name
@@ -64,15 +65,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
     console.error("Fetch artists error:", error);
   }
 
-  const splitSearchTerms = () => {
-    return searchTerm.split(",").map((word) => normalizeName(word));
-  };
-
-  const filteredArtists = artists.filter((artist) => {
-    return splitSearchTerms().some((term) =>
-      normalizeName(artist.name).includes(term)
-    );
-  });
+  const filteredArtists = filterArtistsBySearchTerms(artists, searchTerm);
 
   const groupedArtists = groupArtistsByFirstLetter(filteredArtists);
 
