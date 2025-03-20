@@ -149,7 +149,7 @@ export async function fetchExhibitionDetails(
   query {
     exhibition(id: "${exhibitionId}") {
       picture {
-        url(transform: { quality: 5 }) 
+        url(transform: { quality: 20 }) 
         title
         description
       }
@@ -159,7 +159,7 @@ export async function fetchExhibitionDetails(
           name
           imagesCollection(limit: 1) {
             items {
-              url(transform: { quality: 5 }) 
+              url(transform: { quality: 20 }) 
               title
               description
             }

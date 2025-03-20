@@ -113,6 +113,7 @@ const Section: React.FC<SectionProps> = ({
       ref={sectionRef}
       id={exhibition.id}
       className="flex flex-col space-y-8"
+      style={{ height: "1200px", overflowY: "hidden" }}
     >
       <div className="block pt-10 md:hidden">
         <MobileGallery
