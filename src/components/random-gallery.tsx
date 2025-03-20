@@ -19,7 +19,7 @@ const artworks = [
     alt: "Artwork 2",
   },
   {
-    src: "/images/4.jpeg",
+    src: "/images/10.jpg",
     style: "col-start-5 col-span-2 row-start-1 row-span-1 h-50",
     alt: "Artwork 3",
   },
@@ -44,7 +44,7 @@ const artworks = [
     alt: "Artwork 7",
   },
   {
-    src: "/images/3.jpeg",
+    src: "/images/3.jpg",
     style: "col-start-7 col-span-3 row-start-2 row-span-1 h-64",
     alt: "Artwork 8",
   },
