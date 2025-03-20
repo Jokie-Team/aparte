@@ -100,7 +100,9 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
 
       {filteredExhibitions.current.length === 0 &&
         filteredExhibitions.future.length === 0 &&
-        Object.keys(filteredExhibitions.past).length === 0 && (
+        filteredExhibitions.past
+          .map((year) => year[1].length)
+          .reduce((acc, curr) => acc + curr, 0) === 0 && (
           <p className="text-gray-500">{translations.emptyState}</p>
         )}
 

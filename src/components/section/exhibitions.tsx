@@ -74,7 +74,7 @@ const Section: React.FC<SectionProps> = ({
   }, [exhibitionId]);
 
   const handleArtistsClick = () => {
-    const artistNames = exhibition.artists
+    const artistNames = exhibitionWithAllDetails.artists
       .map((artist) => artist.name)
       .join(", ");
     router.push(`/artists?search=${encodeURIComponent(artistNames)}`);

@@ -59,7 +59,7 @@ export default async function LocalePage() {
         <RandomGallery />
         <h1>{t("title")}</h1>
       </div>
-
+      <div className="border-b border-gray-200" />
       {exhibitionsToShow.length > 0 && (
         <div className="px-6 py-10 w-full">
           {exhibitionsToShow.map((exhibition) => (
