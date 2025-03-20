@@ -22,7 +22,9 @@ const MobileGallery: React.FC<MobileGalleryProps> = ({
   if (!images.length) return null;
 
   return (
-    <div className={`flex flex-row gap-4 w-full ${className}`}>
+    <div
+      className={`flex flex-row gap-4 w-full ${className} max-h-[400px] tablet:max-h-auto`}
+    >
       <div className="flex flex-col gap-2 w-16">
         {images.map((image, index) => (
           <div
