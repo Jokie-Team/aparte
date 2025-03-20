@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useLocale } from "next-intl";
 import { Navbar } from "./navbar";
 import BurgerMenu from "../icons/burger-menu";
-import Cross from "../icons/cross";
+import { CrossIcon } from "../icons/cross";
 import { Divider } from "../Divider";
 
 interface HeaderProps {
@@ -43,16 +43,13 @@ export default function Header({ showBorder }: HeaderProps) {
           </button>
         ) : (
           <button onClick={toggleMobileMenu}>
-            <Cross />
+            <CrossIcon />
           </button>
         )}
         {isMobileMenuOpen && (
           <div className="absolute inset-x-0 top-14 w-full flex flex-col h-screen">
             <Divider />
             <div className="flex-1 bg-[#ffffff] py-5">
-              {/* <div className="px-5">
-                <RandomGallery />
-              </div> neeed to receive artworks to achieve this - or refactor random gallery*/}
               <Navbar isMobile isMobileMenuOpen onClick={closeMobileMenu} />
             </div>
           </div>

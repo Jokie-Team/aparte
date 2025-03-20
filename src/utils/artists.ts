@@ -11,11 +11,26 @@ export function groupByFirstLetter(artists: Artist[]): ArtistsGroupedByLetter {
   }, {});
 }
 
+export const normalizeName = (name: string) => {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toLowerCase();
+};
+
 export const filterArtistsBySearchTerms = (
   artists: Artist[],
-  searchInputTerm: string
-) =>
-  artists.filter((artist) => {
-    const tokens = searchInputTerm.split(" ");
-    return tokens.some((token) => artist.name.toLowerCase().includes(token));
-  });
+  searchTerm: string
+): Artist[] => {
+  const terms = searchTerm
+    .split(",")
+    .map((term) => normalizeName(term.trim()))
+    .filter((term) => term);
+
+  if (!terms.length) return artists;
+
+  return artists.filter((artist) =>
+    terms.some((term) => normalizeName(artist.name).includes(term))
+  );
+};

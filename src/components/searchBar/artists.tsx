@@ -102,6 +102,9 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
         value={searchTerm}
         handleSearchChange={handleSearchChange}
         search={translations.search}
+        handleClear={() => {
+          setSearchTerm("");
+        }}
       />
       {Object.keys(filteredArtists).length === 0 && (
         <p className="text-gray-500">{translations.emptyState}</p>

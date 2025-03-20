@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const ArtistPage = () => {
   const params = useParams();
-  const artistId = params.artistId as string;
+  const artistId = params?.artistId as string;
   const [artist, setArtist] = useState(null);
 
   useEffect(() => {

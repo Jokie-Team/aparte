@@ -1,24 +1,27 @@
 import React from "react";
-import { fetchArtworks } from "@/lib/artworks";
 import { getTranslations } from "next-intl/server";
 import Section from "@/src/components/section/homepage";
 import RandomGallery from "@/src/components/random-gallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
+import Tag from "@/src/components/tags/tag";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
 
-  const randomArtworks = await fetchArtworks(false, 9);
-
   let exhibitions = [];
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`, {
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions?details=true`,
+      {
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch exhibitions: ${res.status} - ${await res.text()}`);
+      throw new Error(
+        `Failed to fetch exhibitions: ${res.status} - ${await res.text()}`
+      );
     }
 
     const data = await res.json();
@@ -31,13 +34,14 @@ export default async function LocalePage() {
     console.error("Fetch exhibitions error:", error);
   }
 
-
   const groupedExhibitions = groupExhibitionsByDate(exhibitions);
 
   let exhibitionsToShow = groupedExhibitions.current;
+  let label = t("currentExhibitions");
 
   if (exhibitionsToShow.length === 0) {
     exhibitionsToShow = groupedExhibitions.future;
+    label = t("futureExhibitions");
   }
 
   if (exhibitionsToShow.length === 0) {
@@ -49,17 +53,21 @@ export default async function LocalePage() {
       const mostRecentYear = pastYears[0];
       exhibitionsToShow = groupedExhibitions.past[mostRecentYear];
     }
+    label = t("pastExhibitions");
   }
 
   return (
     <div className="flex flex-col">
-      <div className="px-6 py-10 w-full overflow-x-hidden overflow-y-hidden">
-        <RandomGallery artworks={randomArtworks} />
-        <h1 className="bottom-0 left-0">{t("title")}</h1>
+      <div className="px-6 py-10 w-full overflow-x-hidden">
+        <RandomGallery />
+        <h1>{t("title")}</h1>
       </div>
-
+      <div className="border-b border-gray-200" />
+      <div className="px-6 pt-28">
+        <Tag text={label} />
+      </div>
       {exhibitionsToShow.length > 0 && (
-        <div className="px-6 py-10 w-full">
+        <div className="px-6 pb-28 w-full">
           {exhibitionsToShow.map((exhibition) => (
             <Section
               key={exhibition.id}

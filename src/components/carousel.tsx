@@ -24,19 +24,13 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
   return (
     <div className="relative w-full mt-10">
       {currentIndex > 0 && (
-        <button
-          onClick={handlePrev}
-          className="absolute left-0 top-0"
-        >
+        <button onClick={handlePrev} className="absolute left-0 top-0">
           <Arrow size={28} direction="left" />
         </button>
       )}
 
       {currentIndex < images.length - visibleCount && (
-        <button
-          onClick={handleNext}
-          className="absolute right-6 top-0"
-        >
+        <button onClick={handleNext} className="absolute right-6 top-0">
           <Arrow size={28} direction="right" />
         </button>
       )}
@@ -46,7 +40,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
           className="flex transition-transform duration-300"
           style={{
             transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-            gap: "24px"
+            gap: "24px",
           }}
         >
           {images.map((image, index) => (
@@ -59,6 +53,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
                 src={image.url}
                 alt={`Slide ${index}`}
                 className="w-full h-auto object-contain"
+                style={{ maxHeight: "300px" }}
               />
             </div>
           ))}

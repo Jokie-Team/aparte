@@ -16,7 +16,15 @@ export interface Artist {
   };
 }
 
+const artistsCache: { [key: string]: Artist[] } = {};
+
 export async function fetchAllArtists(preview = false): Promise<Artist[]> {
+  const cacheKey = preview ? "preview" : "production";
+
+  if (artistsCache[cacheKey]) {
+    return artistsCache[cacheKey];
+  }
+
   const query = `
     {
       artistCollection(limit: 400) {
@@ -25,14 +33,6 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
           name
           picture { url }
           bio
-          exhibitionsCollection(limit: 5) {
-            items {
-              ... on Exhibition {
-                sys { id }
-                title
-              }
-            }
-          }
         }
       }
     }
@@ -44,13 +44,44 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
     throw new Error("Failed to fetch artists");
   }
 
-  return response.data.artistCollection.items.map((artist: any) => ({
+  const artists = response.data.artistCollection.items.map((artist: any) => ({
     id: artist.sys.id,
     name: artist.name,
     picture: artist.picture,
     bio: artist.bio,
-    exhibitions: artist.exhibitionsCollection?.items || [], // Garante que exhibitions é sempre um array
+    exhibitions: [],
   }));
+
+  artistsCache[cacheKey] = artists;
+  return artists;
+}
+
+export async function fetchArtistExhibitions(
+  artistId: string,
+  preview = false
+): Promise<Exhibition[]> {
+  const query = `
+    query {
+      artist(id: "${artistId}") {
+        exhibitionsCollection(limit: 5) {
+          items {
+            ... on Exhibition {
+              sys { id }
+              title
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await fetchGraphQL(query, preview);
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error(`Failed to fetch exhibitions for artist ${artistId}`);
+  }
+
+  return response.data.artist.exhibitionsCollection?.items || [];
 }
 
 export async function fetchArtistById(id: string, preview = false) {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Exhibition } from "@/lib/exhibitions";
 import ContentfulImage from "@/lib/contentful-image";
 import { Artist } from "@/lib/artists";
@@ -21,18 +21,60 @@ interface TranslationsObject {
 
 type SectionProps = {
   exhibition: Exhibition;
+  exhibitionId: string;
   translations: TranslationsObject;
 };
 
 const MAX_NO_CHARACTERS_DESCRIPTION = 300;
 
-const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
+const Section: React.FC<SectionProps> = ({
+  exhibition,
+  exhibitionId,
+  translations,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [exhibitionWithAllDetails, setDetails] =
+    useState<Exhibition>(exhibition);
   const router = useRouter();
   const locale = useLocale();
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          fetch(`/api/exhibitions/${exhibitionId}`)
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Failed to fetch details for ${exhibitionId}`);
+              }
+              return res.json();
+            })
+            .then((data) => {
+              setDetails({ ...exhibition, ...data });
+            })
+            .catch((error) =>
+              console.error(
+                `Error fetching details for ${exhibitionId}:`,
+                error
+              )
+            );
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [exhibitionId]);
 
   const handleArtistsClick = () => {
-    const artistNames = exhibition.artists
+    const artistNames = exhibitionWithAllDetails.artists
       .map((artist) => artist.name)
       .join(", ");
     router.push(`/artists?search=${encodeURIComponent(artistNames)}`);
@@ -67,30 +109,37 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
   };
 
   return (
-    <div id={exhibition.id} className="flex flex-col space-y-8">
+    <div
+      ref={sectionRef}
+      id={exhibition.id}
+      className="flex flex-col space-y-8"
+      style={{ height: "1200px", overflowY: "hidden" }}
+    >
       <div className="block pt-10 md:hidden">
         <MobileGallery
           images={
-            exhibition?.artworks
-              .map((artwork) => artwork.images[0])
-              .slice(0, 5) || []
+            exhibitionWithAllDetails.artworks?.map(
+              (artwork) => artwork.images[0]
+            ) || []
           }
         />
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col space-y-4 w-full md:w-1/2">
-          <h3 className="text-gray-900">{exhibition.title}</h3>
+          <h3 className="text-gray-900">{exhibitionWithAllDetails.title}</h3>
           <p className="text-gray-600">
-            {exhibition?.description &&
+            {exhibitionWithAllDetails?.description &&
               (isExpanded
-                ? exhibition.description.split("\n").map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))
+                ? exhibitionWithAllDetails.description
+                    .split("\n")
+                    .map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))
                 : getCroppedText(
-                    exhibition.description,
+                    exhibitionWithAllDetails.description,
                     MAX_NO_CHARACTERS_DESCRIPTION
                   )
                     .split("\n")
@@ -101,8 +150,9 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                       </React.Fragment>
                     )))}
           </p>
-          {exhibition?.description &&
-            exhibition.description.length > MAX_NO_CHARACTERS_DESCRIPTION && (
+          {exhibitionWithAllDetails?.description &&
+            exhibitionWithAllDetails.description.length >
+              MAX_NO_CHARACTERS_DESCRIPTION && (
               <span
                 onClick={handleToggleDescription}
                 className="font-extrabold text-blue-600 hover:text-blue-800 mt-2 cursor-pointer flex items-center gap-2"
@@ -113,10 +163,10 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             )}
           <div>
             <div className="border-t border-gray-300 !mt-10" />
-            {exhibition.artists.length > 0 && (
+            {exhibitionWithAllDetails?.artists.length > 0 && (
               <>
                 <p className="text-gray-800 font-medium !my-3">
-                  {mapArtistsToArtistsList(exhibition.artists)}
+                  {mapArtistsToArtistsList(exhibitionWithAllDetails.artists)}
                 </p>
                 <div className="border-t border-gray-300 !m-0" />
               </>
@@ -127,22 +177,22 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
                 month: "long",
                 year: "numeric",
               }).format(
-                new Date(exhibition.startDate)
+                new Date(exhibitionWithAllDetails.startDate)
               )} - ${new Intl.DateTimeFormat(locale, {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
-              }).format(new Date(exhibition.endDate))}`}
+              }).format(new Date(exhibitionWithAllDetails.endDate))}`}
             </p>
             <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
 
-        {exhibition?.picture?.url && (
+        {exhibitionWithAllDetails?.picture?.url && (
           <div className="hidden md:block md:w-2/5">
             <ContentfulImage
-              src={exhibition?.picture?.url}
-              alt={exhibition?.title || "Exhibition"}
+              src={exhibitionWithAllDetails?.picture?.url}
+              alt={exhibitionWithAllDetails?.title || "Exhibition"}
               width={400}
               height={400}
               className="rounded object-cover"
@@ -152,12 +202,12 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
       </div>
 
       <div className="flex flex-row gap-10">
-        {exhibition.artists.length > 0 && (
+        {exhibitionWithAllDetails.artists.length > 0 && (
           <ForwardButton
             onClick={handleArtistsClick}
             className="w-full md:w-auto"
           >
-            {exhibition.artists.length > 1
+            {exhibitionWithAllDetails.artists.length > 1
               ? translations.aboutArtists
               : translations.aboutArtist}
           </ForwardButton>
@@ -166,7 +216,9 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
       <div className="hidden md:flex">
         <Carousel
           images={
-            exhibition?.artworks.map((artwork) => artwork.images[0]) || []
+            exhibitionWithAllDetails?.artworks.map(
+              (artwork) => artwork.images[0]
+            ) || []
           }
           visibleCount={3}
         />

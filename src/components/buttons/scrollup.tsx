@@ -7,7 +7,6 @@ interface ScrollUpProps {
 }
 
 const ScrollUp: React.FC<ScrollUpProps> = ({ direction }) => {
-  const [hovered, setHovered] = useState<boolean | null>(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const handleScroll = () => {
@@ -38,15 +37,13 @@ const ScrollUp: React.FC<ScrollUpProps> = ({ direction }) => {
         <button
           type="button"
           onClick={scrollToTop}
-          className="w-20 h-20 flex items-center justify-center bg-white border border-black rounded-full hover:bg-black"
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
+          className="group w-20 h-20 flex items-center justify-center bg-white border border-black rounded-full hover:bg-black"
         >
           <div className="w-10 h-10 flex items-center justify-center">
             <Arrow
               size={32}
               direction={direction}
-              fill={hovered ? "#fff" : "#000"}
+              className="fill-black group-hover:fill-white"
             />
           </div>
         </button>

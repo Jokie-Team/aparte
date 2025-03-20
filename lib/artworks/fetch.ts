@@ -13,7 +13,10 @@ export interface Artwork {
   images: MediaProps[];
 }
 
-export async function fetchArtworks(preview = false, limit?: number): Promise<Artwork[]> {
+export async function fetchArtworks(
+  preview = false,
+  limit?: number
+): Promise<Artwork[]> {
   const query = `
   query {
     artworkCollection(limit: ${limit}) {
@@ -60,13 +63,15 @@ export async function fetchArtworks(preview = false, limit?: number): Promise<Ar
     width: item.width || undefined,
     available: item.available || false,
     technique: item.technique || "",
-    artists: item.artistsCollection?.items.map((artist: any) => ({
-      id: artist.sys.id,
-    })) || [],
-    images: item.imagesCollection?.items.map((image: any) => ({
-      url: image.url,
-      title: image.title || "",
-      description: image.description || "",
-    })) || [],
+    artists:
+      item.artistsCollection?.items.map((artist: any) => ({
+        id: artist.sys.id,
+      })) || [],
+    images:
+      item.imagesCollection?.items.map((image: any) => ({
+        url: image.url,
+        title: image.title || "",
+        description: image.description || "",
+      })) || [],
   }));
 }

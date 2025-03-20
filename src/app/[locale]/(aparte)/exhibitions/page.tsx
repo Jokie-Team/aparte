@@ -1,6 +1,9 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
-import { Exhibition } from "@/lib/exhibitions";
+import {
+  fetchAllExhibitions,
+  fetchExhibitionDetails,
+} from "@/lib/exhibitions/fetch";
 import ExhibitionsSidebar from "@/src/components/sidebar/exhibitions";
 import Section from "@/src/components/section/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
@@ -11,45 +14,19 @@ type ExhibitionsProps = {
 };
 
 const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
-  const t = await getTranslations("exhibitions");
-  const searchTerm = (await searchParams).search?.toLowerCase() || "";
-  const group = (await searchParams).group?.toLowerCase() || "";
+  const [t, exhibitions, resolvedSearchParams] = await Promise.all([
+    getTranslations("exhibitions"),
+    fetchAllExhibitions(false),
+    searchParams,
+  ]);
 
-  let exhibitions: Exhibition[] = [];
-
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`,
-      {
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(
-        `Failed to fetch exhibitions: ${res.status} - ${errorText}`
-      );
-    }
-
-    // Valida se o JSON retornado é válido
-    const data = await res.json();
-    if (!data || !Array.isArray(data)) {
-      throw new Error("Invalid data format received from API");
-    }
-    exhibitions = data;
-  } catch (error) {
-    console.error("Fetch exhibitions error:", error);
-  }
+  const searchTerm = resolvedSearchParams.search?.toLowerCase() || "";
+  const group = resolvedSearchParams.group?.toLowerCase() || "";
 
   const groupedExhibitions = groupExhibitionsByDate(exhibitions);
 
   const orderedExhibitions = (() => {
-    let filtered: Exhibition[] = [];
-
+    let filtered = [];
     switch (group) {
       case "current":
         filtered = [...groupedExhibitions.current];
@@ -122,6 +99,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
           <div key={exhibitionItem.id} id={exhibitionItem.id}>
             <Section
               exhibition={exhibitionItem}
+              exhibitionId={exhibitionItem.id}
               translations={{
                 readMore: t("section.readMore"),
                 readLess: t("section.readLess"),

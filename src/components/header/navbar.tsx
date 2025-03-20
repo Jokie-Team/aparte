@@ -36,10 +36,10 @@ const Navbar = ({
     if (pathname === `/${currentLocale}`) {
       return `/${locale}`;
     }
-    return pathname.replace(`/${currentLocale}`, `/${locale}`);
+    return pathname?.replace(`/${currentLocale}`, `/${locale}`) || `/${locale}`;
   };
 
-  const normalizedPathname = pathname.replace(`/${currentLocale}`, "");
+  const normalizedPathname = pathname?.replace(`/${currentLocale}`, "");
 
   const navStyles = {
     nav: clsx("transition-all duration-300", {
