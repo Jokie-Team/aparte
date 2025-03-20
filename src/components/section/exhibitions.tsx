@@ -63,7 +63,7 @@ const Section: React.FC<SectionProps> = ({
           observer.disconnect();
         }
       },
-      { threshold: 1 }
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
