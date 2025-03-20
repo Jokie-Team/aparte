@@ -96,6 +96,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
         value={searchTerm}
         handleSearchChange={handleSearchChange}
         search={translations.search}
+        handleClear={() => setSearchTerm("")}
       />
 
       {filteredExhibitions.current.length === 0 &&
