@@ -3,11 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  filterArtistsBySearchTerms,
-  groupByFirstLetter,
-} from "@/src/utils/artists";
+import { filterArtistsBySearchTerms } from "@/src/utils/artists";
 import clsx from "clsx";
+import { set } from "lodash";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
@@ -40,6 +38,23 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
         params.set("search", value);
       }
 
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  };
+
+  const handleLetterSelection = (letter: string) => {
+    const artistsForLetter =
+      groupedArtists[letter]?.map((artist) => artist.name).join(", ") || "";
+    setSelectedLetter(letter);
+    setSearchTerm(artistsForLetter);
+
+    try {
+      const params = new URLSearchParams();
+      if (artistsForLetter) {
+        params.set("search", artistsForLetter);
+      }
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     } catch (error) {
       console.error("Navigation error:", error);
@@ -88,7 +103,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
       if (matchingArtists.length) filtered[letter] = matchingArtists;
     }
     return filtered;
-  }, [groupedArtists, searchTerm]);
+  }, [groupedArtists, searchTerm, selectedLetter]);
 
   useEffect(() => {
     if (Object.keys(filteredArtists).length > 0) {
@@ -115,7 +130,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
           .map(([letter], index) => (
             <div key={`${index}-${letter}`}>
               <h4
-                onClick={() => setSelectedLetter(letter)}
+                onClick={() => handleLetterSelection(letter)}
                 className={clsx("cursor-pointer", {
                   underline: selectedLetter === letter,
                 })}
