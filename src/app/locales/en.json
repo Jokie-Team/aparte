@@ -66,6 +66,9 @@
       "aboutArtists": "About the artists",
       "readMore": "Read More",
       "readLess": "Read Less"
-    }
+    },
+     "currentExhibitions": "Current Exhibitions",
+     "futureExhibitions": "Future Exhibitions",
+     "pastExhibitions": "Past Exhibitions"
   }
 }

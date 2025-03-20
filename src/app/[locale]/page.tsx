@@ -1,9 +1,9 @@
 import React from "react";
-import { fetchArtworks } from "@/lib/artworks";
 import { getTranslations } from "next-intl/server";
 import Section from "@/src/components/section/homepage";
 import RandomGallery from "@/src/components/random-gallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
+import Tag from "@/src/components/tags/tag";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
@@ -37,9 +37,11 @@ export default async function LocalePage() {
   const groupedExhibitions = groupExhibitionsByDate(exhibitions);
 
   let exhibitionsToShow = groupedExhibitions.current;
+  let label = t("currentExhibitions");
 
   if (exhibitionsToShow.length === 0) {
     exhibitionsToShow = groupedExhibitions.future;
+    label = t("futureExhibitions");
   }
 
   if (exhibitionsToShow.length === 0) {
@@ -51,6 +53,7 @@ export default async function LocalePage() {
       const mostRecentYear = pastYears[0];
       exhibitionsToShow = groupedExhibitions.past[mostRecentYear];
     }
+    label = t("pastExhibitions");
   }
 
   return (
@@ -60,8 +63,11 @@ export default async function LocalePage() {
         <h1>{t("title")}</h1>
       </div>
       <div className="border-b border-gray-200" />
+      <div className="px-6 pt-28">
+        <Tag text={label} />
+      </div>
       {exhibitionsToShow.length > 0 && (
-        <div className="px-6 py-10 w-full">
+        <div className="px-6 pb-28 w-full">
           {exhibitionsToShow.map((exhibition) => (
             <Section
               key={exhibition.id}
