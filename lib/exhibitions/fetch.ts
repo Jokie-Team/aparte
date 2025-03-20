@@ -55,9 +55,10 @@ const exhibitionsCache: { [key: string]: Exhibition[] } = {};
 const exhibitionDetailsCache: { [key: string]: Partial<Exhibition> } = {};
 
 export async function fetchAllExhibitions(
-  preview = false
+  preview = false,
+  withDetails = false
 ): Promise<Exhibition[]> {
-  const cacheKey = preview ? "preview" : "production";
+  const cacheKey = `${preview ? "preview" : "production"}_${withDetails}`;
 
   if (exhibitionsCache[cacheKey]) {
     return exhibitionsCache[cacheKey];
@@ -119,7 +120,20 @@ export async function fetchAllExhibitions(
         })
       );
 
-      allExhibitions = [...allExhibitions, ...exhibitions];
+      if (withDetails) {
+        const detailedExhibitions = await Promise.all(
+          exhibitions.map(async (exhibition: any) => {
+            const details = await fetchExhibitionDetails(
+              exhibition.id,
+              preview
+            );
+            return { ...exhibition, ...details };
+          })
+        );
+        allExhibitions = [...allExhibitions, ...detailedExhibitions];
+      } else {
+        allExhibitions = [...allExhibitions, ...exhibitions];
+      }
 
       skip += CHUNK_SIZE;
       hasMore = skip < total;

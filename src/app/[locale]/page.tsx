@@ -11,7 +11,7 @@ export default async function LocalePage() {
   let exhibitions = [];
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions?details=true`,
       {
         cache: "no-store",
         headers: { "Content-Type": "application/json" },
