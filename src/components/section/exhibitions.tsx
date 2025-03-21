@@ -35,6 +35,7 @@ const Section: React.FC<SectionProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [exhibitionWithAllDetails, setDetails] =
     useState<Exhibition>(exhibition);
+
   const router = useRouter();
   const locale = useLocale();
   const sectionRef = useRef<HTMLDivElement | null>(null);

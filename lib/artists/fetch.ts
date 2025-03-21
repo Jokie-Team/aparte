@@ -1,9 +1,9 @@
 import { fetchGraphQL } from "../api";
+import { Artwork } from "../artworks";
 import { Exhibition } from "../exhibitions";
 
 export interface Artist {
   id: string;
-  exhibitions: Exhibition[];
   name: string;
   bio: string;
   picture: {
@@ -14,6 +14,8 @@ export interface Artist {
     width?: number;
     height?: number;
   };
+  exhibitions: Exhibition[];
+  artworks: Artwork[];
 }
 
 const artistsCache: { [key: string]: Artist[] } = {};
@@ -40,7 +42,6 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
 
   const response = await fetchGraphQL(query, preview);
   if (response.errors) {
-    console.log(response.errors);
     throw new Error("Failed to fetch artists");
   }
 
@@ -56,18 +57,29 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   return artists;
 }
 
-export async function fetchArtistExhibitions(
+export async function fetchArtistDetails(
   artistId: string,
   preview = false
-): Promise<Exhibition[]> {
+): Promise<Partial<Artist>> {
   const query = `
     query {
       artist(id: "${artistId}") {
         exhibitionsCollection(limit: 5) {
           items {
-            ... on Exhibition {
-              sys { id }
-              title
+            sys { id }
+            title
+          }
+        }
+        artworksCollection(limit: 10) {
+          items {
+            sys { id }
+            name
+            imagesCollection(limit: 1) {
+              items {
+                url(transform: { quality: 5 }) 
+                title
+                description
+              }
             }
           }
         }
@@ -76,25 +88,30 @@ export async function fetchArtistExhibitions(
   `;
 
   const response = await fetchGraphQL(query, preview);
+
   if (response.errors) {
     console.error(response.errors);
-    throw new Error(`Failed to fetch exhibitions for artist ${artistId}`);
+    throw new Error("Failed to fetch Artist by ID");
   }
 
-  return response.data.artist.exhibitionsCollection?.items || [];
-}
+  const artist = response.data.artist;
 
-export async function fetchArtistById(id: string, preview = false) {
-  const query = `
-    query ($id: String!) {
-      artist(id: $id) {
-        name
-        picture { url }
-      }
-    }
-  `;
-  const response = await fetchGraphQL(query, preview);
-
-  if (response.errors) throw new Error("Failed to fetch Artist by ID");
-  return response.data.artist;
+  return {
+    exhibitions:
+      artist.exhibitionsCollection?.items.map((ex: any) => ({
+        id: ex.sys.id,
+        title: ex.title,
+      })) || [],
+    artworks:
+      artist.artworksCollection?.items.map((art: any) => ({
+        id: art.sys.id,
+        name: art.name || "",
+        images:
+          art.imagesCollection?.items.map((img: any) => ({
+            url: img.url,
+            title: img.title || "",
+            description: img.description || "",
+          })) || [],
+      })) || [],
+  };
 }
