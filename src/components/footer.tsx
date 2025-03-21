@@ -42,8 +42,8 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-t border-accent-2 text-center px-6 pt-10 mt-auto">
-      <h1 className="text-left mb-10">{t("title")}</h1>
+    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center px-6 pt-10 mt-auto"> {/* border-t */}
+      {/* <h1 className="text-left mb-10">{t("title")}</h1> */}
       <div className="h-full flex flex-col md:flex-row md:gap-20 gap-0">
         <div className="w-1/2"></div>
         <div className="flex flex-col flex-1 justify-around gap-10 md:gap-20">

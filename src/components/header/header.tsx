@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../logo/logo";
 import clsx from "clsx";
 import { useLocale } from "next-intl";
@@ -9,13 +9,13 @@ import { CrossIcon } from "../icons/cross";
 import { Divider } from "../Divider";
 
 interface HeaderProps {
-  showBorder: boolean;
+  showBorder?: boolean; // torna opcional para não depender da prop externa
 }
 
 export default function Header({ showBorder }: HeaderProps) {
   const currentLocale = useLocale();
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -23,12 +23,21 @@ export default function Header({ showBorder }: HeaderProps) {
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div
       className={clsx(
-        "fixed top-0 w-full z-50 flex flex-row justify-between font-neue h-14 items-center md:p-10 p-3 bg-[#ffffff]",
+        "fixed top-0 w-full z-50 flex flex-row justify-between font-neue h-14 items-center md:p-10 p-3 bg-[#ffffff] transition-all duration-300",
         {
-          "border-b": showBorder,
+          "border-b": scrolled,
         }
       )}
     >

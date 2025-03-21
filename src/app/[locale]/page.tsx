@@ -60,14 +60,14 @@ export default async function LocalePage() {
     <div className="flex flex-col">
       <div className="px-6 py-10 w-full overflow-x-hidden">
         <RandomGallery />
-        <h1>{t("title")}</h1>
+        {/* <h1>{t("title")}</h1> */}
       </div>
-      <div className="border-b border-gray-200" />
+      {/* <div className="border-b border-gray-200" /> */}
       <div className="px-6 pt-28">
         <Tag text={label} />
       </div>
       {exhibitionsToShow.length > 0 && (
-        <div className="px-6 pb-28 w-full">
+        <div className="px-6 pt-6 pb-52 w-full">
           {exhibitionsToShow.map((exhibition) => (
             <Section
               key={exhibition.id}

@@ -50,7 +50,7 @@ const Section: React.FC<{
         <div className="flex flex-col gap-2 w-full md:w-2/3">
           <div className="block md:hidden w-full ">
             <ContentfulImage
-              src={artist?.picture?.url || "/images/placeholder.jpeg"}
+              src={artist?.picture?.url || ""}
               alt={
                 artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`
               }
@@ -63,19 +63,19 @@ const Section: React.FC<{
             {artist?.bio &&
               (isExpanded
                 ? artist.bio.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))
+                : getCroppedText(artist.bio, MAX_NO_CHARACTERS_BIO)
+                  .split("\n")
+                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  ))
-                : getCroppedText(artist.bio, MAX_NO_CHARACTERS_BIO)
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    )))}
+                  )))}
           </p>
           {artist?.bio && artist.bio.length > MAX_NO_CHARACTERS_BIO && (
             <span
@@ -89,7 +89,7 @@ const Section: React.FC<{
         </div>
         <div className="hidden md:block w-full md:w-1/3 ">
           <ContentfulImage
-            src={artist?.picture?.url || "/images/placeholder.jpeg"}
+            src={artist?.picture?.url || ""}
             alt={
               artist?.picture?.alt || `${artist?.name || "Artist"}'s picture`
             }

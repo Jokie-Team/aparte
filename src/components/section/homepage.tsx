@@ -72,8 +72,8 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             <ContentfulImage
               src={exhibition?.picture?.url}
               alt={exhibition?.title || "Exhibition"}
-              width={400}
-              height={400}
+              width={600}
+              height={600}
               className="rounded object-cover"
             />
           </div>
@@ -84,22 +84,22 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
             {exhibition?.description &&
               (isExpanded
                 ? exhibition.description.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))
+                : getCroppedText(
+                  exhibition.description,
+                  MAX_NO_CHARACTERS_DESCRIPTION
+                )
+                  .split("\n")
+                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  ))
-                : getCroppedText(
-                    exhibition.description,
-                    MAX_NO_CHARACTERS_DESCRIPTION
-                  )
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    )))}
+                  )))}
           </p>
           {exhibition?.description &&
             exhibition.description.length > MAX_NO_CHARACTERS_DESCRIPTION && (
