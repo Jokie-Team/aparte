@@ -2,7 +2,6 @@
 
 import React from "react";
 import BorderedList from "./list/bordered-list";
-import Newsletter from "./newsletter";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -25,7 +24,12 @@ export default function Footer() {
         window.location.href = `tel:+351220120184`;
       },
     },
-    { title: t("info.facebook"), onItemClick: () => { window.open("https://www.facebook.com/apartegaleriaa") } },
+    {
+      title: t("info.facebook"),
+      onItemClick: () => {
+        window.open("https://www.facebook.com/apartegaleriaa");
+      },
+    },
   ];
 
   const MenuItems = [
@@ -42,7 +46,9 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center px-6 pt-10 mt-auto"> {/* border-t */}
+    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center px-6 pt-10 mt-auto">
+      {" "}
+      {/* border-t */}
       {/* <h1 className="text-left mb-10">{t("title")}</h1> */}
       <div className="h-full flex flex-col md:flex-row md:gap-20 gap-0">
         <div className="w-1/2"></div>
