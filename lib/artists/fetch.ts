@@ -76,7 +76,7 @@ export async function fetchArtistDetails(
             name
             imagesCollection(limit: 1) {
               items {
-                url(transform: { quality: 5 }) 
+                url(transform: { quality: 10 }) 
                 title
                 description
               }
