@@ -104,22 +104,22 @@ const Section: React.FC<{
             {artistWithAllDetails?.bio &&
               (isExpanded
                 ? artistWithAllDetails.bio.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))
+                : getCroppedText(
+                  artistWithAllDetails.bio,
+                  MAX_NO_CHARACTERS_BIO
+                )
+                  .split("\n")
+                  .map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
                       <br />
                     </React.Fragment>
-                  ))
-                : getCroppedText(
-                    artistWithAllDetails.bio,
-                    MAX_NO_CHARACTERS_BIO
-                  )
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    )))}
+                  )))}
           </p>
           {artistWithAllDetails?.bio &&
             artistWithAllDetails.bio.length > MAX_NO_CHARACTERS_BIO && (
@@ -153,7 +153,7 @@ const Section: React.FC<{
         )}
       </div>
       <div className="hidden md:flex">
-        <Carousel images={[]} visibleCount={3} />
+        <Carousel images={artistWithAllDetails?.artworks?.map((artwork) => artwork.images[0]) || []} visibleCount={3} />
       </div>
     </div>
   );
