@@ -1,9 +1,9 @@
 import { fetchGraphQL } from "../api";
+import { Artwork } from "../artworks";
 import { Exhibition } from "../exhibitions";
 
 export interface Artist {
   id: string;
-  exhibitions: Exhibition[];
   name: string;
   bio: string;
   picture: {
@@ -14,6 +14,8 @@ export interface Artist {
     width?: number;
     height?: number;
   };
+  exhibitions: Exhibition[];
+  artworks: Artwork[];
 }
 
 const artistsCache: { [key: string]: Artist[] } = {};
@@ -84,17 +86,70 @@ export async function fetchArtistExhibitions(
   return response.data.artist.exhibitionsCollection?.items || [];
 }
 
-export async function fetchArtistById(id: string, preview = false) {
+export async function fetchArtistById(id: string, preview = false): Promise<Artist> {
   const query = `
-    query ($id: String!) {
+    query {
       artist(id: $id) {
+        sys { id }
         name
-        picture { url }
+        bio
+        picture {
+          url
+          title
+          description
+          width
+          height
+        }
+        exhibitionsCollection(limit: 5) {
+          items {
+            sys { id }
+            title
+          }
+        }
+        artworksCollection(limit: 10) {
+          items {
+            sys { id }
+            name
+            imagesCollection(limit: 1) {
+              items {
+                url
+                title
+                description
+              }
+            }
+          }
+        }
       }
     }
   `;
+
   const response = await fetchGraphQL(query, preview);
 
-  if (response.errors) throw new Error("Failed to fetch Artist by ID");
-  return response.data.artist;
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error("Failed to fetch Artist by ID");
+  }
+
+  const artist = response.data.artist;
+
+  return {
+    id: artist.sys.id,
+    name: artist.name,
+    bio: artist.bio,
+    picture: artist.picture,
+    exhibitions: artist.exhibitionsCollection?.items.map((ex: any) => ({
+      id: ex.sys.id,
+      title: ex.title,
+    })) || [],
+    artworks: artist.artworksCollection?.items.map((art: any) => ({
+      id: art.sys.id,
+      name: art.name || "",
+      images:
+        art.imagesCollection?.items.map((img: any) => ({
+          url: img.url,
+          title: img.title || "",
+          description: img.description || "",
+        })) || [],
+    })) || [],
+  };
 }

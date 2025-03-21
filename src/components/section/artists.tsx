@@ -6,6 +6,7 @@ import ContentfulImage from "@/lib/contentful-image";
 import ForwardButton from "../buttons/forward";
 import { useRouter } from "next/navigation";
 import { ExpandMoreIcon } from "../icons/expand-more";
+import Carousel from "../carousel";
 
 interface TranslationsObject {
   aboutArtist: string;
@@ -44,6 +45,7 @@ const Section: React.FC<{
       : cropped + "...";
   };
 
+  console.log(artist)
   return (
     <div id={id} className="flex flex-col gap-20 my-20 w-full">
       <div className="flex flex-row justify-between gap-36 w-full">
@@ -105,6 +107,12 @@ const Section: React.FC<{
             {translations.aboutExhibitions}
           </ForwardButton>
         )}
+      </div>
+      <div className="hidden md:flex">
+        <Carousel
+          images={[]}
+          visibleCount={3}
+        />
       </div>
     </div>
   );
