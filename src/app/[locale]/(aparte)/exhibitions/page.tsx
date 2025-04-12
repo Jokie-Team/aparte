@@ -2,7 +2,6 @@ import React from "react";
 import { getTranslations } from "next-intl/server";
 import {
   fetchAllExhibitions,
-  fetchExhibitionDetails,
 } from "@/lib/exhibitions/fetch";
 import ExhibitionsSidebar from "@/src/components/sidebar/exhibitions";
 import Section from "@/src/components/section/exhibitions";
@@ -11,6 +10,14 @@ import { ExhibitionsSearchBar } from "@/src/components/searchBar/exhibitions";
 
 type ExhibitionsProps = {
   searchParams: Promise<{ search?: string; group?: string }>;
+};
+
+const normalizeText = (text: string) => {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toLowerCase();
 };
 
 const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
@@ -62,7 +69,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
     }
 
     return filtered.filter((exhibition) =>
-      exhibition.title.toLowerCase().includes(searchTerm)
+      normalizeText(exhibition.title).includes(normalizeText(searchTerm))
     );
   })();
 
@@ -70,7 +77,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
     <div className="p-12 flex flex-row w-full gap-24">
       <div className="hidden md:block w-1/4 flex-shrink-0">
         <ExhibitionsSidebar
-          exhibitions={exhibitions}
+          exhibitions={orderedExhibitions}
           translations={{
             emptyState: t("sidebar.emptyState"),
             current: t("sidebar.current"),

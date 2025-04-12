@@ -1,11 +1,12 @@
 "use client";
+import React from "react";
 import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Exhibition } from "@/lib/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { usePathname, useRouter } from "next/navigation";
 import { Arrow } from "../icons/arrow";
-import React from "react";
+import { normalizeText } from "@/src/utils/common";
 
 interface ExhibitionsSidebarProps {
   exhibitions: Exhibition[];
@@ -57,7 +58,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       .map(([year, exhibitions]) => {
         const filteredAndSorted = exhibitions
           .filter((exhibition) =>
-            exhibition.title.toLowerCase().includes(searchTerm)
+            normalizeText(exhibition.title).includes(normalizeText(searchTerm))
           )
           .sort(
             (a, b) =>
@@ -69,10 +70,10 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
 
     return {
       current: groupedExhibitions.current.filter((exhibition) =>
-        exhibition.title.toLowerCase().includes(searchTerm)
+        normalizeText(exhibition.title).includes(normalizeText(searchTerm))
       ),
       future: groupedExhibitions.future.filter((exhibition) =>
-        exhibition.title.toLowerCase().includes(searchTerm)
+        normalizeText(exhibition.title).includes(normalizeText(searchTerm))
       ),
       past: sortedPast,
     };
@@ -115,9 +116,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.current.map((exhibition, index) => (
                 <li
                   key={exhibition.id}
-                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                    index === 0 ? "border-t" : ""
-                  } group transition-all duration-300 hover:py-6`}
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                    } group transition-all duration-300 hover:py-6`}
                 >
                   <button
                     key={exhibition.id}
@@ -157,9 +157,8 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
               {filteredExhibitions.future.map((exhibition, index) => (
                 <li
                   key={exhibition.id}
-                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                    index === 0 ? "border-t" : ""
-                  } group transition-all duration-300 hover:py-6`}
+                  className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                    } group transition-all duration-300 hover:py-6`}
                 >
                   <button
                     key={exhibition.id}
@@ -194,48 +193,47 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
       {filteredExhibitions.past.some(
         ([year, exhibitionsByYear]) => year && exhibitionsByYear.length > 0
       ) && (
-        <div>
-          <h4>{translations.past}</h4>
-          <div className="border-b border-gray-200 mt-6 mb-12"></div>
-          {filteredExhibitions.past.map(([year, exhibitionsByYear]) =>
-            exhibitionsByYear.length > 0 ? (
-              <React.Fragment key={year}>
-                <div className="flex flex-row justify-between gap-10">
-                  <h5>{year}</h5>
-                  <ul className="w-2/3">
-                    {exhibitionsByYear.map((exhibition, index) => (
-                      <li
-                        key={exhibition.id}
-                        className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                          index === 0 ? "border-t" : ""
-                        } group transition-all duration-300 hover:py-6`}
-                      >
-                        <button
+          <div>
+            <h4>{translations.past}</h4>
+            <div className="border-b border-gray-200 mt-6 mb-12"></div>
+            {filteredExhibitions.past.map(([year, exhibitionsByYear]) =>
+              exhibitionsByYear.length > 0 ? (
+                <React.Fragment key={year}>
+                  <div className="flex flex-row justify-between gap-10">
+                    <h5>{year}</h5>
+                    <ul className="w-2/3">
+                      {exhibitionsByYear.map((exhibition, index) => (
+                        <li
                           key={exhibition.id}
-                          onClick={() => scrollToElement(exhibition.id)}
-                          className="w-full text-left flex flex-row justify-between items-center"
+                          className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                            } group transition-all duration-300 hover:py-6`}
                         >
-                          <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal">
-                            {exhibition.title}
-                          </span>
-                          <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                            <Arrow
-                              size={24}
-                              direction="right"
-                              className="fill-black"
-                            />
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="my-12 border-b border-gray-200" />
-              </React.Fragment>
-            ) : null
-          )}
-        </div>
-      )}
+                          <button
+                            key={exhibition.id}
+                            onClick={() => scrollToElement(exhibition.id)}
+                            className="w-full text-left flex flex-row justify-between items-center"
+                          >
+                            <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal">
+                              {exhibition.title}
+                            </span>
+                            <span className="opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                              <Arrow
+                                size={24}
+                                direction="right"
+                                className="fill-black"
+                              />
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="my-12 border-b border-gray-200" />
+                </React.Fragment>
+              ) : null
+            )}
+          </div>
+        )}
     </aside>
   );
 };

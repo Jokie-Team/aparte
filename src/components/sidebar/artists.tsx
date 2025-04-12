@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { SearchInput } from "../searchInput/searchInput";
 import { Artist } from "@/lib/artists";
 import { usePathname, useRouter } from "next/navigation";
-import { filterArtistsBySearchTerms, normalizeName } from "@/src/utils/artists";
+import { filterArtistsBySearchTerms } from "@/src/utils/artists";
+import { normalizeText } from "@/src/utils/common";
 import { Arrow } from "../icons/arrow";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
@@ -47,7 +48,7 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
 
     artists.forEach((artist) => {
       const normalizedFirstLetter =
-        normalizeName(artist.name)[0].toUpperCase() || "#";
+        normalizeText(artist.name)[0].toUpperCase() || "#";
       if (!grouped[normalizedFirstLetter]) {
         grouped[normalizedFirstLetter] = [];
       }
@@ -59,7 +60,7 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
       .sort((a, b) => a.localeCompare(b))
       .forEach((key) => {
         sortedGrouped[key] = grouped[key].sort((a, b) =>
-          normalizeName(a.name).localeCompare(normalizeName(b.name))
+          normalizeText(a.name).localeCompare(normalizeText(b.name))
         );
       });
 
@@ -101,9 +102,8 @@ const ArtistsSidebar: React.FC<SidebarProps> = ({
                 {group.map((artist: Artist, index: number) => (
                   <li
                     key={artist.id}
-                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${
-                      index === 0 ? "border-t" : ""
-                    } group transition-all duration-300 hover:py-6`}
+                    className={`w-full py-3 flex items-center justify-between border-b border-gray-200 text-gray-800 hover:text-black font-normal ${index === 0 ? "border-t" : ""
+                      } group transition-all duration-300 hover:py-6`}
                   >
                     <button
                       onClick={() => {

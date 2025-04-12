@@ -61,7 +61,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  const normalizeName = (name: string) => {
+  const normalizeText = (name: string) => {
     return name
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
@@ -74,7 +74,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
 
     artists.forEach((artist) => {
       const normalizedFirstLetter =
-        normalizeName(artist.name)[0].toUpperCase() || "#";
+        normalizeText(artist.name)[0].toUpperCase() || "#";
       if (!grouped[normalizedFirstLetter]) {
         grouped[normalizedFirstLetter] = [];
       }
@@ -86,7 +86,7 @@ const ArtistsSearchBar: React.FC<SearchBarProps> = ({
       .sort((a, b) => a.localeCompare(b))
       .forEach((key) => {
         sortedGrouped[key] = grouped[key].sort((a, b) =>
-          normalizeName(a.name).localeCompare(normalizeName(b.name))
+          normalizeText(a.name).localeCompare(normalizeText(b.name))
         );
       });
 

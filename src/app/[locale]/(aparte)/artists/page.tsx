@@ -3,23 +3,15 @@ import React from "react";
 import { Artist, fetchAllArtists } from "@/lib/artists";
 import { ArtistsSidebar } from "@/src/components/sidebar/artists";
 import Section from "@/src/components/section/artists";
-import { Divider } from "@/src/components/Divider";
 import { ArtistsSearchBar } from "@/src/components/searchBar/artists";
 import { filterArtistsBySearchTerms } from "@/src/utils/artists";
-
-const normalizeName = (name: string) => {
-  return name
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .toLowerCase();
-};
+import { normalizeText } from "@/src/utils/common";
 
 const groupArtistsByFirstLetter = (artists: Artist[]) => {
   const grouped: Record<string, Artist[]> = {};
 
   artists.forEach((artist) => {
-    const firstLetter = normalizeName(artist.name)[0]?.toUpperCase() || "#";
+    const firstLetter = normalizeText(artist.name)[0]?.toUpperCase() || "#";
     if (!grouped[firstLetter]) grouped[firstLetter] = [];
     grouped[firstLetter].push(artist);
   });
@@ -29,7 +21,7 @@ const groupArtistsByFirstLetter = (artists: Artist[]) => {
     .sort((a, b) => a.localeCompare(b))
     .forEach((key) => {
       sortedGrouped[key] = grouped[key].sort((a, b) =>
-        normalizeName(a.name).localeCompare(normalizeName(b.name))
+        normalizeText(a.name).localeCompare(normalizeText(b.name))
       );
     });
 

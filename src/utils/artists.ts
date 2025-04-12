@@ -1,4 +1,5 @@
 import { Artist } from "@/lib/artists";
+import { normalizeText } from "./common";
 
 export type ArtistsGroupedByLetter = Record<string, Artist[]>;
 
@@ -11,26 +12,20 @@ export function groupByFirstLetter(artists: Artist[]): ArtistsGroupedByLetter {
   }, {});
 }
 
-export const normalizeName = (name: string) => {
-  return name
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .toLowerCase();
-};
-
 export const filterArtistsBySearchTerms = (
   artists: Artist[],
   searchTerm: string
 ): Artist[] => {
   const terms = searchTerm
     .split(",")
-    .map((term) => normalizeName(term.trim()))
+    .map((term) => normalizeText(term.trim()))
     .filter((term) => term);
 
   if (!terms.length) return artists;
 
   return artists.filter((artist) =>
-    terms.some((term) => normalizeName(artist.name).includes(term))
+    terms.some((term) => normalizeText(artist.name).includes(term))
   );
 };
+export { normalizeText };
+
