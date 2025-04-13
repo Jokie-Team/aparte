@@ -7,6 +7,7 @@ import ForwardButton from "../buttons/forward";
 import { useRouter } from "next/navigation";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import Carousel from "../carousel";
+import { Artwork, fetchArtworksByArtist } from "@/lib/artworks";
 
 interface TranslationsObject {
   aboutArtist: string;
@@ -25,6 +26,7 @@ const Section: React.FC<{
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
   const [artistWithAllDetails, setDetails] = useState<Artist>(artist);
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -45,6 +47,15 @@ const Section: React.FC<{
             .catch((error) =>
               console.error(`Error fetching details for ${artistId}:`, error)
             );
+
+          fetchArtworksByArtist(artistId)
+            .then((fetchedArtworks) => {
+              setArtworks(fetchedArtworks);
+            })
+            .catch((error) =>
+              console.error(`Error fetching artworks for ${artistId}:`, error)
+            );
+
           observer.disconnect();
         }
       },
@@ -153,7 +164,10 @@ const Section: React.FC<{
         )}
       </div>
       <div className="hidden md:flex">
-        <Carousel images={artistWithAllDetails?.artworks?.map((artwork) => artwork.images[0]) || []} visibleCount={3} />
+        <Carousel
+          images={artworks.map((artwork) => artwork.images?.[0]).filter(Boolean)}
+          visibleCount={3}
+        />
       </div>
     </div>
   );

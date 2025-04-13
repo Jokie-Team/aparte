@@ -13,55 +13,61 @@ export interface Artwork {
   images: MediaProps[];
 }
 
-export async function fetchArtworks(
-  preview = false,
-  limit?: number
+export async function fetchArtworksByArtist(
+  artistId: string,
+  preview = false
 ): Promise<Artwork[]> {
+
   const query = `
-  query {
-    artworkCollection(limit: ${limit}) {
-      items {
-        sys {
-          id
-        }
-        name
-        year
-        height
-        width
-        available
-        technique
-        artistsCollection {
-          items {
-            sys {
-              id
+    query GetArtistArtworks {
+      artworkCollection(limit: 50) {
+        items {
+          sys { id }
+          name
+          year
+          height
+          width
+          available
+          technique
+          artistsCollection(limit: 5) {
+            items {
+              sys { id }
             }
           }
-        }
-        imagesCollection {
-          items {
-            url
-            title
-            description
+          imagesCollection(limit: 3) {
+            items {
+              url
+              title
+              description
+            }
           }
         }
       }
     }
-  }
   `;
 
   const response = await fetchGraphQL(query, preview);
+
   if (response.errors) {
-    console.error(response.errors);
-    throw new Error("Failed to fetch artworks");
+    console.error("GraphQL error in fetchArtworksByArtist:", JSON.stringify(response.errors, null, 2));
+    throw new Error("Failed to fetch artworks by artist");
   }
 
-  return response.data.artworkCollection.items.map((item: any) => ({
+  const items = response.data.artworkCollection?.items.filter((item: { artistsCollection: { items: any[]; }; }) =>
+    item.artistsCollection?.items.some(artist => artist.sys.id === artistId)
+  ) || [];
+
+  return mapArtworks(items);
+}
+
+function mapArtworks(items: any[]): Artwork[] {
+  return items.map((item) => ({
     id: item.sys.id,
     name: item.name || "",
-    year: item.year || undefined,
-    height: item.height || undefined,
-    width: item.width || undefined,
-    available: item.available || false,
+    year: item.year ?? undefined,
+    height: item.height ?? undefined,
+    width: item.width ?? undefined,
+    available: item.available ?? false,
     technique: item.technique || "",
     artists:
       item.artistsCollection?.items.map((artist: any) => ({
