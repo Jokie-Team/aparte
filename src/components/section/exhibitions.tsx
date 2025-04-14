@@ -132,28 +132,28 @@ const Section: React.FC<SectionProps> = ({
             {exhibitionWithAllDetails?.description &&
               (isExpanded
                 ? exhibitionWithAllDetails.description
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))
+                  .split("\n")
+                  .map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))
                 : getCroppedText(
-                    exhibitionWithAllDetails.description,
-                    MAX_NO_CHARACTERS_DESCRIPTION
-                  )
-                    .split("\n")
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    )))}
+                  exhibitionWithAllDetails.description,
+                  MAX_NO_CHARACTERS_DESCRIPTION
+                )
+                  .split("\n")
+                  .map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  )))}
           </p>
           {exhibitionWithAllDetails?.description &&
             exhibitionWithAllDetails.description.length >
-              MAX_NO_CHARACTERS_DESCRIPTION && (
+            MAX_NO_CHARACTERS_DESCRIPTION && (
               <span
                 onClick={handleToggleDescription}
                 className="font-extrabold text-blue-600 hover:text-blue-800 mt-2 cursor-pointer flex items-center gap-2"
@@ -216,11 +216,14 @@ const Section: React.FC<SectionProps> = ({
       </div>
       <div className="hidden md:flex">
         <Carousel
-          images={
-            exhibitionWithAllDetails?.artworks.map(
-              (artwork) => artwork.images[0]
-            ) || []
-          }
+          images={exhibitionWithAllDetails?.artworks
+            .filter((artwork) => artwork.name && artwork.images?.[0]?.url)
+            .map((artwork) => ({
+              url: artwork.images[0].url,
+              title: artwork.name,
+              height: artwork.height,
+              width: artwork.width,
+            }))}
           visibleCount={3}
         />
       </div>

@@ -1,10 +1,10 @@
 "use client";
-import { MediaProps } from "@/lib/types";
+import { PictureProps } from "@/lib/types";
 import React, { useState } from "react";
 import { Arrow } from "./icons/arrow";
 
 interface CarouselProps {
-  images: MediaProps[];
+  images: Array<PictureProps>;
   visibleCount: number;
 }
 
@@ -46,15 +46,23 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
           {images.map((image, index) => (
             <div
               key={index}
-              className="flex-none w-1/6"
+              className="flex-none w-1/6 relative group"
               style={{ flex: `0 0 calc(${100 / visibleCount}% - 24px)` }}
             >
               <img
                 src={image.url}
-                alt={`Slide ${index}`}
-                className="w-full h-auto object-contain"
+                alt={image.title || "Obra sem título"}
+                className="w-full h-auto object-contain transition-opacity duration-300"
                 style={{ maxHeight: "300px" }}
               />
+              <div className="absolute inset-0 bg-black text-white bg-opacity-0 group-hover:bg-opacity-60 transition-opacity duration-300 items-center justify-center flex flex-col">
+                <p className="text-[20px] text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
+                  {image.title || "Sem título"}
+                </p>
+                <p className="text-[16px] italic text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
+                  {image.height && image.width ? image.height + " x " + image.width : ""}
+                </p>
+              </div>
             </div>
           ))}
         </div>

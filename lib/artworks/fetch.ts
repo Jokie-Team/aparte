@@ -1,5 +1,5 @@
 import { fetchGraphQL } from "../api";
-import { MediaProps } from "../types";
+import { PictureProps } from "../types";
 
 export interface Artwork {
   id: string;
@@ -10,7 +10,7 @@ export interface Artwork {
   available?: boolean;
   technique?: string;
   artists: { id: string }[];
-  images: MediaProps[];
+  images: PictureProps[];
 }
 
 export async function fetchArtworksByArtist(
@@ -37,8 +37,6 @@ export async function fetchArtworksByArtist(
           imagesCollection(limit: 3) {
             items {
               url
-              title
-              description
             }
           }
         }

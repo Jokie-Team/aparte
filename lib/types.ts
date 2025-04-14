@@ -7,8 +7,3 @@ export interface PictureProps {
   height?: number;
 }
 
-export interface MediaProps {
-  url: string;
-  title: string;
-  description?: string;
-}

@@ -89,6 +89,7 @@ const Section: React.FC<{
       : cropped + "...";
   };
 
+  console.log(artworks);
   return (
     <div
       id={artistId}
@@ -165,7 +166,14 @@ const Section: React.FC<{
       </div>
       <div className="hidden md:flex">
         <Carousel
-          images={artworks.map((artwork) => artwork.images?.[0]).filter(Boolean)}
+          images={artworks
+            .filter((artwork) => artwork.name && artwork.images?.[0]?.url)
+            .map((artwork) => ({
+              url: artwork.images[0].url,
+              title: artwork.name,
+              height: artwork.height,
+              width: artwork.width,
+            }))}
           visibleCount={3}
         />
       </div>
