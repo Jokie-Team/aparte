@@ -60,7 +60,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
                   {image.title || "Sem título"}
                 </p>
                 <p className="text-[16px] italic text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
-                  {image.height && image.width ? image.height + " x " + image.width : ""}
+                  {image.height && image.width ? image.width + " x " + image.height : ""}
                 </p>
               </div>
             </div>
