@@ -121,13 +121,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                 >
                   <button
                     key={exhibition.id}
-                    onClick={() =>
-                      scrollToElement(
-                        `exhibition-${exhibition.title
-                          .replaceAll(" ", "-")
-                          .toLowerCase()}`
-                      )
-                    }
+                    onClick={() => scrollToElement(exhibition.id)}
                     className="w-full text-left flex flex-row justify-between items-center"
                   >
                     <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal">
@@ -162,13 +156,7 @@ const ExhibitionsSidebar: React.FC<ExhibitionsSidebarProps> = ({
                 >
                   <button
                     key={exhibition.id}
-                    onClick={() =>
-                      scrollToElement(
-                        `exhibition-${exhibition.title
-                          .replaceAll(" ", "-")
-                          .toLowerCase()}`
-                      )
-                    }
+                    onClick={() => scrollToElement(exhibition.id)}
                     className="w-full text-left flex flex-row justify-between items-center"
                   >
                     <span className="truncate group-hover:overflow-visible group-hover:whitespace-normal">
