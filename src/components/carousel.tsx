@@ -55,34 +55,33 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
 
       <div className="overflow-hidden w-full mt-16">
         <div
-          className="flex transition-transform duration-300"
+          className="grid grid-cols-3 gap-8"
           style={{
-            transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-            gap: "24px",
+            display: "grid",
+            gridTemplateColumns: `repeat(${visibleCount}, 1fr)`,
           }}
         >
-          {images.map((image, index) => (
+          {images.slice(currentIndex, currentIndex + visibleCount).map((image, index) => (
             <div
               key={index}
-              className="flex-none w-1/6 relative group"
-              style={{ flex: `0 0 calc(${100 / visibleCount}% - 24px)` }}
+              className="relative group"
             >
-              <div className="relative inline-block" onClick={() => openPreview(image)}>
+              <div
+                className="inline-flex items-center justify-center cursor-pointer relative"
+                onClick={() => openPreview(image)}
+              >
                 <img
                   src={image.url}
                   alt={image.title || "Obra sem título"}
-                  className="w-full h-auto object-contain transition-opacity duration-300 cursor-pointer"
-                  style={{ maxHeight: "300px" }}
+                  className="object-contain"
                 />
-                <div
-                  className="absolute top-0 left-0 right-0 bottom-0 bg-black text-white bg-opacity-0 group-hover:bg-opacity-60 transition-opacity duration-300 items-center justify-center flex flex-col"
-                >
-                  <p className="text-[16px] text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
-                    {image.title || "Sem título"}
-                  </p>
-                  <p className="text-[12x] italic text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
-                    {image.height && image.width ? image.width + " x " + image.height : ""}
-                  </p>
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
+                  <div className="px-4 text-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <p className="text-[16px]">{image.title || "Sem título"}</p>
+                    {image.width && image.height && (
+                      <p className="text-[12px] italic mt-1">{image.width} × {image.height}</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
