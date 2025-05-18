@@ -19,11 +19,12 @@ interface TranslationsObject {
 type SectionProps = {
   exhibition: Exhibition;
   translations: TranslationsObject;
+  isImageRight?: boolean;
 };
 
 const MAX_NO_CHARACTERS_DESCRIPTION = 300;
 
-const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
+const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRight = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const locale = useLocale();
 
@@ -66,7 +67,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations }) => {
           }
         />
       </div>
-      <div className="flex flex-row justify-between">
+      <div className={`flex flex-row justify-between ${isImageRight ? '' : 'flex-row-reverse'}`}>
         {exhibition?.picture?.url && (
           <div className="hidden md:block md:w-2/5">
             <ContentfulImage

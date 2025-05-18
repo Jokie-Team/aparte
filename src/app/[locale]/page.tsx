@@ -72,6 +72,7 @@ export default async function LocalePage() {
             <React.Fragment key={exhibition.id}>
               <Section
                 exhibition={exhibition}
+                isImageRight={index % 2 !== 0}
                 translations={{
                   readMore: t("section.readMore"),
                   readLess: t("section.readLess"),
