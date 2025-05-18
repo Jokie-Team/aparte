@@ -67,19 +67,23 @@ export default async function LocalePage() {
         <Tag text={label} />
       </div>
       {exhibitionsToShow.length > 0 && (
-        <div className="px-6 pt-6 pb-52 w-full">
-          {exhibitionsToShow.map((exhibition) => (
-            <Section
-              key={exhibition.id}
-              exhibition={exhibition}
-              translations={{
-                readMore: t("section.readMore"),
-                readLess: t("section.readLess"),
-                aboutArtworks: t("section.aboutArtworks"),
-                aboutArtist: t("section.aboutArtist"),
-                aboutArtists: t("section.aboutArtists"),
-              }}
-            />
+        <div className="px-6 pt-6 pb-52 w-full flex flex-col gap-20">
+          {exhibitionsToShow.map((exhibition, index) => (
+            <React.Fragment key={exhibition.id}>
+              <Section
+                exhibition={exhibition}
+                translations={{
+                  readMore: t("section.readMore"),
+                  readLess: t("section.readLess"),
+                  aboutArtworks: t("section.aboutArtworks"),
+                  aboutArtist: t("section.aboutArtist"),
+                  aboutArtists: t("section.aboutArtists"),
+                }}
+              />
+              {index < exhibitionsToShow.length - 1 && (
+                <div className="border-t border-gray-300 w-full" />
+              )}
+            </React.Fragment>
           ))}
         </div>
       )}
