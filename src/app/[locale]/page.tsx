@@ -39,27 +39,41 @@ export default async function LocalePage() {
   let exhibitionsToShow = groupedExhibitions.current;
   let label = t("currentExhibitions");
 
-  if (exhibitionsToShow.length === 0) {
-    exhibitionsToShow = groupedExhibitions.future;
+  if (exhibitionsToShow.length === 0 && groupedExhibitions.future.length > 0) {
+    const nextStart = groupedExhibitions.future
+      .map(e => new Date(e.startDate).toISOString().split("T")[0])
+      .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
+
+    exhibitionsToShow = groupedExhibitions.future.filter(
+      e => new Date(e.startDate).toISOString().split("T")[0] === nextStart
+    );
     label = t("futureExhibitions");
   }
 
-  if (exhibitionsToShow.length === 0) {
-    const pastYears = Object.keys(groupedExhibitions.past)
-      .map(Number)
-      .sort((a, b) => b - a);
+  if (
+    exhibitionsToShow.length === 0
+  ) {
+    const allPast = groupedExhibitions.past;
+    const mostRecentYear = Math.max(...Object.keys(allPast).map(Number));
+    const allPastLast = allPast[mostRecentYear];
+    console.log(allPastLast)
+    const lastEnd = allPastLast
+      .map(e => new Date(e.endDate).toISOString().split("T")[0])
+      .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
 
-    if (pastYears.length > 0) {
-      const mostRecentYear = pastYears[0];
-      exhibitionsToShow = groupedExhibitions.past[mostRecentYear];
-    }
+    exhibitionsToShow = allPastLast.filter(
+      e => new Date(e.endDate).toISOString().split("T")[0] === lastEnd
+    );
     label = t("pastExhibitions");
   }
+
+  const artworks = exhibitionsToShow.flatMap(e => e.artworks || []);
+  const randomSubset = artworks.sort(() => 0.5 - Math.random()).slice(0, 8);
 
   return (
     <div className="flex flex-col">
       <div className="px-6 py-10 w-full overflow-x-hidden">
-        <RandomGallery />
+        <RandomGallery artworks={randomSubset} />
         {/* <h1>{t("title")}</h1> */}
       </div>
       {/* <div className="border-b border-gray-200" /> */}
