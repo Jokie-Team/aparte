@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import Carousel from "../carousel";
 import { Artwork, fetchArtworksByArtist } from "@/lib/artworks";
+import Link from "next/link";
+import { getCroppedText } from "@/src/utils/common";
+import ExpandableText from "../ExpandableText";
 
 interface TranslationsObject {
   aboutArtist: string;
@@ -23,7 +26,6 @@ const Section: React.FC<{
   translations: TranslationsObject;
   artistId: string;
 }> = ({ artist, translations, artistId }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
   const [artistWithAllDetails, setDetails] = useState<Artist>(artist);
   const [artworks, setArtworks] = useState<Artwork[]>([]);
@@ -76,20 +78,6 @@ const Section: React.FC<{
     router.push(`/exhibitions?search=${encodeURIComponent(exhibitionsNames)}`);
   };
 
-  const handleToggleBio = () => {
-    setIsExpanded((prev) => !prev);
-  };
-
-  const getCroppedText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    const cropped = text.slice(0, maxLength);
-    const lastPeriodIndex = cropped.lastIndexOf(".");
-    return lastPeriodIndex !== -1
-      ? cropped.slice(0, lastPeriodIndex + 1)
-      : cropped + "...";
-  };
-
-  console.log(artworks);
   return (
     <div
       id={artistId}
@@ -112,37 +100,11 @@ const Section: React.FC<{
           <h3 className="text-gray-900 pt-10 md:pt-0">
             {artistWithAllDetails?.name}
           </h3>
-          <p className="text-gray-600">
-            {artistWithAllDetails?.bio &&
-              (isExpanded
-                ? artistWithAllDetails.bio.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))
-                : getCroppedText(
-                  artistWithAllDetails.bio,
-                  MAX_NO_CHARACTERS_BIO
-                )
-                  .split("\n")
-                  .map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  )))}
-          </p>
-          {artistWithAllDetails?.bio &&
-            artistWithAllDetails.bio.length > MAX_NO_CHARACTERS_BIO && (
-              <span
-                onClick={handleToggleBio}
-                className="font-extrabold text-blue-600 hover:text-blue-800 mt-2 cursor-pointer flex items-center gap-2"
-              >
-                {isExpanded ? translations.readLess : translations.readMore}
-                <ExpandMoreIcon rotate180={isExpanded} />
-              </span>
-            )}
+          <ExpandableText
+            text={artistWithAllDetails?.bio || ""}
+            readMoreLabel={translations.readMore}
+            readLessLabel={translations.readLess}
+          />
         </div>
         <div className="hidden md:block w-full md:w-1/3 ">
           <ContentfulImage
@@ -157,7 +119,9 @@ const Section: React.FC<{
         </div>
       </div>
       <div className="flex flex-row gap-10">
-        {/*<ForwardButton>{translations.aboutArtist}</ForwardButton>*/}
+        {<Link href={`/artists/${artistWithAllDetails.id}`}>
+          <ForwardButton>{translations.aboutArtist}</ForwardButton>
+        </Link>}
         {artistWithAllDetails.exhibitions.length > 0 && (
           <ForwardButton onClick={handleExhibitionsClick}>
             {translations.aboutExhibitions}

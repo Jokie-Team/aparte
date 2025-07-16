@@ -1,7 +1,7 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
 import Section from "@/src/components/section/homepage";
-import RandomGallery from "@/src/components/random-gallery";
+import RandomGallery from "@/src/components/RandomGallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import Tag from "@/src/components/tags/tag";
 

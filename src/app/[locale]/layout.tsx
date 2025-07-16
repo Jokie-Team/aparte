@@ -35,7 +35,6 @@ export default async function LocaleLayout({
             <Footer />
             <ScrollUp direction="up" />
           </section>
-          <ScrollUp direction={"up"} />
         </NextIntlClientProvider>
       </body>
     </html>
