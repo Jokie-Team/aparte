@@ -4,7 +4,6 @@ import { getTranslations } from "next-intl/server";
 import BackButton from "@/src/components/buttons/back";
 import ExpandableText from "@/src/components/ExpandableText";
 import Carousel from "@/src/components/carousel";
-import Link from "next/link";
 import ForwardButton from "@/src/components/buttons/forward";
 import Tag from "@/src/components/tags/tag";
 
@@ -27,6 +26,13 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
   const details = await fetchArtistDetails(artistId);
   const artist = { ...base, ...details };
 
+  const artworksPerPage = 12; // 3 rows of 4 columns
+  const initialArtworks = artist.artworks.slice(0, artworksPerPage);
+  const remainingArtworks = artist.artworks.slice(artworksPerPage);
+
+  const hasPicture = artist.picture?.url;
+  const hasArtwork = artist.artworks?.length > 0;
+
   return (
     <div className="px-10 py-10 space-y-10">
       <BackButton />
@@ -40,22 +46,22 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
               readLessLabel={t("section.readLess")}
             />
             <div className="flex flex-row w-full justify-end gap-10">
-              {artist.artworks.length > 0 && (
+              {hasArtwork && (
                 <ForwardButton>
-                  {t("section.aboutArtworks")}
+                  {t("section.seeArtworks")}
                 </ForwardButton>
               )}
               {artist.exhibitions.length > 0 && (
                 <ForwardButton>
-                  {t("section.aboutExhibitions")}
+                  {t("section.seeExhibitions")}
                 </ForwardButton>
               )}
             </div>
           </div>
 
-          <div className="flex flex-row space-x-6 space-between">
-            {artist.picture?.url && (
-              <div className="w-[calc(30%-12px)] h-[70%] aspect-square">
+          <div className="flex flex-row space-x-6 justify-end w-full">
+            {hasPicture && !hasArtwork && (
+              <div className="w-1/2 aspect-square">
                 <Image
                   src={artist.picture.url}
                   alt={artist.picture.title || artist.name}
@@ -65,8 +71,8 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
                 />
               </div>
             )}
-            {artist.artworks?.length > 0 && (
-              <div className="w-[calc(70%-12px)]">
+            {!hasPicture && hasArtwork && (
+              <div className="w-full">
                 <Image
                   src={artist.artworks[0].images?.[0].url}
                   alt={artist.artworks[0].images?.[0].title || artist.name}
@@ -76,16 +82,38 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
                 />
               </div>
             )}
+            {hasPicture && hasArtwork && (
+              <>
+                <div className="w-[calc(30%-12px)] h-[70%] aspect-square">
+                  <Image
+                    src={artist.picture.url}
+                    alt={artist.picture.title || artist.name}
+                    width={300}
+                    height={300}
+                    className="object-cover object-top w-full h-full"
+                  />
+                </div>
+                <div className="w-[calc(70%-12px)]">
+                  <Image
+                    src={artist.artworks[0].images?.[0].url}
+                    alt={artist.artworks[0].images?.[0].title || artist.name}
+                    width={300}
+                    height={300}
+                    className="object-cover w-full h-auto"
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {artist.artworks?.length > 0 && (
+        {hasArtwork && (
           <div className="space-y-8">
             <div className="pt-28">
               <Tag text={t("section.artistArtworks")} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {artist.artworks.map((artwork) => {
+              {initialArtworks.map((artwork) => {
                 const image = artwork.images?.[0];
                 return image ? (
                   <div key={artwork.id} className="relative group">
@@ -103,6 +131,11 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
                 ) : null;
               })}
             </div>
+            {remainingArtworks.length > 0 && (
+              <div className="text-center text-sm text-gray-500">
+                {t("section.moreArtworksAvailable")}
+              </div>
+            )}
           </div>
         )}
         {artist.exhibitions?.length > 0 && (
@@ -122,6 +155,6 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }

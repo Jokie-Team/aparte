@@ -10,11 +10,11 @@ import Carousel from "../carousel";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import { useLocale } from "next-intl";
 import MobileGallery from "../MobileGallery";
+import Link from "next/link";
 
 interface TranslationsObject {
   readMore: string;
   readLess: string;
-  aboutArtworks: string;
   aboutArtist: string;
   aboutArtists: string;
 }
@@ -203,16 +203,17 @@ const Section: React.FC<SectionProps> = ({
       </div>
 
       <div className="flex flex-row gap-10">
-        {exhibitionWithAllDetails.artists.length > 0 && (
+        {exhibitionWithAllDetails.artists.length > 0 ? exhibitionWithAllDetails.artists.length == 1 ?
+          <Link href={`/artists/${exhibitionWithAllDetails.artists[0].id}`}>
+            <ForwardButton>{translations.aboutArtist}</ForwardButton>
+          </Link> :
           <ForwardButton
             onClick={handleArtistsClick}
             className="w-full md:w-auto"
           >
-            {exhibitionWithAllDetails.artists.length > 1
-              ? translations.aboutArtists
-              : translations.aboutArtist}
+            {translations.aboutArtists}
           </ForwardButton>
-        )}
+          : null}
       </div>
       <div className="hidden md:flex">
         <Carousel

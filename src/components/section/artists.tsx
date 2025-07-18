@@ -5,21 +5,18 @@ import { Artist } from "@/lib/artists";
 import ContentfulImage from "@/lib/contentful-image";
 import ForwardButton from "../buttons/forward";
 import { useRouter } from "next/navigation";
-import { ExpandMoreIcon } from "../icons/expand-more";
 import Carousel from "../carousel";
 import { Artwork, fetchArtworksByArtist } from "@/lib/artworks";
 import Link from "next/link";
-import { getCroppedText } from "@/src/utils/common";
 import ExpandableText from "../ExpandableText";
 
 interface TranslationsObject {
   aboutArtist: string;
-  aboutExhibitions: string;
+  seeExhibitions: string;
+  seeArtworks: string;
   readMore: string;
   readLess: string;
 }
-
-const MAX_NO_CHARACTERS_BIO = 500;
 
 const Section: React.FC<{
   artist: Artist;
@@ -71,13 +68,6 @@ const Section: React.FC<{
     return () => observer.disconnect();
   }, [artistId]);
 
-  const handleExhibitionsClick = () => {
-    const exhibitionsNames = artistWithAllDetails.exhibitions
-      .map((exhibition) => exhibition.title)
-      .join(" ");
-    router.push(`/exhibitions?search=${encodeURIComponent(exhibitionsNames)}`);
-  };
-
   return (
     <div
       id={artistId}
@@ -119,28 +109,23 @@ const Section: React.FC<{
         </div>
       </div>
       <div className="flex flex-row gap-10">
-        {<Link href={`/artists/${artistWithAllDetails.id}`}>
-          <ForwardButton>{translations.aboutArtist}</ForwardButton>
+        {artistWithAllDetails.artworks?.length > 0 && <Link href={`/artists/${artistWithAllDetails.id}`}>
+          <ForwardButton>{translations.seeArtworks}</ForwardButton>
         </Link>}
-        {artistWithAllDetails.exhibitions.length > 0 && (
-          <ForwardButton onClick={handleExhibitionsClick}>
-            {translations.aboutExhibitions}
-          </ForwardButton>
-        )}
       </div>
-      <div className="hidden md:flex">
-        <Carousel
-          images={artworks
-            .filter((artwork) => artwork.name && artwork.images?.[0]?.url)
-            .map((artwork) => ({
-              url: artwork.images[0].url,
-              title: artwork.name,
-              height: artwork.height,
-              width: artwork.width,
-            }))}
-          visibleCount={3}
-        />
-      </div>
+      {artistWithAllDetails.exhibitions.length > 0 && (
+        <div className="hidden md:flex">
+          <Carousel
+            images={artistWithAllDetails?.exhibitions
+              .filter((exhibition) => exhibition.title && exhibition.picture?.url)
+              .map((exhibition) => ({
+                url: exhibition.picture?.url,
+                title: exhibition.title,
+              }))}
+            visibleCount={3}
+          />
+        </div>
+      )}
     </div>
   );
 };
