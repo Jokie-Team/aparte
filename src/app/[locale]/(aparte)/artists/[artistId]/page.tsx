@@ -1,32 +1,41 @@
-import { fetchAllArtists, fetchArtistDetails } from "@/lib/artists";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+
+import { fetchAllArtists, fetchArtistDetails } from "@/lib/artists";
 import BackButton from "@/src/components/buttons/back";
 import ExpandableText from "@/src/components/ExpandableText";
 import Carousel from "@/src/components/carousel";
 import ForwardButton from "@/src/components/buttons/forward";
 import Tag from "@/src/components/tags/tag";
 
-interface ArtistPageProps {
-  params: {
-    locale: string;
-    artistId: string;
-  };
-}
+export default function ArtistPage() {
+  const params = useParams<{ locale: string; artistId: string }>();
+  const t = useTranslations("artists");
+  const [artist, setArtist] = useState<any>(null);
 
-export default async function ArtistPage({ params }: ArtistPageProps) {
-  const t = await getTranslations("artists");
-  const { artistId } = params;
+  useEffect(() => {
+    async function loadArtist() {
+      if (!params?.artistId) return;
 
-  const allArtists = await fetchAllArtists();
-  const base = allArtists.find((a) => a.id === artistId);
+      const allArtists = await fetchAllArtists();
+      const base = allArtists.find((a) => a.id === params.artistId);
 
-  if (!base) return <div className="m-4">Artista não encontrado</div>;
+      if (!base) return;
+      const details = await fetchArtistDetails(params.artistId);
 
-  const details = await fetchArtistDetails(artistId);
-  const artist = { ...base, ...details };
+      setArtist({ ...base, ...details });
+    }
 
-  const artworksPerPage = 12; // 3 rows of 4 columns
+    loadArtist();
+  }, [params?.artistId]);
+
+  if (!artist) return <div className="p-10">A carregar artista...</div>;
+
+  const artworksPerPage = 12;
   const initialArtworks = artist.artworks.slice(0, artworksPerPage);
   const remainingArtworks = artist.artworks.slice(artworksPerPage);
 
@@ -46,16 +55,8 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
               readLessLabel={t("section.readLess")}
             />
             <div className="flex flex-row w-full justify-end gap-10">
-              {hasArtwork && (
-                <ForwardButton>
-                  {t("section.seeArtworks")}
-                </ForwardButton>
-              )}
-              {artist.exhibitions.length > 0 && (
-                <ForwardButton>
-                  {t("section.seeExhibitions")}
-                </ForwardButton>
-              )}
+              {hasArtwork && <ForwardButton>{t("section.seeArtworks")}</ForwardButton>}
+              {artist.exhibitions.length > 0 && <ForwardButton>{t("section.seeExhibitions")}</ForwardButton>}
             </div>
           </div>
 
@@ -113,7 +114,7 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
               <Tag text={t("section.artistArtworks")} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {initialArtworks.map((artwork) => {
+              {initialArtworks.map((artwork: any) => {
                 const image = artwork.images?.[0];
                 return image ? (
                   <div key={artwork.id} className="relative group">
@@ -138,6 +139,7 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
             )}
           </div>
         )}
+
         {artist.exhibitions?.length > 0 && (
           <div className="space-y-8">
             <div className="pt-28">
@@ -145,7 +147,7 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
             </div>
             <div className="h-[30vh]">
               <Carousel
-                images={artist.exhibitions.map((exhibition) => ({
+                images={artist.exhibitions?.map((exhibition: any) => ({
                   url: exhibition.picture?.url || "/images/placeholder.jpg",
                   title: exhibition.title,
                 }))}

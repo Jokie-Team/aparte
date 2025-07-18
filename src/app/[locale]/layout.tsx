@@ -6,14 +6,13 @@ import ScrollUp from "@/src/components/buttons/scrollup";
 import React from "react";
 import Header from "@/src/components/header/header";
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: {
+interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: { locale?: string };
-}) {
-  const { locale } = params;
+  params: { locale: string };
+}
+
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { locale } = await Promise.resolve(params);
 
   if (!locale || typeof locale !== "string") {
     throw new Error("Locale parameter is required and must be a valid string.");
