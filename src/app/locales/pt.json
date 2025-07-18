@@ -34,6 +34,9 @@
     "section": {
       "aboutArtist": "Sobre o artista",
       "aboutExhibitions": "Ver exposições",
+      "aboutArtworks": "Ver obras",
+      "artistArtworks": "Obras do artista",
+      "artistExhibitions": "Exposições do artista",
       "readMore": "Ler mais",
       "readLess": "Ler menos"
     }
@@ -50,7 +53,6 @@
     "section": {
       "aboutArtworks": "Obras da exposição",
       "aboutArtist": "Sobre o artista",
-      "aboutArtists": "Sobre os artistas",
       "readMore": "Ler Mais",
       "readLess": "Ler Menos"
     }
@@ -71,5 +73,4 @@
     "futureExhibitions": "Exposições Futuras",
     "pastExhibitions": "Exposições Passadas"
   }
-  
 }

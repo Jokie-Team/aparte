@@ -34,6 +34,9 @@
     "section": {
       "aboutArtist": "About the artist",
       "aboutExhibitions": "See exhibitions",
+      "aboutArtworks": "See artworks",
+      "artistArtworks": "Artist artworks",
+      "artistExhibitions": "Artist exhibitions",
       "readMore": "Read more",
       "readLess": "Read less"
     }
@@ -67,8 +70,8 @@
       "readMore": "Read More",
       "readLess": "Read Less"
     },
-     "currentExhibitions": "Current Exhibitions",
-     "futureExhibitions": "Future Exhibitions",
-     "pastExhibitions": "Past Exhibitions"
+    "currentExhibitions": "Current Exhibitions",
+    "futureExhibitions": "Future Exhibitions",
+    "pastExhibitions": "Past Exhibitions"
   }
 }
