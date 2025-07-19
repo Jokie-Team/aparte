@@ -9,13 +9,13 @@ import { fetchAllArtists, fetchArtistDetails } from "@/lib/artists";
 import BackButton from "@/src/components/buttons/back";
 import ExpandableText from "@/src/components/ExpandableText";
 import Carousel from "@/src/components/carousel";
-import ForwardButton from "@/src/components/buttons/forward";
 import Tag from "@/src/components/tags/tag";
 
 export default function ArtistPage() {
   const params = useParams<{ locale: string; artistId: string }>();
   const t = useTranslations("artists");
   const [artist, setArtist] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"artworks" | "exhibitions">("artworks");
 
   useEffect(() => {
     async function loadArtist() {
@@ -45,7 +45,7 @@ export default function ArtistPage() {
   return (
     <div className="px-10 py-10 space-y-10">
       <BackButton />
-      <div className="space-y-40">
+      <div className="space-y-20">
         <div className="grid grid-cols-2 md:grid-cols-2 gap-64 items-start">
           <div className="col-span-1 space-y-10">
             <h2>{artist.name}</h2>
@@ -54,10 +54,10 @@ export default function ArtistPage() {
               readMoreLabel={t("section.readMore")}
               readLessLabel={t("section.readLess")}
             />
-            <div className="flex flex-row w-full justify-end gap-10">
+            {/* <div className="flex flex-row w-full justify-end gap-10">
               {hasArtwork && <ForwardButton>{t("section.seeArtworks")}</ForwardButton>}
               {artist.exhibitions.length > 0 && <ForwardButton>{t("section.seeExhibitions")}</ForwardButton>}
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-row space-x-6 justify-end w-full">
@@ -107,12 +107,32 @@ export default function ArtistPage() {
             )}
           </div>
         </div>
-
-        {hasArtwork && (
+        {(artist.artworks?.length > 0 || artist.exhibitions?.length > 0) && (
+          <div className="pt-28 flex flex-row space-x-2">
+            {artist.artworks?.length > 0 && (
+              <button onClick={() => setActiveTab("artworks")}>
+                <Tag
+                  size="small"
+                  clickable={true}
+                  selected={activeTab === "artworks"}
+                  text={t("section.artistArtworks")}
+                />
+              </button>
+            )}
+            {artist.exhibitions?.length > 0 && (
+              <button onClick={() => setActiveTab("exhibitions")}>
+                <Tag
+                  size="small"
+                  clickable={true}
+                  selected={activeTab === "exhibitions"}
+                  text={t("section.artistExhibitions")}
+                />
+              </button>
+            )}
+          </div>
+        )}
+        {activeTab === "artworks" && hasArtwork && (
           <div className="space-y-8">
-            <div className="pt-28">
-              <Tag text={t("section.artistArtworks")} />
-            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {initialArtworks.map((artwork: any) => {
                 const image = artwork.images?.[0];
@@ -140,11 +160,8 @@ export default function ArtistPage() {
           </div>
         )}
 
-        {artist.exhibitions?.length > 0 && (
+        {activeTab === "exhibitions" && artist.exhibitions?.length > 0 && (
           <div className="space-y-8">
-            <div className="pt-28">
-              <Tag text={t("section.artistExhibitions")} />
-            </div>
             <div className="h-[30vh]">
               <Carousel
                 images={artist.exhibitions?.map((exhibition: any) => ({
