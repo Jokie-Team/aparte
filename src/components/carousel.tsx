@@ -1,19 +1,27 @@
 "use client";
-import { PictureProps } from "@/lib/types";
 import React, { useState } from "react";
 import { Arrow } from "./icons/arrow";
 import ImagePreview from "./ImagePreview";
 import Tag from "./tags/tag";
 
+interface ItemProps {
+  url: string;
+  title?: string;
+  description?: string;
+  width?: number;
+  height?: number;
+  startDate?: string;
+  endDate?: string;
+}
 interface CarouselProps {
-  images: Array<PictureProps>;
+  images: ItemProps[];
   visibleCount: number;
   title?: string;
 }
 
 const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [previewImage, setPreviewImage] = useState<PictureProps | null>(null);
+  const [previewImage, setPreviewImage] = useState<ItemProps | null>(null);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
@@ -25,7 +33,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
     );
   };
 
-  const openPreview = (image: PictureProps) => {
+  const openPreview = (image: ItemProps) => {
     setPreviewImage(image);
   };
 
@@ -88,6 +96,9 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
                     <p className="text-[16px]">{image.title || "Sem título"}</p>
                     {image.width && image.height && (
                       <p className="text-[12px] italic mt-1">{image.width} × {image.height}</p>
+                    )}
+                    {image.startDate && image.endDate && (
+                      <p className="text-[12px] italic mt-1">{new Date(image.startDate).toLocaleDateString()} - {new Date(image.endDate).toLocaleDateString()}</p>
                     )}
                   </div>
                 </div>

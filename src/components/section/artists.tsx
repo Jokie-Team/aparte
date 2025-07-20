@@ -122,6 +122,8 @@ const Section: React.FC<{
               .map((exhibition) => ({
                 url: exhibition.picture?.url,
                 title: exhibition.title,
+                startDate: exhibition.startDate,
+                endDate: exhibition.endDate,
               }))}
             visibleCount={3}
             title={translations.artistExhibitions}

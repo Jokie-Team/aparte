@@ -178,6 +178,8 @@ export async function fetchExhibitionDetails(
               description
             }
           }
+          width
+          height
         }
       }
     }
@@ -212,6 +214,8 @@ export async function fetchExhibitionDetails(
               title: image.title || "",
               description: image.description || "",
             })) || [],
+          width: artwork.width || 0,
+          height: artwork.height || 0,
         })) || [],
       artists,
     };

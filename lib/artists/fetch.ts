@@ -69,6 +69,8 @@ export async function fetchArtistDetails(
             sys { id }
             title
             picture { url }
+            startDate
+            endDate
           }
         }
         artworksCollection(limit: 10) {
@@ -103,6 +105,8 @@ export async function fetchArtistDetails(
         id: ex.sys.id,
         title: ex.title,
         picture: ex.picture,
+        startDate: ex.startDate,
+        endDate: ex.endDate,
       })) || [],
     artworks:
       artist.artworksCollection?.items.map((art: any) => ({

@@ -6,4 +6,3 @@ export interface PictureProps {
   width?: number;
   height?: number;
 }
-
