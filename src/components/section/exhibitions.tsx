@@ -15,6 +15,7 @@ import Link from "next/link";
 interface TranslationsObject {
   readMore: string;
   readLess: string;
+  exhibitionArtworks: string;
   aboutArtist: string;
   aboutArtists: string;
 }
@@ -226,6 +227,7 @@ const Section: React.FC<SectionProps> = ({
               width: artwork.width,
             }))}
           visibleCount={3}
+          title={translations.exhibitionArtworks}
         />
       </div>
     </div>

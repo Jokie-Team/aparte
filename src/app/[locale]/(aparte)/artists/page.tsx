@@ -76,6 +76,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                     aboutArtist: t("section.aboutArtist"),
                     seeExhibitions: t("section.seeExhibitions"),
                     seeArtworks: t("section.seeArtworks"),
+                    artistExhibitions: t("section.artistExhibitions"),
                     readLess: t("section.readLess"),
                     readMore: t("section.readMore"),
                   }}

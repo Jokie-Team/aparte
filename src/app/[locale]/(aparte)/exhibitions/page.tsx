@@ -110,6 +110,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
               translations={{
                 readMore: t("section.readMore"),
                 readLess: t("section.readLess"),
+                exhibitionArtworks: t("section.exhibitionArtworks"),
                 aboutArtist: t("section.aboutArtist"),
                 aboutArtists: t("section.aboutArtists"),
               }}

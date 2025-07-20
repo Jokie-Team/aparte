@@ -3,13 +3,15 @@ import { PictureProps } from "@/lib/types";
 import React, { useState } from "react";
 import { Arrow } from "./icons/arrow";
 import ImagePreview from "./ImagePreview";
+import Tag from "./tags/tag";
 
 interface CarouselProps {
   images: Array<PictureProps>;
   visibleCount: number;
+  title?: string;
 }
 
-const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
+const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [previewImage, setPreviewImage] = useState<PictureProps | null>(null);
 
@@ -41,14 +43,20 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount }) => {
         />
       )}
 
+      {title != "" && (
+        <div className="py-6">
+          <Tag size="extrasmall" text={title} />
+        </div>
+      )}
+
       {currentIndex > 0 && (
-        <button onClick={handlePrev} className="absolute left-0 top-0">
+        <button onClick={handlePrev} className="absolute left-0">
           <Arrow size={28} direction="left" />
         </button>
       )}
 
       {currentIndex < images.length - visibleCount && (
-        <button onClick={handleNext} className="absolute right-6 top-0">
+        <button onClick={handleNext} className="absolute right-6">
           <Arrow size={28} direction="right" />
         </button>
       )}

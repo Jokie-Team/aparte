@@ -14,6 +14,7 @@ interface TranslationsObject {
   aboutArtist: string;
   seeExhibitions: string;
   seeArtworks: string;
+  artistExhibitions: string;
   readMore: string;
   readLess: string;
 }
@@ -123,6 +124,7 @@ const Section: React.FC<{
                 title: exhibition.title,
               }))}
             visibleCount={3}
+            title={translations.artistExhibitions}
           />
         </div>
       )}
