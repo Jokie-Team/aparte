@@ -17,42 +17,50 @@ export async function fetchArtworksByArtist(
   artistId: string,
   preview = false
 ): Promise<Artwork[]> {
-
-  const query = `
-    query GetArtistArtworks {
-      artworkCollection(limit: 50) {
-        items {
-          sys { id }
-          name
-          year
-          height
-          width
-          available
-          technique
-          artistsCollection(limit: 5) {
-            items {
-              sys { id }
-            }
+  const query = `query GetArtistArtworks {
+    artworkCollection(limit: 50) {
+      items {
+        sys { id }
+        name
+        year
+        height
+        width
+        available
+        technique
+        artistsCollection(limit: 5) {
+          items {
+            sys { id }
           }
-          imagesCollection(limit: 3) {
-            items {
-              url
-            }
+        }
+        imagesCollection(limit: 3) {
+          items {
+            url
+            title
+            description
           }
         }
       }
     }
-  `;
+  }`;
 
   const response = await fetchGraphQL(query, preview);
 
   if (response.errors) {
     console.error("GraphQL error in fetchArtworksByArtist:", JSON.stringify(response.errors, null, 2));
-    throw new Error("Failed to fetch artworks by artist");
+    return [];
   }
 
-  const items = response.data.artworkCollection?.items.filter((item: { artistsCollection: { items: any[]; }; }) =>
-    item.artistsCollection?.items.some(artist => artist.sys.id === artistId)
+  // 🔍 Log de artworks com referências partidas
+  response.data.artworkCollection?.items?.forEach((item: any) => {
+    if (!item?.artistsCollection?.items?.length) {
+      console.warn("⚠️ Artwork with broken or missing artist reference:", item.sys?.id, item.name);
+    }
+  });
+
+  const items = response.data.artworkCollection?.items?.filter(
+    (item: any) =>
+      item?.artistsCollection?.items?.length > 0 &&
+      item.artistsCollection.items.some((artist: any) => artist?.sys?.id === artistId)
   ) || [];
 
   return mapArtworks(items);
