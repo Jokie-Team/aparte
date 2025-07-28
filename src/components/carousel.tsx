@@ -51,7 +51,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
         />
       )}
 
-      {title != "" && (
+      {title != "" && images.length > 0 && (
         <div className="py-6">
           <Tag size="extrasmall" text={title} />
         </div>
@@ -94,12 +94,12 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
                   <div className="px-4 text-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <p className="text-[16px]">{image.title || "Sem título"}</p>
-                    {image.width && image.height && (
-                      <p className="text-[12px] italic mt-1">{image.width} × {image.height}</p>
-                    )}
-                    {image.startDate && image.endDate && (
-                      <p className="text-[12px] italic mt-1">{new Date(image.startDate).toLocaleDateString()} - {new Date(image.endDate).toLocaleDateString()}</p>
-                    )}
+                    {image.width || image.height ? (
+                      <p className="text-[12px] italic mt-1">{image?.width || "-"} × {image?.height || "-"}</p>
+                    ) : null}
+                    {image.startDate || image.endDate ? (
+                      <p className="text-[12px] italic mt-1">{new Date(image.startDate || "").toLocaleDateString()} - {new Date(image.endDate || "").toLocaleDateString()}</p>
+                    ) : null}
                   </div>
                 </div>
               </div>

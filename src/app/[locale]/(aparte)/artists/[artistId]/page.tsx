@@ -167,14 +167,16 @@ export default function ArtistPage() {
 
         {activeTab === "exhibitions" && artist.exhibitions?.length > 0 && (
           <div className="space-y-8">
-            <div className="h-[30vh]">
+            <div className="md:flex">
               <Carousel
-                images={artist.exhibitions?.map((exhibition: any) => ({
-                  url: exhibition.picture?.url || "/images/placeholder.jpg",
-                  title: exhibition.title,
-                  startDate: exhibition.startDate,
-                  endDate: exhibition.endDate,
-                }))}
+                images={artist?.exhibitions
+                  .filter((exhibition: { title: any; picture: { url: any; }; }) => exhibition.title && exhibition.picture?.url)
+                  .map((exhibition: { picture: { url: any; }; title: any; startDate: any; endDate: any; }) => ({
+                    url: exhibition.picture?.url,
+                    title: exhibition.title,
+                    startDate: exhibition.startDate,
+                    endDate: exhibition.endDate,
+                  }))}
                 visibleCount={3}
               />
             </div>
