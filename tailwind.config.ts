@@ -14,6 +14,7 @@ export default {
       lightGrey: "#CBCBCB",
       white: "#F9F9F9",
       orange: "#FE531D",
+      red: "#FE531D",
     },
     fontFamily: {
       neue: "var(--font-neue-haas)",

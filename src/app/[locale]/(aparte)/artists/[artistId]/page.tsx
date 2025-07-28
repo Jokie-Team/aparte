@@ -42,6 +42,8 @@ export default function ArtistPage() {
   const hasPicture = artist.picture?.url;
   const hasArtwork = artist.artworks?.length > 0;
 
+  console.log(artist.artworks);
+
   return (
     <div className="px-10 py-10 space-y-10">
       <BackButton />
@@ -145,9 +147,12 @@ export default function ArtistPage() {
                       height={300}
                       className="w-full h-auto object-cover rounded"
                     />
-                    <span className="absolute top-2 left-2 text-xs bg-white rounded px-2 py-1 shadow">
-                      {artwork.name}
-                    </span>
+                    {!artwork.available && (
+                      <span className="absolute top-2 left-2 flex items-center gap-2 text-sm font-medium bg-white rounded px-3 py-1 shadow-md">
+                        <span className="w-2 h-2 rounded-full bg-red" />
+                        {t("section.unavailable")}
+                      </span>
+                    )}
                   </div>
                 ) : null;
               })}
@@ -167,6 +172,8 @@ export default function ArtistPage() {
                 images={artist.exhibitions?.map((exhibition: any) => ({
                   url: exhibition.picture?.url || "/images/placeholder.jpg",
                   title: exhibition.title,
+                  startDate: exhibition.startDate,
+                  endDate: exhibition.endDate,
                 }))}
                 visibleCount={3}
               />

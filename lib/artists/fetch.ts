@@ -84,6 +84,7 @@ export async function fetchArtistDetails(
                 description
               }
             }
+            available
           }
         }
       }
@@ -118,6 +119,7 @@ export async function fetchArtistDetails(
             title: img.title || "",
             description: img.description || "",
           })) || [],
+        available: art.available,
       })) || [],
   };
 }

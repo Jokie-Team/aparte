@@ -50,7 +50,6 @@ export async function fetchArtworksByArtist(
     return [];
   }
 
-  // 🔍 Log de artworks com referências partidas
   response.data.artworkCollection?.items?.forEach((item: any) => {
     if (!item?.artistsCollection?.items?.length) {
       console.warn("⚠️ Artwork with broken or missing artist reference:", item.sys?.id, item.name);

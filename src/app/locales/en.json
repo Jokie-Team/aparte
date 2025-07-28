@@ -38,7 +38,8 @@
       "artistArtworks": "Artist artworks",
       "artistExhibitions": "Artist exhibitions",
       "readMore": "Read more",
-      "readLess": "Read less"
+      "readLess": "Read less",
+      "unavailable": "Unavailable"
     }
   },
   "exhibitions": {
