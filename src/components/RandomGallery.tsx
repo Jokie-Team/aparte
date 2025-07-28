@@ -22,9 +22,7 @@ type RandomGalleryProps = {
 
 const breakpointColumnsObj = {
   default: 4,
-  1100: 3,
-  700: 2,
-  500: 1,
+  700: 3,
 };
 
 export default function RandomGallery({ artworks }: RandomGalleryProps) {
