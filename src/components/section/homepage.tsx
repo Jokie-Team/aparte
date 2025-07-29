@@ -6,7 +6,6 @@ import ContentfulImage from "@/lib/contentful-image";
 import { Artist } from "@/lib/artists";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import { useLocale } from "next-intl";
-import MobileGallery from "../MobileGallery";
 
 interface TranslationsObject {
   readMore: string;
@@ -59,12 +58,12 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRigh
   return (
     <div id={exhibition.id} className="flex flex-col space-y-8">
       <div className="block pt-10 md:hidden">
-        <MobileGallery
-          images={
-            exhibition?.artworks
-              .map((artwork) => artwork.images[0])
-              .slice(0, 5) || []
-          }
+        <ContentfulImage
+          src={exhibition?.picture?.url}
+          alt={exhibition?.title || "Exhibition"}
+          width={600}
+          height={600}
+          className="object-cover"
         />
       </div>
       <div className={`flex flex-row justify-between ${isImageRight ? '' : 'flex-row-reverse'}`}>
@@ -75,7 +74,7 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRigh
               alt={exhibition?.title || "Exhibition"}
               width={600}
               height={600}
-              className="rounded object-cover"
+              className="object-cover"
             />
           </div>
         )}

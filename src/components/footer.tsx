@@ -10,6 +10,15 @@ export default function Footer() {
   const menuT = useTranslations("menu");
   const router = useRouter();
 
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const ContactItems = [
     { title: t("info.agenda") },
     {
@@ -46,22 +55,25 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center px-6 pt-10 mt-auto">
+    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center md:px-6 pt-10 mt-auto">
       {" "}
       {/* border-t */}
       {/* <h1 className="text-left mb-10">{t("title")}</h1> */}
       <div className="h-full flex flex-col md:flex-row md:gap-20 gap-0">
         <div className="w-1/2"></div>
         <div className="flex flex-col flex-1 justify-around gap-10 md:gap-20">
-          <BorderedList items={ContactItems} bulleted itemClassName="body" />
-          <BorderedList
-            items={MenuItems}
-            bulleted={false}
-            itemClassName="subtitle"
-          />
+          <BorderedList items={ContactItems} bulleted={!isMobile}
+            itemClassName="body" />
+          {!isMobile && (
+            <BorderedList
+              items={MenuItems}
+              bulleted={false}
+              itemClassName="subtitle"
+            />
+          )}
         </div>
       </div>
-      <div className="flex text-left text-xs mt-16 md:flex-row flex-col py-2 gap-x-16">
+      <div className="flex text-center text-xs mt-16 md:flex-row md:text-left flex-col py-2 gap-x-16">
         <div className="pr-10">{t("madeby")}</div>
         <div> {t("rights")}</div>
       </div>

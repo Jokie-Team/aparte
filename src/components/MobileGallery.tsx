@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { Arrow } from "./icons/arrow";
 import ImagePreview from "./ImagePreview";
 
 interface ImageData {
@@ -23,64 +24,61 @@ const MobileGallery: React.FC<MobileGalleryProps> = ({
 
   if (!images.length) return null;
 
-  const handleOpenPreview = () => {
-    setShowPreview(true);
+  const goPrev = () => {
+    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  const handleClosePreview = () => {
-    setShowPreview(false);
+  const goNext = () => {
+    setSelectedIndex((prev) =>
+      prev < images.length - 1 ? prev + 1 : prev
+    );
   };
 
-  // Adaptar o formato da imagem para corresponder ao que o ImagePreview espera
-  const currentImage = images[selectedIndex] ? {
-    ...images[selectedIndex],
-    // Garantir que todas as propriedades necessárias existam
-    title: images[selectedIndex].title || "Sem título",
-  } : null;
+  const handleOpenPreview = () => setShowPreview(true);
+  const handleClosePreview = () => setShowPreview(false);
+
+  const currentImage = images[selectedIndex];
 
   return (
-    <div
-      className={`flex flex-row gap-4 w-full ${className} max-h-[400px] tablet:max-h-auto`}
-    >
+    <div className={`relative w-full max-w-full mx-auto ${className}`}>
       {showPreview && currentImage && (
         <ImagePreview
-          image={currentImage}
+          image={{
+            ...currentImage,
+            title: currentImage.title || "Sem título",
+          }}
           onClose={handleClosePreview}
           isOpen={showPreview}
         />
       )}
-      <div className="flex flex-col gap-2 w-16">
-        {images.map((image, index) => (
-          <div
-            key={`thumb-${index}`}
-            className="relative w-16 h-16 cursor-pointer"
-            onClick={() => setSelectedIndex(index)}
-          >
-            <Image
-              src={image.url}
-              alt={image.description || `Thumbnail ${index + 1}`}
-              fill
-              className="object-cover rounded-sm"
-              sizes="64px"
-            />
-          </div>
-        ))}
-      </div>
-      <div
-        className="relative flex-1 aspect-square cursor-pointer"
-        onClick={handleOpenPreview}
-      >
+
+      {selectedIndex > 0 && (
+        <button
+          onClick={goPrev}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10"
+        >
+          <Arrow direction="left" size={24} />
+        </button>
+      )}
+
+      <div className="w-full aspect-square relative cursor-pointer" onClick={handleOpenPreview}>
         <Image
-          src={images[selectedIndex].url}
-          alt={
-            images[selectedIndex].description || `Image ${selectedIndex + 1}`
-          }
+          src={currentImage.url}
+          alt={currentImage.description || "Imagem"}
           fill
-          className="object-cover rounded-md"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority={selectedIndex === 0}
+          className="object-contain"
+          sizes="100vw"
         />
       </div>
+
+      {selectedIndex < images.length - 1 && (
+        <button
+          onClick={goNext}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10"
+        >
+          <Arrow direction="right" size={24} />
+        </button>
+      )}
     </div>
   );
 };

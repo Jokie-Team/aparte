@@ -42,13 +42,11 @@ export default function ArtistPage() {
   const hasPicture = artist.picture?.url;
   const hasArtwork = artist.artworks?.length > 0;
 
-  console.log(artist.artworks);
-
   return (
     <div className="px-10 py-10 space-y-10">
       <BackButton />
       <div className="space-y-20">
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-64 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-64 items-start">
           <div className="col-span-1 space-y-10">
             <h2>{artist.name}</h2>
             <ExpandableText
@@ -64,7 +62,7 @@ export default function ArtistPage() {
 
           <div className="flex flex-row space-x-6 justify-end w-full">
             {hasPicture && !hasArtwork && (
-              <div className="w-1/2 aspect-square">
+              <div className="w-full md:w-1/2 aspect-square">
                 <Image
                   src={artist.picture.url}
                   alt={artist.picture.title || artist.name}

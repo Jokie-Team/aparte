@@ -49,7 +49,7 @@ export default function RandomGallery({ artworks }: RandomGalleryProps) {
             alt={img.title || "Artwork"}
             width={500}
             height={500}
-            className="w-full h-auto object-contain rounded"
+            className="w-full h-auto object-contain"
           />
         </div>
       ))}
