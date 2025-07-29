@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getTranslations } from "next-intl/server";
 import {
   fetchAllExhibitions,

@@ -14,6 +14,7 @@ body {
 }
 
 @layer components {
+
   html,
   body {
     @apply font-neue;

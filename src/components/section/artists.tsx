@@ -114,7 +114,7 @@ const Section: React.FC<{
           <ForwardButton>{translations.seeArtworks}</ForwardButton>
         </Link>}
       </div>
-      {artistWithAllDetails.exhibitions.length > 0 && (
+      {artistWithAllDetails.exhibitions?.length > 0 ? (
         <div className="hidden md:flex">
           <Carousel
             images={artistWithAllDetails?.exhibitions
@@ -129,7 +129,7 @@ const Section: React.FC<{
             title={translations.artistExhibitions}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

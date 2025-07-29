@@ -6,6 +6,9 @@ import ContentfulImage from "@/lib/contentful-image";
 import { Artist } from "@/lib/artists";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import { useLocale } from "next-intl";
+import ForwardButton from "../buttons/forward";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface TranslationsObject {
   readMore: string;
@@ -26,6 +29,7 @@ const MAX_NO_CHARACTERS_DESCRIPTION = 300;
 const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRight = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const locale = useLocale();
+  const router = useRouter();
 
   const mapArtistsToArtistsList = (artists: Artist[]) => {
     let artistsList = "";
@@ -53,6 +57,13 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRigh
     return lastPeriodIndex !== -1
       ? cropped.slice(0, lastPeriodIndex + 1)
       : cropped + "...";
+  };
+
+  const handleArtistsClick = () => {
+    const artistNames = exhibition.artists
+      .map((artist) => artist.name)
+      .join(", ");
+    router.push(`/artists?search=${encodeURIComponent(artistNames)}`);
   };
 
   return (
@@ -135,6 +146,19 @@ const Section: React.FC<SectionProps> = ({ exhibition, translations, isImageRigh
               }).format(new Date(exhibition.endDate))}`}
             </p>
             <div className="border-t border-gray-300 !mb-10 !mt-0" />
+            <div className="flex flex-row gap-10">
+              {exhibition.artists.length > 0 ? exhibition.artists.length == 1 ?
+                <Link href={`/artists/${exhibition.artists[0].id}`}>
+                  <ForwardButton>{translations.aboutArtist}</ForwardButton>
+                </Link> :
+                <ForwardButton
+                  onClick={handleArtistsClick}
+                  className="w-full md:w-auto"
+                >
+                  {translations.aboutArtists}
+                </ForwardButton>
+                : null}
+            </div>
           </div>
         </div>
       </div>
