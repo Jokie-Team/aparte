@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Arrow } from "./icons/arrow";
-import ImagePreview from "./ImagePreview";
 import Tag from "./tags/tag";
 import { ImageLoader } from "./loader";
 
@@ -19,11 +18,16 @@ interface CarouselProps {
   images: ItemProps[];
   visibleCount: number;
   title?: string;
+  type?: "artwork" | "exhibition";
 }
 
-const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" }) => {
+const Carousel: React.FC<CarouselProps> = ({
+  images,
+  visibleCount,
+  title = "",
+  type = "artwork",
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [previewImage, setPreviewImage] = useState<ItemProps | null>(null);
   const [loadedIndexes, setLoadedIndexes] = useState<number[]>([]);
 
   const handlePrev = () => {
@@ -36,43 +40,31 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
     );
   };
 
-  const openPreview = (image: ItemProps) => {
-    setPreviewImage(image);
-  };
-
-  const closePreview = () => {
-    setPreviewImage(null);
-  };
-
   return (
-    <div className="relative w-full mt-10">
-      {previewImage && (
-        <ImagePreview
-          image={previewImage}
-          onClose={closePreview}
-          isOpen={Boolean(previewImage)}
-        />
-      )}
-
+    <div className="relative w-full">
       {title !== "" && images.length > 0 && (
-        <div className="py-6">
+        < div className="py-6" >
           <Tag size="extrasmall" text={title} />
-        </div>
+        </div >
       )}
 
-      {currentIndex > 0 && (
-        <button onClick={handlePrev} className="absolute left-0 z-10">
-          <Arrow size={28} direction="left" />
-        </button>
-      )}
+      {
+        currentIndex > 0 && (
+          <button onClick={handlePrev} className="absolute left-0 z-10">
+            <Arrow size={28} direction="left" />
+          </button>
+        )
+      }
 
-      {currentIndex < images.length - visibleCount && (
-        <button onClick={handleNext} className="absolute right-6 z-10">
-          <Arrow size={28} direction="right" />
-        </button>
-      )}
+      {
+        currentIndex < images.length - visibleCount && (
+          <button onClick={handleNext} className="absolute right-6 z-10">
+            <Arrow size={28} direction="right" />
+          </button>
+        )
+      }
 
-      <div className="overflow-hidden w-full mt-16">
+      <div className={`overflow-hidden w-full ${images.length > visibleCount ? "mt-16" : ""}`}>
         <div
           className="grid gap-8"
           style={{
@@ -87,8 +79,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
             return (
               <div
                 key={realIndex}
-                className="relative group cursor-pointer flex items-center justify-center"
-                onClick={() => openPreview(image)}
+                className="relative group flex items-center justify-center"
               >
                 {!isLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white">
@@ -97,7 +88,7 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
                 )}
                 <img
                   src={image.url}
-                  alt={image.title || "Obra sem título"}
+                  alt={image.title || "Sem título"}
                   className={`object-contain w-full h-auto transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"
                     }`}
                   onLoad={() =>
@@ -106,28 +97,36 @@ const Carousel: React.FC<CarouselProps> = ({ images, visibleCount, title = "" })
                     )
                   }
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
-                  <div className="px-4 text-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <p className="text-[16px]">{image.title || "Sem título"}</p>
-                    {image.width || image.height ? (
-                      <p className="text-[12px] italic mt-1">
-                        {image?.width || "-"} × {image?.height || "-"}
-                      </p>
-                    ) : null}
-                    {image.startDate || image.endDate ? (
+                {type === "exhibition" ? (
+                  <div className="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-0 transition-all duration-300 flex items-center justify-center">
+                    <div className="px-4 text-center text-white opacity-100 group-hover:opacity-0 transition-all duration-300">
+                      <p className="text-[16px]">{image.title || "Sem título"}</p>
                       <p className="text-[12px] italic mt-1">
                         {new Date(image.startDate || "").toLocaleDateString()} -{" "}
                         {new Date(image.endDate || "").toLocaleDateString()}
                       </p>
-                    ) : null}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
+                    <div className="px-4 text-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <>
+                        <p className="text-[16px]">{image.title || "Sem título"}</p>
+                        {(image.width || image.height) && (
+                          <p className="text-[12px] italic mt-1">
+                            {image?.width || "-"} × {image?.height || "-"}
+                          </p>
+                        )}
+                      </>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

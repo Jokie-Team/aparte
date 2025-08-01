@@ -127,6 +127,7 @@ const Section: React.FC<{
               }))}
             visibleCount={3}
             title={translations.artistExhibitions}
+            type="exhibition"
           />
         </div>
       ) : null}

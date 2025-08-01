@@ -224,6 +224,7 @@ export default function ArtistPage() {
                     endDate: exhibition.endDate,
                   }))}
                 visibleCount={3}
+                type="exhibition"
               />
             </div>
           </div>

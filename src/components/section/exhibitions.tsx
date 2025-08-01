@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Exhibition } from "@/lib/exhibitions";
-import { Artist } from "@/lib/artists";
 import ContentfulImage from "@/lib/contentful-image";
 import { useLocale } from "next-intl";
 import Link from "next/link";

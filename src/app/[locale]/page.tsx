@@ -90,9 +90,6 @@ export default async function LocalePage() {
                 translations={{
                   readMore: t("section.readMore"),
                   readLess: t("section.readLess"),
-                  aboutArtworks: t("section.aboutArtworks"),
-                  aboutArtist: t("section.aboutArtist"),
-                  aboutArtists: t("section.aboutArtists"),
                 }}
               />
               {index < exhibitionsToShow.length - 1 && (

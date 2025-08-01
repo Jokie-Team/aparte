@@ -114,6 +114,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
                 aboutArtist: t("section.aboutArtist"),
                 aboutArtists: t("section.aboutArtists"),
               }}
+              showCarousel={true}
             />
             {index !== orderedExhibitions.length - 1 && (
               <div className="my-32 border-b border-gray-200" />
