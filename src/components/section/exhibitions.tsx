@@ -2,233 +2,172 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Exhibition } from "@/lib/exhibitions";
-import ContentfulImage from "@/lib/contentful-image";
 import { Artist } from "@/lib/artists";
-import ForwardButton from "../buttons/forward";
-import { useRouter } from "next/navigation";
-import Carousel from "../carousel";
-import { ExpandMoreIcon } from "../icons/expand-more";
+import ContentfulImage from "@/lib/contentful-image";
 import { useLocale } from "next-intl";
-import MobileGallery from "../MobileGallery";
 import Link from "next/link";
+import { ExpandMoreIcon } from "../icons/expand-more";
+import Carousel from "../carousel";
+import MobileGallery from "../MobileGallery";
 
 interface TranslationsObject {
   readMore: string;
   readLess: string;
-  exhibitionArtworks: string;
-  aboutArtist: string;
-  aboutArtists: string;
+  aboutArtworks?: string;
+  aboutArtist?: string;
+  aboutArtists?: string;
+  exhibitionArtworks?: string;
 }
 
-type SectionProps = {
+interface SectionProps {
   exhibition: Exhibition;
-  exhibitionId: string;
   translations: TranslationsObject;
-};
+  exhibitionId?: string;
+  isImageRight?: boolean;
+  showGallery?: boolean;
+  showCarousel?: boolean;
+}
 
 const MAX_NO_CHARACTERS_DESCRIPTION = 300;
 
 const Section: React.FC<SectionProps> = ({
   exhibition,
-  exhibitionId,
   translations,
+  exhibitionId,
+  isImageRight = false,
+  showGallery = false,
+  showCarousel = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [exhibitionWithAllDetails, setDetails] =
-    useState<Exhibition>(exhibition);
-
-  const router = useRouter();
-  const locale = useLocale();
+  const [exhibitionDetails, setExhibitionDetails] = useState<Exhibition>(exhibition);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const locale = useLocale();
 
   useEffect(() => {
+    if (!exhibitionId) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
           fetch(`/api/exhibitions/${exhibitionId}`)
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error(`Failed to fetch details for ${exhibitionId}`);
-              }
-              return res.json();
-            })
-            .then((data) => {
-              setDetails({ ...exhibition, ...data });
-            })
-            .catch((error) =>
-              console.error(
-                `Error fetching details for ${exhibitionId}:`,
-                error
-              )
-            );
+            .then((res) => res.json())
+            .then((data) => setExhibitionDetails({ ...exhibition, ...data }))
+            .catch((err) => console.error("Error fetching details:", err));
           observer.disconnect();
         }
       },
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current);
 
     return () => observer.disconnect();
   }, [exhibitionId]);
 
-  const handleArtistsClick = () => {
-    const artistNames = exhibitionWithAllDetails.artists
-      .map((artist) => artist.name)
-      .join(", ");
-    router.push(`/artists?search=${encodeURIComponent(artistNames)}`);
-  };
-
-  const mapArtistsToArtistsList = (artists: Artist[]) => {
-    let artistsList = "";
-
-    if (artists.length === 1) return artists[0].name;
-
-    artists.map((artist, index) => {
-      if (index === artists.length - 1) {
-        artistsList = artistsList + artist.name;
-      } else {
-        artistsList = artistsList + artist.name + ", ";
-      }
-    });
-    return artistsList;
-  };
-
-  const handleToggleDescription = () => {
-    setIsExpanded((prev) => !prev);
-  };
+  const handleToggleDescription = () => setIsExpanded((prev) => !prev);
 
   const getCroppedText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     const cropped = text.slice(0, maxLength);
     const lastPeriodIndex = cropped.lastIndexOf(".");
-    return lastPeriodIndex !== -1
-      ? cropped.slice(0, lastPeriodIndex + 1)
-      : cropped + "...";
+    return lastPeriodIndex !== -1 ? cropped.slice(0, lastPeriodIndex + 1) : cropped + "...";
   };
 
+  const formatDate = (date: string) =>
+    new Intl.DateTimeFormat(locale, { day: "2-digit", month: "long", year: "numeric" }).format(
+      new Date(date)
+    );
+
   return (
-    <div
-      ref={sectionRef}
-      id={exhibition.id}
-      className="flex flex-col space-y-8"
-    >
-      <div className="block pt-10 md:hidden">
-        <MobileGallery
-          images={
-            exhibitionWithAllDetails.artworks?.map(
-              (artwork) => artwork.images[0]
-            ) || []
-          }
-        />
-      </div>
-      <div className="flex flex-row justify-between">
+    <div ref={sectionRef} id={exhibition.id} className="flex flex-col space-y-8">
+      {showGallery && (
+        <div className="block pt-10 md:hidden">
+          <MobileGallery
+            images={exhibitionDetails.artworks?.map((a) => a.images[0]) || []}
+          />
+        </div>
+      )}
+      <div className={`flex flex-row justify-between ${isImageRight ? "" : "flex-row-reverse"}`}>
+        {exhibitionDetails.picture?.url && (
+          <div className="hidden md:block md:w-2/5">
+            <ContentfulImage
+              src={exhibitionDetails.picture.url}
+              alt={exhibitionDetails.title}
+              width={600}
+              height={600}
+              className="object-cover rounded"
+            />
+          </div>
+        )}
         <div className="flex flex-col space-y-4 w-full md:w-1/2">
-          <h3 className="text-gray-900">{exhibitionWithAllDetails.title}</h3>
+          <h3 className="text-gray-900">{exhibitionDetails.title}</h3>
           <p className="text-gray-600">
-            {exhibitionWithAllDetails?.description &&
-              (isExpanded
-                ? exhibitionWithAllDetails.description
-                  .split("\n")
-                  .map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))
-                : getCroppedText(
-                  exhibitionWithAllDetails.description,
-                  MAX_NO_CHARACTERS_DESCRIPTION
-                )
-                  .split("\n")
-                  .map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  )))}
+            {(isExpanded ? exhibitionDetails.description : getCroppedText(exhibitionDetails.description, MAX_NO_CHARACTERS_DESCRIPTION))
+              .split("\n")
+              .map((line, idx) => (
+                <React.Fragment key={idx}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
           </p>
-          {exhibitionWithAllDetails?.description &&
-            exhibitionWithAllDetails.description.length >
-            MAX_NO_CHARACTERS_DESCRIPTION && (
-              <span
-                onClick={handleToggleDescription}
-                className="font-extrabold text-blue-600 hover:text-blue-800 mt-2 cursor-pointer flex items-center gap-2"
-              >
-                {isExpanded ? translations.readLess : translations.readMore}
-                <ExpandMoreIcon rotate180={isExpanded} />
-              </span>
-            )}
+          {exhibitionDetails.description.length > MAX_NO_CHARACTERS_DESCRIPTION && (
+            <span
+              onClick={handleToggleDescription}
+              className="font-extrabold text-blue-600 hover:text-blue-800 mt-2 cursor-pointer flex items-center gap-2"
+            >
+              {isExpanded ? translations.readLess : translations.readMore}
+              <ExpandMoreIcon rotate180={isExpanded} />
+            </span>
+          )}
           <div>
             <div className="border-t border-gray-300 !mt-10" />
-            {exhibitionWithAllDetails?.artists.length > 0 && (
+            {exhibitionDetails.artists.length > 0 && (
               <>
                 <p className="text-gray-800 font-medium !my-3">
-                  {mapArtistsToArtistsList(exhibitionWithAllDetails.artists)}
+                  {exhibitionDetails.artists.map((artist, index) => (
+                    <span key={index}>
+                      <Link
+                        href={`/artists/${artist.id}`}
+                        className="hover:font-bold transition-all"
+                      >
+                        {artist.name}
+                      </Link>
+                      {index < exhibitionDetails.artists.length - 1 && ", "}
+                    </span>
+                  ))}
                 </p>
                 <div className="border-t border-gray-300 !m-0" />
               </>
             )}
             <p className="text-gray-500 !my-3">
-              {`${new Intl.DateTimeFormat(locale, {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }).format(
-                new Date(exhibitionWithAllDetails.startDate)
-              )} - ${new Intl.DateTimeFormat(locale, {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }).format(new Date(exhibitionWithAllDetails.endDate))}`}
+              {`${formatDate(exhibitionDetails.startDate)} - ${formatDate(
+                exhibitionDetails.endDate
+              )}`}
             </p>
             <div className="border-t border-gray-300 !mb-10 !mt-0" />
           </div>
         </div>
-
-        {exhibitionWithAllDetails?.picture?.url && (
-          <div className="hidden md:block md:w-2/5">
-            <ContentfulImage
-              src={exhibitionWithAllDetails?.picture?.url}
-              alt={exhibitionWithAllDetails?.title || "Exhibition"}
-              width={400}
-              height={400}
-              className="rounded object-cover"
-            />
-          </div>
-        )}
       </div>
-
-      <div className="flex flex-row gap-10">
-        {exhibitionWithAllDetails.artists.length > 0 ? exhibitionWithAllDetails.artists.length == 1 ?
-          <Link href={`/artists/${exhibitionWithAllDetails.artists[0].id}`}>
-            <ForwardButton>{translations.aboutArtist}</ForwardButton>
-          </Link> :
-          <ForwardButton
-            onClick={handleArtistsClick}
-            className="w-full md:w-auto"
-          >
-            {translations.aboutArtists}
-          </ForwardButton>
-          : null}
-      </div>
-      <div className="hidden md:flex">
-        <Carousel
-          images={exhibitionWithAllDetails?.artworks
-            .filter((artwork) => artwork.name && artwork.images?.[0]?.url)
-            .map((artwork) => ({
-              url: artwork.images[0].url,
-              title: artwork.name,
-              height: artwork.height,
-              width: artwork.width,
-            }))}
-          visibleCount={3}
-          title={translations.exhibitionArtworks}
-        />
-      </div>
+      {showCarousel && (
+        <div className="hidden md:flex">
+          <Carousel
+            images={
+              exhibitionDetails.artworks
+                .filter((a) => a.name && a.images?.[0]?.url)
+                .map((a) => ({
+                  url: a.images[0].url,
+                  title: a.name,
+                  height: a.height,
+                  width: a.width,
+                })) || []
+            }
+            visibleCount={3}
+            title={translations.exhibitionArtworks || ""}
+          />
+        </div>
+      )}
     </div>
   );
 };
