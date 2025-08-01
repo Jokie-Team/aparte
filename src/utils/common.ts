@@ -1,6 +1,5 @@
-
-export const normalizeText = (text: string) =>
-    text
+export const normalizeText = (text: string | null | undefined) =>
+    (text || "")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-zA-Z0-9]/g, "")

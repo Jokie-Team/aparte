@@ -172,7 +172,7 @@ export default function ArtistPage() {
                     key={artwork.id}
                     className="relative group w-full text-left focus:outline-none"
                     onClick={() => openGallery(index)}
-                    aria-label={artwork.title || t("section.openGallery")}
+                    aria-label={artwork.title || "untitled"}
                   >
                     <div className="relative group">
                       <Image
