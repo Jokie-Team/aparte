@@ -10,12 +10,13 @@ export const dynamic = "force-dynamic";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
-  const serverBaseUrl = await getServerBaseUrl();
+  const serverBaseUrl = getServerBaseUrl();
 
   let exhibitions: any[] = [];
   try {
     const res = await fetch(`${serverBaseUrl}/api/exhibitions?details=true`, {
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
     });
 
     if (!res.ok) {
