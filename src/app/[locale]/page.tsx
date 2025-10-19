@@ -4,16 +4,19 @@ import Section from "@/src/components/section/exhibitions";
 import RandomGallery from "@/src/components/RandomGallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import Tag from "@/src/components/tags/tag";
+import {getBaseUrl} from '@/src/utils/common';
+
+export const dynamic = 'force-dynamic';
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
 
   let exhibitions = [];
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/exhibitions?details=true`,
+    const baseUrl = getBaseUrl();   
+    const res = await fetch(  
+      `${baseUrl}/api/exhibitions?details=true`,
       {
-        cache: "no-store",
         headers: { "Content-Type": "application/json" },
       }
     );

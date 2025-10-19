@@ -1,22 +1,19 @@
-import { getRequestConfig } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import { locales, Locale } from "../i18n.config";
+// src/i18n/request.ts
+import {getRequestConfig, type GetRequestConfigParams} from 'next-intl/server';
+import {locales, type Locale} from '../i18n.config';
 
-export default getRequestConfig(async () => {
-  const localeHeader = (await headers()).get('X-NEXT-INTL-LOCALE');
+export default getRequestConfig(({locale}: GetRequestConfigParams) => {
+  // valida / define fallback
+  const currentLocale: Locale = (locales as readonly string[]).includes(locale as Locale)
+    ? (locale as Locale)
+    : ('pt' as Locale);
 
-  // Certifique-se de que o locale é uma string válida
-  const locale = localeHeader && locales.includes(localeHeader as Locale)
-    ? localeHeader
-    : undefined; // Use `undefined` ao invés de `null` para omitir o atributo no DOM
+  // carrega o JSON das mensagens (ajustado ao teu path)
+  const messages = require(`../app/locales/${currentLocale}.json`);
 
-  if (!locale) {
-    return notFound();
-  }
-
+  // 👉 o teu tipo pede 'locale' + 'messages'
   return {
-    locale, // Inclui o locale para uso no sistema
-    messages: (await import(`../app/locales/${locale}.json`)).default,
+    locale: currentLocale,
+    messages
   };
 });
