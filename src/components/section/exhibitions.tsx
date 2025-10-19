@@ -8,7 +8,6 @@ import Link from "next/link";
 import { ExpandMoreIcon } from "../icons/expand-more";
 import Carousel from "../carousel";
 import MobileGallery from "../MobileGallery";
-import { getBaseUrl } from "@/src/utils/common";
 
 interface TranslationsObject {
   readMore: string;
@@ -58,8 +57,7 @@ const Section: React.FC<SectionProps> = ({
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
-          const baseUrl = getBaseUrl();
-          fetch(`${baseUrl}/api/exhibitions/${exhibitionId}`)
+          fetch(`/api/exhibitions/${exhibitionId}`)
             .then((res) => res.json())
             .then((data) => setExhibitionDetails({ ...exhibition, ...data }))
             .catch((err) => console.error("Error fetching details:", err));

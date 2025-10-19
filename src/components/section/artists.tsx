@@ -9,7 +9,6 @@ import Carousel from "../carousel";
 import { Artwork, fetchArtworksByArtist } from "@/lib/artworks";
 import Link from "next/link";
 import ExpandableText from "../ExpandableText";
-import {getBaseUrl} from '@/src/utils/common';
 
 
 interface TranslationsObject {
@@ -35,9 +34,8 @@ const Section: React.FC<{
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        const baseUrl = getBaseUrl();
         if (entry.isIntersecting) {
-          fetch(`${baseUrl}/api/artists/${artistId}`)
+          fetch(`/api/artists/${artistId}`)   
             .then((res) => {
               if (!res.ok) {
                 throw new Error(`Failed to fetch details for ${artistId}`);

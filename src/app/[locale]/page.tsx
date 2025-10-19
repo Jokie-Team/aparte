@@ -4,17 +4,17 @@ import Section from "@/src/components/section/exhibitions";
 import RandomGallery from "@/src/components/RandomGallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import Tag from "@/src/components/tags/tag";
-import { getBaseUrl } from "@/src/utils/common";
+import { getServerBaseUrl } from "@/src/utils/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
-  const baseUrl = getBaseUrl();
+  const serverBaseUrl = await getServerBaseUrl();
 
   let exhibitions: any[] = [];
   try {
-    const res = await fetch(`${baseUrl}/api/exhibitions?details=true`, {
+    const res = await fetch(`${serverBaseUrl}/api/exhibitions?details=true`, {
       headers: { "Content-Type": "application/json" },
     });
 
