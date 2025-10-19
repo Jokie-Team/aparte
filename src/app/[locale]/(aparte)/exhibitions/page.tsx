@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { getTranslations } from "next-intl/server";
-import {
-  fetchAllExhibitions,
-} from "@/lib/exhibitions/fetch";
+import { fetchAllExhibitions } from "@/lib/exhibitions/fetch";
 import ExhibitionsSidebar from "@/src/components/sidebar/exhibitions";
 import Section from "@/src/components/section/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
@@ -12,13 +10,12 @@ type ExhibitionsProps = {
   searchParams: Promise<{ search?: string; group?: string }>;
 };
 
-const normalizeText = (text: string) => {
-  return text
+const normalizeText = (text: string) =>
+  (text ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]/g, "")
     .toLowerCase();
-};
 
 const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
   const [t, exhibitions, resolvedSearchParams] = await Promise.all([
@@ -30,44 +27,40 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
   const searchTerm = resolvedSearchParams.search?.toLowerCase() || "";
   const group = resolvedSearchParams.group?.toLowerCase() || "";
 
-  const groupedExhibitions = groupExhibitionsByDate(exhibitions);
+  const groupedExhibitions = groupExhibitionsByDate(exhibitions ?? []);
 
   const orderedExhibitions = (() => {
-    let filtered = [];
+    let filtered: any[] = [];
     switch (group) {
       case "current":
-        filtered = [...groupedExhibitions.current];
+        filtered = [...(groupedExhibitions.current ?? [])];
         break;
       case "future":
-        filtered = [...groupedExhibitions.future];
+        filtered = [...(groupedExhibitions.future ?? [])];
         break;
       case "past":
-        filtered = Object.entries(groupedExhibitions.past)
+        filtered = Object.entries(groupedExhibitions.past ?? {})
           .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-          .flatMap(([, exhibitions]) =>
-            exhibitions.sort(
-              (a, b) =>
-                new Date(b.startDate || 0).getTime() -
-                new Date(a.startDate || 0).getTime()
+          .flatMap(([, exhs]) =>
+            (exhs ?? []).sort(
+              (a, b) => new Date(b.startDate || 0).getTime() - new Date(a.startDate || 0).getTime()
             )
           );
         break;
       default:
         filtered = [
-          ...groupedExhibitions.current,
-          ...groupedExhibitions.future,
-          ...Object.entries(groupedExhibitions.past)
+          ...(groupedExhibitions.current ?? []),
+          ...(groupedExhibitions.future ?? []),
+          ...Object.entries(groupedExhibitions.past ?? {})
             .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-            .flatMap(([, exhibitions]) =>
-              exhibitions.sort(
+            .flatMap(([, exhs]) =>
+              (exhs ?? []).sort(
                 (a, b) =>
-                  new Date(b.startDate || 0).getTime() -
-                  new Date(a.startDate || 0).getTime()
+                  new Date(b.startDate || 0).getTime() - new Date(a.startDate || 0).getTime()
               )
             ),
         ];
     }
-
     return filtered.filter((exhibition) =>
       normalizeText(exhibition.title).includes(normalizeText(searchTerm))
     );
@@ -91,8 +84,9 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
 
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
+
         <ExhibitionsSearchBar
-          exhibitions={exhibitions}
+          exhibitions={exhibitions ?? []}
           translations={{
             emptyState: t("sidebar.emptyState"),
             current: t("sidebar.current"),
@@ -102,7 +96,8 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
           }}
           searchValue={searchTerm}
         />
-        {orderedExhibitions.map((exhibitionItem, index) => (
+
+        {(orderedExhibitions ?? []).map((exhibitionItem, index) => (
           <div key={exhibitionItem.id} id={exhibitionItem.id}>
             <Section
               exhibition={exhibitionItem}
@@ -116,7 +111,7 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
               }}
               showCarousel={true}
             />
-            {index !== orderedExhibitions.length - 1 && (
+            {index !== (orderedExhibitions?.length ?? 0) - 1 && (
               <div className="my-32 border-b border-gray-200" />
             )}
           </div>

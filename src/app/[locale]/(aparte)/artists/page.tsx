@@ -33,14 +33,10 @@ type ArtistsProps = {
 };
 
 const Artists = async ({ searchParams }: ArtistsProps) => {
-  const [t, artists] = await Promise.all([
-    getTranslations("artists"),
-    fetchAllArtists(),
-  ]);
+  const [t, artists] = await Promise.all([getTranslations("artists"), fetchAllArtists()]);
   const searchTerm = (await searchParams).search?.toLowerCase() ?? "";
 
   const filteredArtists = filterArtistsBySearchTerms(artists, searchTerm);
-
   const groupedArtists = groupArtistsByFirstLetter(filteredArtists);
 
   return (
@@ -48,24 +44,21 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
       <div className="w-1/4 flex-shrink-0 hidden md:block">
         <ArtistsSidebar
           artists={filteredArtists}
-          translations={{
-            emptyState: t("sidebar.emptyState"),
-            search: t("sidebar.search"),
-          }}
+          translations={{ emptyState: t("sidebar.emptyState"), search: t("sidebar.search") }}
           searchValue={searchTerm}
         />
       </div>
+
       <div className="w-full">
         <h2 className="mb-8">{t("title")}</h2>
+
         <ArtistsSearchBar
           artists={filteredArtists}
-          translations={{
-            emptyState: t("sidebar.emptyState"),
-            search: t("sidebar.search"),
-          }}
+          translations={{ emptyState: t("sidebar.emptyState"), search: t("sidebar.search") }}
           searchValue={searchTerm}
         />
-        {Object.entries(groupedArtists).map(([letter, group], groupIndex) => (
+
+        {Object.entries(groupedArtists ?? {}).map(([letter, group], groupIndex) => (
           <div key={letter} id={letter}>
             {group.map((artist, artistIndex) => (
               <React.Fragment key={artist.id}>
@@ -83,7 +76,7 @@ const Artists = async ({ searchParams }: ArtistsProps) => {
                 />
                 {!(
                   artistIndex === group.length - 1 &&
-                  groupIndex === Object.entries(groupedArtists).length - 1
+                  groupIndex === Object.entries(groupedArtists ?? {}).length - 1
                 ) && <div className="my-32 border-b border-gray-200" />}
               </React.Fragment>
             ))}
