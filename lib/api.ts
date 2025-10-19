@@ -33,14 +33,14 @@ export async function fetchGraphQL(
   // For server-side requests, use direct Contentful API
   const spaceId = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
   const token = preview
-    ? process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN
+    ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
     : process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
   if (!spaceId) {
     console.error('Environment variables:', {
       spaceId: !!process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
       hasAccessToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-      hasPreviewToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN
+      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
     });
     throw new Error('Contentful Space ID is not available');
   }
@@ -49,7 +49,7 @@ export async function fetchGraphQL(
     console.error('Environment variables:', {
       spaceId: !!process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
       hasAccessToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-      hasPreviewToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN
+      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
     });
     throw new Error('Access token is not available');
   }

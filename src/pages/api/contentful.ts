@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const spaceId = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
         const token = preview
-            ? process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN
+            ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
             : process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
         if (!spaceId) {
