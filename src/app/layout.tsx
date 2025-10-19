@@ -1,8 +1,16 @@
+import "@/src/styles/globals.css";
+import { getLocale } from "next-intl/server";
 import * as React from "react";
 
-export default function RootLayout({children}:{children:React.ReactNode}) {
+function docLang(l?: string) {
+  return l === "pt" ? "pt" : l === "en" ? "en" : "en";
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale().catch(() => "en");
+
   return (
-    <html lang="pt">
+    <html lang={docLang(locale)} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );
