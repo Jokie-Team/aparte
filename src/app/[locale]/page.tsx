@@ -4,30 +4,20 @@ import Section from "@/src/components/section/exhibitions";
 import RandomGallery from "@/src/components/RandomGallery";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import Tag from "@/src/components/tags/tag";
-import { getServerBaseUrl } from "@/src/utils/server";
+
+import { fetchAllExhibitions } from "@/lib/exhibitions/fetch";
 
 export const dynamic = "force-dynamic";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
-  const serverBaseUrl = getServerBaseUrl();
 
   let exhibitions: any[] = [];
   try {
-    const res = await fetch(`${serverBaseUrl}/api/exhibitions?details=true`, {
-      headers: { "Content-Type": "application/json" },
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch exhibitions: ${res.status} - ${await res.text()}`);
-    }
-
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error("Invalid JSON format received from API");
-    exhibitions = data;
+    exhibitions = await fetchAllExhibitions(true);
   } catch (error) {
     console.error("Fetch exhibitions error:", error);
+    exhibitions = [];
   }
 
   const groupedExhibitions = groupExhibitionsByDate(exhibitions ?? []);
