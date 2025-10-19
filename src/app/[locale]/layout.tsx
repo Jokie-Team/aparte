@@ -1,24 +1,19 @@
 import "@/src/styles/globals.css";
 import Footer from "../../components/footer";
-import { getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
+import {NextIntlClientProvider} from "next-intl";
+import {getMessages} from "next-intl/server";
 import ScrollUp from "@/src/components/buttons/scrollup";
-import React from "react";
 import Header from "@/src/components/header/header";
+import * as React from "react";
 
-interface LocaleLayoutProps {
+type LocaleLayoutProps = {
   children: React.ReactNode;
-  params: { locale: string };
-}
+  params: Promise<{ locale: string }>;
+};
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  const { locale } = await Promise.resolve(params);
-
-  if (!locale || typeof locale !== "string") {
-    throw new Error("Locale parameter is required and must be a valid string.");
-  }
-
-  const messages = await getMessages({ locale });
+export default async function LocaleLayout({children, params}: LocaleLayoutProps) {
+  const {locale} = await params;              
+  const messages = await getMessages();         
 
   return (
     <html lang={locale}>
@@ -26,8 +21,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <NextIntlClientProvider messages={messages} locale={locale}>
           <section className="flex flex-col">
             <div className="flex flex-col min-h-screen">
+              <Header showBorder={true} />
               <main className="mt-16 flex flex-1 bg-gray-100 overflow-y-auto">
-                <Header showBorder={true} />
                 {children}
               </main>
             </div>
@@ -38,4 +33,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       </body>
     </html>
   );
+}
+
+export function generateStaticParams() {
+  return [{locale: "pt"}, {locale: "en"}];
 }
