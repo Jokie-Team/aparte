@@ -52,7 +52,7 @@ export default function Footer() {
           >
             {t("info.facebook")}
           </a>
-          <span>|</span>
+          <span>•</span>
           <a
             href="https://www.instagram.com/apartegaleria/"
             target="_blank"
@@ -88,7 +88,7 @@ export default function Footer() {
       <div className="h-full flex flex-col md:flex-row md:gap-20 gap-0">
         <div className="w-1/2"></div>
         <div className="flex flex-col flex-1 justify-around gap-10 md:gap-20">
-          <BorderedList items={ContactItems} bulleted={!isMobile}
+          <BorderedList items={ContactItems} bulleted={false}
             itemClassName="body" />
           {!isMobile && (
             <BorderedList
