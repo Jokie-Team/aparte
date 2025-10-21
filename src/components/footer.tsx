@@ -34,10 +34,36 @@ export default function Footer() {
       },
     },
     {
-      title: t("info.facebook"),
+      title: t("info.email"),
       onItemClick: () => {
-        window.open("https://www.facebook.com/apartegaleriaa");
+        window.location.href = `mailto:geral@apartegaleria.com`;
       },
+    },
+    {
+      title: "",
+      children: (
+        <>
+          <a
+            href="https://www.facebook.com/apartegaleriaa"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {t("info.facebook")}
+          </a>
+          <span>|</span>
+          <a
+            href="https://www.instagram.com/apartegaleria/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {t("info.instagram")}
+          </a>
+        </>
+      ),
     },
   ];
 
@@ -55,7 +81,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center md:px-6 pt-10 mt-auto">
+    <footer id="footer" className="sm:static relative w-full bottom-0 h-full md:h-4/6 border-t-1 bg-accent-1 border-accent-2 text-center md:px-6 pt-10 mt-auto">
       {" "}
       {/* border-t */}
       {/* <h1 className="text-left mb-10">{t("title")}</h1> */}
@@ -67,7 +93,7 @@ export default function Footer() {
           {!isMobile && (
             <BorderedList
               items={MenuItems}
-              bulleted={false}
+              bulleted={false}  
               itemClassName="subtitle"
             />
           )}

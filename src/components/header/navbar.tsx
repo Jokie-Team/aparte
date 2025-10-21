@@ -18,8 +18,7 @@ type NavbarProps = {
 const NAV_ITEMS: NavItem[] = [
   { path: "/exhibitions", translationKey: "exhibitions" },
   { path: "/artists", translationKey: "artists" },
-  /*   { path: "/contacts", translationKey: "contacts" },
-   */
+  { path: "#footer", translationKey: "contacts" },
 ];
 
 const Navbar = ({

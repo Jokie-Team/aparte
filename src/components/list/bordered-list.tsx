@@ -1,9 +1,11 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import { Body, Subtitle } from "../headings/headings";
 
 interface Item {
   title: string;
   onItemClick?: MouseEventHandler<HTMLLIElement>;
+  children?: ReactNode;             
+  key?: string | number;            
 }
 
 interface BorderedListProps<T extends Item> {
@@ -20,7 +22,7 @@ const BorderedList = <T extends Item>({
 }: BorderedListProps<T>) => {
   return (
     <ul className="text-base">
-      {items.map((item) => (
+      {items.map((item, i) => (
         <li
           className={`
             flex items-center justify-center text-center
@@ -29,21 +31,28 @@ const BorderedList = <T extends Item>({
             ${item.onItemClick ? "cursor-pointer" : ""}
             sm:justify-start sm:text-left
           `}
-          key={item.title}
+          key={item.key ?? item.title ?? i}
           onClick={item.onItemClick}
         >
-          {bulleted && (
-            <span className="mr-2 sm:inline-block hidden list-disc">●</span>
-          )}
-          {itemClassName === "body" ? (
-            <Body>{item.title}</Body>
-          ) : (
-            <Subtitle>{item.title}</Subtitle>
+          <div className="flex items-center sm:justify-start">
+            {bulleted && (
+              <span className="mr-2 sm:inline-block hidden list-disc">●</span>
+            )}
+            {itemClassName === "body" ? (
+              <Body className={`${item.onItemClick ? "hover:opacity-80" : ""}`}>{item.title}</Body>
+            ) : (
+              <Subtitle className={`${item.onItemClick ? "hover:opacity-80" : ""}`}>{item.title}</Subtitle>
+            )}
+          </div>
+
+          {item.children && (
+            <div className="flex items-center gap-3">
+              {item.children}
+            </div>
           )}
         </li>
       ))}
     </ul>
-
   );
 };
 
