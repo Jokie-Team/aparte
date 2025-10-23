@@ -112,6 +112,7 @@ async function fetchExhibitionDetails(id: string, preview = false): Promise<Exhi
             name
             width
             height
+            depth
             imagesCollection(limit: 1) {
               items {
                 url
@@ -142,6 +143,7 @@ async function fetchExhibitionDetails(id: string, preview = false): Promise<Exhi
       name: a?.name ?? "",
       width: a?.width ?? 0,
       height: a?.height ?? 0,
+      depth: a?.depth ?? 0,
       images:
         a?.imagesCollection?.items?.map((img: any) => ({
           url: img?.url ?? "",

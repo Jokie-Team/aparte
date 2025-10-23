@@ -13,6 +13,7 @@ export interface Artist {
     description?: string;
     width?: number;
     height?: number;
+    depth?: number;
   };
   exhibitions: Exhibition[];
   artworks: Artwork[];
@@ -87,6 +88,7 @@ export async function fetchArtistDetails(
             available
             width
             height
+            depth
           }
         }
       }
@@ -124,6 +126,7 @@ export async function fetchArtistDetails(
         available: art.available,
         width: art.width,
         height: art.height,
+        depth: art.depth,
       })) || [],
   };
 }

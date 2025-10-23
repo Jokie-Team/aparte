@@ -7,6 +7,7 @@ export interface Artwork {
   year?: number;
   height?: number;
   width?: number;
+  depth?: number;
   available?: boolean;
   technique?: string;
   artists: { id: string }[];
@@ -25,6 +26,7 @@ export async function fetchArtworksByArtist(
         year
         height
         width
+        depth
         available
         technique
         artistsCollection(limit: 5) {
@@ -71,6 +73,7 @@ function mapArtworks(items: any[]): Artwork[] {
     name: item.name || "",
     year: item.year ?? undefined,
     height: item.height ?? undefined,
+    depth: item.depth ?? undefined,
     width: item.width ?? undefined,
     available: item.available ?? false,
     technique: item.technique || "",

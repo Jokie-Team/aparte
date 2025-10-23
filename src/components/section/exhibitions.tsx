@@ -172,6 +172,7 @@ const Section: React.FC<SectionProps> = ({
                   title: a!.name!,
                   height: a!.height,
                   width: a!.width,
+                  depth: a!.depth,
                 }))
             }
             visibleCount={3}

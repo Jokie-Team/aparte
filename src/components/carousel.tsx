@@ -10,6 +10,7 @@ interface ItemProps {
   description?: string;
   width?: number;
   height?: number;
+  depth?: number;
   startDate?: string;
   endDate?: string;
 }
@@ -112,9 +113,9 @@ const Carousel: React.FC<CarouselProps> = ({
                     <div className="px-4 text-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <>
                         <p className="text-[16px]">{image.title || "Sem título"}</p>
-                        {(image.width || image.height) && (
+                        {(image.width || image.height || image.depth) && (
                           <p className="text-[12px] italic mt-1">
-                            {image?.width || "-"} × {image?.height || "-"}
+                            {image?.width || "-"} × {image?.height || "-"} {image?.depth ? `× ${image?.depth}` : ""}
                           </p>
                         )}
                       </>
