@@ -181,6 +181,7 @@ export async function fetchExhibitionDetails(
           width
           height
           depth
+          technique
         }
       }
     }
@@ -218,6 +219,7 @@ export async function fetchExhibitionDetails(
           width: artwork.width || 0,
           height: artwork.height || 0,
           depth: artwork.depth || 0,
+          technique: artwork.technique || "",
         })) || [],
       artists,
     };
