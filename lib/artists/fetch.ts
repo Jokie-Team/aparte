@@ -89,6 +89,7 @@ export async function fetchArtistDetails(
             width
             height
             depth
+            technique
           }
         }
       }
@@ -127,6 +128,7 @@ export async function fetchArtistDetails(
         width: art.width,
         height: art.height,
         depth: art.depth,
+        technique: art.technique,
       })) || [],
   };
 }

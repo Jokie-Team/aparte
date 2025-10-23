@@ -71,6 +71,8 @@ export default function ArtistPage() {
     available: artwork.available,
     width: artwork.width,
     height: artwork.height,
+    depth: artwork.depth,
+    technique: artwork.technique,
   }));
 
   return (

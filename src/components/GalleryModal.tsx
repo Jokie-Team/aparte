@@ -7,6 +7,8 @@ export interface Artwork {
     available: boolean;
     width: number;
     height: number;
+    depth: number;
+    technique: string;
 }
 
 interface GalleryModalProps {
@@ -75,8 +77,11 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
                 {/* Details */}
                 <div className="flex-1 flex flex-col justify-center pl-12">
                     <h2 className="text-2xl font-light mb-4">{artwork.title || "Sem título"}</h2>
+                    {artwork.technique && (
+                        <h3 className="text-xl font-light mb-2">{artwork.technique}</h3>
+                    )}
                     {artwork.width && artwork.height && (
-                        <h3 className="text-xl font-light">{artwork.width} × {artwork.height}</h3>
+                        <h3 className="text-xl font-light">{artwork.width} × {artwork.height} {artwork.depth ? `× ${artwork.depth}` : ""}</h3>
                     )}
                     <div className="text-sm text-gray-700 mt-4">
                         {!artwork.available && (
