@@ -6,6 +6,10 @@ import Section from "@/src/components/section/exhibitions";
 import { groupExhibitionsByDate } from "@/src/utils/exhibitions";
 import { ExhibitionsSearchBar } from "@/src/components/searchBar/exhibitions";
 
+// ✅ ISR: Revalidate every 30 minutes (1800 seconds)
+// This means the page will be cached and only regenerated every 30 minutes
+export const revalidate = 1800;
+
 type ExhibitionsProps = {
   searchParams: Promise<{ search?: string; group?: string }>;
 };

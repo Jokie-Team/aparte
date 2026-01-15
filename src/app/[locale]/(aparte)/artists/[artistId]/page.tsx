@@ -12,6 +12,10 @@ import Carousel from "@/src/components/carousel";
 import Tag from "@/src/components/tags/tag";
 import GalleryModal, { Artwork } from "@/src/components/GalleryModal";
 
+// ✅ ISR: Revalidate every 30 minutes (1800 seconds)
+// This means the page will be cached and only regenerated every 30 minutes
+export const revalidate = 1800;
+
 export default function ArtistPage() {
   const params = useParams<{ locale: string; artistId: string }>();
   const t = useTranslations("artists");

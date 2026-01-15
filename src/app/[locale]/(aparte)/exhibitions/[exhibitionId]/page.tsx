@@ -3,6 +3,10 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+// ✅ ISR: Revalidate every 30 minutes (1800 seconds)
+// This means the page will be cached and only regenerated every 30 minutes
+export const revalidate = 1800;
+
 const ExhibitionPage = () => {
   const params = useParams();
   const exhibitionId = params?.exhibitionId as string;
