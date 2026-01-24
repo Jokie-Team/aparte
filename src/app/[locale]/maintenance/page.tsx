@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Maintenance({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: "maintenance" });
