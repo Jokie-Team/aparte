@@ -1,31 +1,35 @@
 export async function fetchGraphQL(
   query: string,
   preview = false,
-  variables?: Record<string, any>
+  variables?: Record<string, any>,
 ): Promise<any> {
   // For client-side requests, use our API route
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/contentful`;
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/api/contentful`;
 
-      console.log('Calling Contentful via API route:', apiUrl);
+      console.log("Calling Contentful via API route:", apiUrl);
 
       const response = await fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ query, preview, variables }),
       });
 
       if (!response.ok) {
-        console.error('API response not OK:', response.status, response.statusText);
+        console.error(
+          "API response not OK:",
+          response.status,
+          response.statusText,
+        );
         throw new Error(`API response error: ${response.status}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Error in fetchGraphQL client-side:', error);
+      console.error("Error in fetchGraphQL client-side:", error);
       throw error;
     }
   }
@@ -37,24 +41,27 @@ export async function fetchGraphQL(
     : process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
   if (!spaceId) {
-    console.error('Environment variables:', {
+    console.error("Environment variables:", {
       spaceId: !!process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
       hasAccessToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
     });
-    throw new Error('Contentful Space ID is not available');
+    throw new Error("Contentful Space ID is not available");
   }
 
   if (!token) {
-    console.error('Environment variables:', {
+    console.error("Environment variables:", {
       spaceId: !!process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
       hasAccessToken: !!process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+      hasPreviewToken: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
     });
-    throw new Error('Access token is not available');
+    throw new Error("Access token is not available");
   }
 
-  console.log("Using token (server-side):", token.substring(0, 5) + "..." + token.substring(token.length - 5));
+  console.log(
+    "Using token (server-side):",
+    token.substring(0, 5) + "..." + token.substring(token.length - 5),
+  );
 
   try {
     const response = await fetch(
@@ -66,11 +73,15 @@ export async function fetchGraphQL(
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ query, variables }),
-      }
+      },
     );
 
     if (!response.ok) {
-      console.error("Contentful API error:", response.status, response.statusText);
+      console.error(
+        "Contentful API error:",
+        response.status,
+        response.statusText,
+      );
     }
 
     return await response.json();

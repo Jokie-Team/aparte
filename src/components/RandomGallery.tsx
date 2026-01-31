@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import Masonry from "react-masonry-css";
 
@@ -18,6 +18,7 @@ type Artwork = {
 
 type RandomGalleryProps = {
   artworks: Artwork[];
+  count?: number;
 };
 
 const breakpointColumnsObj = {
@@ -25,16 +26,19 @@ const breakpointColumnsObj = {
   700: 3,
 };
 
-export default function RandomGallery({ artworks }: RandomGalleryProps) {
-  const [images, setImages] = React.useState<ArtworkImage[]>([]);
-
-  React.useEffect(() => {
-    const all = artworks
-      .flatMap(a => a.images.map(img => ({ ...img, artworkId: a.id })))
-      .filter(img => img.url);
-    const shuffled = all.sort(() => 0.5 - Math.random()).slice(0, 8);
-    setImages(shuffled);
-  }, [artworks]);
+export default function RandomGallery({
+  artworks,
+  count = 8,
+}: RandomGalleryProps) {
+  const images: ArtworkImage[] = useMemo(() => {
+    return [
+      ...artworks.flatMap((a) =>
+        a.images.map((img) => ({ ...img, artworkId: a.id })),
+      ),
+    ]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, count);
+  }, [artworks, count]);
 
   return (
     <Masonry

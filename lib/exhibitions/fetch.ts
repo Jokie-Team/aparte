@@ -6,7 +6,7 @@ import { PictureProps } from "../types";
 export interface Exhibition {
   title: string;
   description: string;
-  picture: PictureProps;
+  picture: PictureProps | null;
   artists: Artist[];
   startDate: string;
   endDate: string;
@@ -16,7 +16,7 @@ export interface Exhibition {
 
 async function fetchArtistsForExhibition(
   exhibitionId: string,
-  preview = false
+  preview = false,
 ): Promise<Artist[]> {
   const ARTIST_CHUNK_SIZE = 100;
   let skip = 0;
@@ -45,7 +45,7 @@ async function fetchArtistsForExhibition(
     (artist: any) => ({
       id: artist.sys.id,
       name: artist.name || "",
-    })
+    }),
   );
 
   return artists;
@@ -56,7 +56,7 @@ const exhibitionDetailsCache: { [key: string]: Partial<Exhibition> } = {};
 
 export async function fetchAllExhibitions(
   preview = false,
-  withDetails = false
+  withDetails = false,
 ): Promise<Exhibition[]> {
   const cacheKey = `${preview ? "preview" : "production"}_${withDetails}`;
 
@@ -117,7 +117,7 @@ export async function fetchAllExhibitions(
           picture: null,
           artists: [],
           artworks: [],
-        })
+        }),
       );
 
       if (withDetails) {
@@ -125,10 +125,10 @@ export async function fetchAllExhibitions(
           exhibitions.map(async (exhibition: any) => {
             const details = await fetchExhibitionDetails(
               exhibition.id,
-              preview
+              preview,
             );
             return { ...exhibition, ...details };
-          })
+          }),
         );
         allExhibitions = [...allExhibitions, ...detailedExhibitions];
       } else {
@@ -153,7 +153,7 @@ export async function fetchAllExhibitions(
 
 export async function fetchExhibitionDetails(
   exhibitionId: string,
-  preview = false
+  preview = false,
 ): Promise<Partial<Exhibition>> {
   if (exhibitionDetailsCache[exhibitionId]) {
     return exhibitionDetailsCache[exhibitionId];
@@ -229,7 +229,7 @@ export async function fetchExhibitionDetails(
   } catch (error) {
     console.error(
       `Error fetching details for exhibition ${exhibitionId}:`,
-      error
+      error,
     );
     throw error;
   }

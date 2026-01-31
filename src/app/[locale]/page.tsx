@@ -5,26 +5,20 @@ import RandomGallery from "@/src/components/RandomGallery";
 import Tag from "@/src/components/tags/tag";
 
 import { fetchHomepageExhibitions } from "@/lib/homepage/fetch";
+import { Exhibition } from "@/lib/exhibitions";
 
-// ✅ ISR: Revalidate every 30 minutes (1800 seconds)
-// This means the page will be cached and only regenerated every 30 minutes
 export const revalidate = 1800;
-
-//export const dynamic = "force-dynamic";
 
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
+  let exhibitions: Exhibition[] = [];
 
-  // 1) Vai buscar SÓ o conjunto que a homepage deve mostrar
-  let exhibitions: any[] = [];
   try {
-    exhibitions = await fetchHomepageExhibitions(false); 
+    exhibitions = await fetchHomepageExhibitions(false);
   } catch (error) {
-    console.error("[HOME] fetchHomepageExhibitions error:", error);
-    exhibitions = [];
+    console.error("Error fetching homepage exhibitions:", error);
   }
 
-  // 2) Decide o rótulo (current / future / past) com base nas datas do 1º item
   const today = new Date().toISOString().split("T")[0];
   let label = t("currentExhibitions");
   if (exhibitions.length > 0) {
@@ -33,15 +27,13 @@ export default async function LocalePage() {
     else if (endDate < today) label = t("pastExhibitions");
   }
 
-  // 3) Galeria: só obras com imagem válida
   const artworks = exhibitions.flatMap((e) => e?.artworks ?? []);
   const artworksWithImages = artworks.filter((a) => a?.images?.[0]?.url);
-  const randomSubset = artworksWithImages.sort(() => 0.5 - Math.random()).slice(0, 8);
 
   return (
     <div className="flex flex-col">
       <div className="px-6 py-10 w-full overflow-x-hidden">
-        <RandomGallery artworks={randomSubset} />
+        <RandomGallery artworks={artworksWithImages} />
       </div>
 
       <div className="px-6 pt-28">

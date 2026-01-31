@@ -47,8 +47,10 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
           .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
           .flatMap(([, exhs]) =>
             (exhs ?? []).sort(
-              (a, b) => new Date(b.startDate || 0).getTime() - new Date(a.startDate || 0).getTime()
-            )
+              (a, b) =>
+                new Date(b.startDate || 0).getTime() -
+                new Date(a.startDate || 0).getTime(),
+            ),
           );
         break;
       default:
@@ -60,13 +62,14 @@ const Exhibitions = async ({ searchParams }: ExhibitionsProps) => {
             .flatMap(([, exhs]) =>
               (exhs ?? []).sort(
                 (a, b) =>
-                  new Date(b.startDate || 0).getTime() - new Date(a.startDate || 0).getTime()
-              )
+                  new Date(b.startDate || 0).getTime() -
+                  new Date(a.startDate || 0).getTime(),
+              ),
             ),
         ];
     }
     return filtered.filter((exhibition) =>
-      normalizeText(exhibition.title).includes(normalizeText(searchTerm))
+      normalizeText(exhibition.title).includes(normalizeText(searchTerm)),
     );
   })();
 

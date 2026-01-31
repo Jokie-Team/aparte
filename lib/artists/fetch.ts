@@ -60,7 +60,7 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
 
 export async function fetchArtistDetails(
   artistId: string,
-  preview = false
+  preview = false,
 ): Promise<Partial<Artist>> {
   const query = `
     query {
