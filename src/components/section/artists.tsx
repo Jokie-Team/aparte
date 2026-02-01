@@ -4,18 +4,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { Artist } from "@/lib/artists";
 import ContentfulImage from "@/lib/contentful-image";
 import ForwardButton from "../buttons/forward";
-import { useRouter } from "next/navigation";
 import Carousel from "../carousel";
 import { Artwork, fetchArtworksByArtist } from "@/lib/artworks";
 import Link from "next/link";
 import ExpandableText from "../ExpandableText";
 
-
 interface TranslationsObject {
   aboutArtist: string;
+  aboutArtists: string;
   seeExhibitions: string;
   seeArtworks: string;
   artistExhibitions: string;
+  exhibitionArtworks: string;
   readMore: string;
   readLess: string;
 }
@@ -25,7 +25,6 @@ const Section: React.FC<{
   translations: TranslationsObject;
   artistId: string;
 }> = ({ artist, translations, artistId }) => {
-  const router = useRouter();
   const [artistWithAllDetails, setDetails] = useState<Artist>(artist);
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -35,7 +34,7 @@ const Section: React.FC<{
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
-          fetch(`/api/artists/${artistId}`)   
+          fetch(`/api/artists/${artistId}`)
             .then((res) => {
               if (!res.ok) {
                 throw new Error(`Failed to fetch details for ${artistId}`);
@@ -46,7 +45,7 @@ const Section: React.FC<{
               setDetails({ ...artist, ...data });
             })
             .catch((error) =>
-              console.error(`Error fetching details for ${artistId}:`, error)
+              console.error(`Error fetching details for ${artistId}:`, error),
             );
 
           fetchArtworksByArtist(artistId)
@@ -54,13 +53,13 @@ const Section: React.FC<{
               setArtworks(fetchedArtworks);
             })
             .catch((error) =>
-              console.error(`Error fetching artworks for ${artistId}:`, error)
+              console.error(`Error fetching artworks for ${artistId}:`, error),
             );
 
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -111,20 +110,24 @@ const Section: React.FC<{
         </div>
       </div>
       <div className="flex flex-row gap-10">
-        {artistWithAllDetails.artworks?.length > 0 && <Link href={`/artists/${artistWithAllDetails.id}`}>
-          <ForwardButton>{translations.seeArtworks}</ForwardButton>
-        </Link>}
+        {artistWithAllDetails.artworks?.length > 0 && (
+          <Link href={`/artists/${artistWithAllDetails.id}`}>
+            <ForwardButton>{translations.seeArtworks}</ForwardButton>
+          </Link>
+        )}
       </div>
       {artistWithAllDetails.exhibitions?.length > 0 ? (
         <div className="hidden md:flex">
           <Carousel
             images={artistWithAllDetails?.exhibitions
-              .filter((exhibition) => exhibition.title && exhibition.picture?.url)
-              .map((exhibition) => ({
-                url: exhibition.picture?.url,
-                title: exhibition.title,
-                startDate: exhibition.startDate,
-                endDate: exhibition.endDate,
+              .filter(
+                (exhibition) => exhibition.title && exhibition.picture?.url,
+              )
+              .map((exhibitionWithImage) => ({
+                url: exhibitionWithImage.picture!.url,
+                title: exhibitionWithImage.title,
+                startDate: exhibitionWithImage.startDate,
+                endDate: exhibitionWithImage.endDate,
               }))}
             visibleCount={3}
             title={translations.artistExhibitions}
