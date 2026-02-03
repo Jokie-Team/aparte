@@ -1,6 +1,7 @@
 import { fetchAllExhibitions } from "@/lib/exhibitions";
 import { ExhibitionsClient } from "./ExhibitionsClient";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 export const revalidate = 1800;
 
@@ -25,7 +26,12 @@ const Exhibitions = async () => {
   };
 
   return (
-    <ExhibitionsClient exhibitions={exhibitions} translations={translations} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <ExhibitionsClient
+        exhibitions={exhibitions}
+        translations={translations}
+      />
+    </Suspense>
   );
 };
 

@@ -142,3 +142,93 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   artistsCache[cacheKey] = allArtists;
   return allArtists;
 }
+
+export async function fetchArtistById(
+  id: string,
+  preview = false,
+): Promise<Artist | null> {
+  try {
+    const query = `
+    {
+      artist(id: "${id}") {
+        sys { id }
+        name
+        bio
+        picture {
+          url
+          title
+          description
+          width
+          height
+          depth
+        }
+        exhibitionsCollection {
+          items {
+            sys { id }
+            title
+            description
+            startDate
+            endDate
+            picture {
+              url
+              title
+              description
+            }
+          }
+        }
+        artworksCollection {
+          items {
+            sys { id }
+            name
+            imagesCollection {
+              items {
+                url
+                title
+                description
+              }
+            }
+            available
+            width
+            height
+            depth
+            technique
+          }
+        }
+      }
+    }
+    `;
+
+    const artist = await fetchGraphQL(query, preview, { id });
+    return artist;
+  } catch (error) {
+    throw new Error("Failed to fetch artist by ID: " + error);
+  }
+}
+
+export async function fetchAllArtistsIds(preview = false): Promise<string[]> {
+  const query = `
+    {
+      artistCollection {
+        items {
+          sys { id }
+        }
+      }
+    }
+    `;
+
+  try {
+    const response = await fetchGraphQL(query, preview);
+    if (response.errors) {
+      console.error(response.errors);
+      throw new Error("Failed to fetch artists IDs");
+    }
+
+    const artistIds = response.data.artistCollection.items.map(
+      (item: any) => item.sys.id,
+    );
+    return artistIds;
+  } catch (error) {
+    console.error("Error fetching artist IDs:", error);
+    throw error;
+  }
+}

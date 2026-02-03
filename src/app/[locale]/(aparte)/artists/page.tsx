@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import React from "react";
+import React, { Suspense } from "react";
 import { fetchAllArtists } from "@/lib/artists";
 import { ArtistsClient } from "./ArtistsClient";
 
@@ -23,7 +23,11 @@ const Artists = async () => {
     readMore: t("section.readMore"),
   };
 
-  return <ArtistsClient artists={artists} translations={translations} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ArtistsClient artists={artists} translations={translations} />
+    </Suspense>
+  );
 };
 
 export default Artists;
