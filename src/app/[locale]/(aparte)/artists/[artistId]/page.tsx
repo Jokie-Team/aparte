@@ -1,7 +1,6 @@
-import { useTranslations } from "next-intl";
-
 import { fetchAllArtistsIds, fetchArtistById } from "@/lib/artists";
 import { ArtistClient } from "./ArtistClient";
+import { getTranslations } from "next-intl/server";
 
 export async function generateStaticParams() {
   const artists = await fetchAllArtistsIds();
@@ -20,7 +19,7 @@ export default async function ArtistPage({
     throw new Error("Artist not found");
   }
 
-  const t = await useTranslations("artists");
+  const t = await getTranslations("artists");
 
   return (
     <ArtistClient

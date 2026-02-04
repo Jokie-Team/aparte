@@ -139,3 +139,89 @@ export async function fetchAllExhibitions(
   exhibitionsCache[cacheKey] = allExhibitions;
   return allExhibitions;
 }
+
+export async function fetchExhibitionById(
+  id: string,
+  preview = false,
+): Promise<Exhibition | null> {
+  const query = `
+    query {
+      exhibition(id: "${id}") {
+        sys { id }
+        title
+        description
+        startDate
+        endDate
+        picture {
+          url(transform: { quality: 5 }) 
+          title
+          description
+        }
+        artworksCollection {
+          items {
+            sys { id }
+            name
+            imagesCollection {
+              items {
+                url(transform: { quality: 10 }) 
+                title
+                description
+              }
+            }
+            width
+            height
+            depth
+            technique
+          }
+        }
+        artistsCollection {
+          items {
+            sys { id }
+            name
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await fetchGraphQL(query, preview);
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error("Failed to fetch exhibition by ID");
+  }
+
+  const item = response.data.exhibition;
+  if (!item) return null;
+  return {
+    id: item.sys.id,
+    title: item.title || "",
+    description: item.description || "",
+    startDate: item.startDate || "",
+    endDate: item.endDate || "",
+    picture: {
+      url: item.picture?.url || "",
+      title: item.picture?.title || "",
+      description: item.picture?.description || "",
+    },
+    artworks:
+      item.artworksCollection?.items.map((artwork: any) => ({
+        id: artwork.sys.id,
+        name: artwork.name || "",
+        images:
+          artwork.imagesCollection?.items.map((image: any) => ({
+            url: image.url,
+            title: image.title || "",
+            description: image.description || "",
+          })) || [],
+        width: artwork.width || 0,
+        height: artwork.height || 0,
+        depth: artwork.depth || 0,
+        technique: artwork.technique || "",
+      })) || [],
+    artists:
+      item.artistsCollection?.items.map((artist: any) => ({
+        id: artist.sys.id,
+        name: artist.name || "",
+      })) || [],
+  };
+}

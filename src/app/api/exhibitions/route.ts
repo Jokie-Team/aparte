@@ -1,4 +1,4 @@
-import { fetchAllExhibitions } from "@/lib/exhibitions";
+import { fetchAllExhibitions, fetchExhibitionById } from "@/lib/exhibitions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -9,8 +9,6 @@ export async function GET(req: NextRequest) {
     const exhibitions = await fetchAllExhibitions(false, details);
     return NextResponse.json(exhibitions);
   } catch (error) {
-    console.log(error);
-
     return NextResponse.json(
       { error: "Failed to fetch data" },
       { status: 500 },

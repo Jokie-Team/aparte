@@ -2,6 +2,7 @@ import { fetchAllExhibitions } from "@/lib/exhibitions";
 import { ExhibitionsClient } from "./ExhibitionsClient";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import Spinner from "@/src/components/spinner";
 
 export const revalidate = 1800;
 
@@ -26,7 +27,13 @@ const Exhibitions = async () => {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[40vh]">
+          <Spinner />
+        </div>
+      }
+    >
       <ExhibitionsClient
         exhibitions={exhibitions}
         translations={translations}

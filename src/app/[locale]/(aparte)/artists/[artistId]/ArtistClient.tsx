@@ -7,7 +7,6 @@ import ExpandableText from "@/src/components/ExpandableText";
 import GalleryModal from "@/src/components/GalleryModal";
 import Tag from "@/src/components/tags/tag";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const ArtistClient = ({
