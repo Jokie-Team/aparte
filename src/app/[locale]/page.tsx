@@ -28,37 +28,51 @@ export default async function LocalePage() {
   }
 
   const artworks = exhibitions.flatMap((e) => e?.artworks ?? []);
-  const artworksWithImages = artworks.filter((a) => a?.images?.[0]?.url);
+  const allImages = artworks.flatMap((a, index) =>
+    a.images.map((img) => ({
+      ...img,
+      id: `${a.id}-${index}`,
+      title: img.title || "",
+      description: img.description || "",
+    })),
+  );
+
+  const images = allImages.sort(() => 0.5 - Math.random()).slice(0, 8);
 
   return (
-    <div className="flex flex-col">
-      <div className="px-6 py-10 w-full overflow-x-hidden">
-        <RandomGallery artworks={artworksWithImages} />
-      </div>
-
-      <div className="px-6 pt-28">
-        <Tag text={label} />
-      </div>
-
-      {exhibitions.length > 0 && (
-        <div className="px-6 pt-6 pb-52 w-full flex flex-col gap-20">
-          {exhibitions.map((exhibition, index) => (
-            <React.Fragment key={exhibition.id}>
-              <Section
-                exhibition={exhibition}
-                isImageRight={index % 2 !== 0}
-                translations={{
-                  readMore: t("section.readMore"),
-                  readLess: t("section.readLess"),
-                }}
-              />
-              {index < exhibitions.length - 1 && (
-                <div className="border-t border-gray-300 w-full" />
-              )}
-            </React.Fragment>
-          ))}
+    <>
+      {images.map((img) => (
+        <link key={img.id} rel="preload" as="image" href={img.url} />
+      ))}
+      <div className="flex flex-col">
+        <div className="px-6 py-10 w-full overflow-x-hidden">
+          <RandomGallery images={images} />
         </div>
-      )}
-    </div>
+
+        <div className="px-6 pt-28">
+          <Tag text={label} />
+        </div>
+
+        {exhibitions.length > 0 && (
+          <div className="px-6 pt-6 pb-52 w-full flex flex-col gap-20">
+            {exhibitions.map((exhibition, index) => (
+              <React.Fragment key={exhibition.id}>
+                <Section
+                  exhibition={exhibition}
+                  isImageRight={index % 2 !== 0}
+                  translations={{
+                    readMore: t("section.readMore"),
+                    readLess: t("section.readLess"),
+                  }}
+                />
+                {index < exhibitions.length - 1 && (
+                  <div className="border-t border-gray-300 w-full" />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

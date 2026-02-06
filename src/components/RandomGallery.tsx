@@ -3,21 +3,15 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import Masonry from "react-masonry-css";
 
-type ArtworkImage = {
-  url: string;
-  title?: string;
-  description?: string;
-  artworkId?: string;
-};
-
-type Artwork = {
+type Image = {
   id: string;
-  name: string;
-  images: ArtworkImage[];
+  title: string;
+  url: string;
+  description?: string;
 };
 
 type RandomGalleryProps = {
-  artworks: Artwork[];
+  images: Image[];
   count?: number;
 };
 
@@ -26,20 +20,7 @@ const breakpointColumnsObj = {
   700: 3,
 };
 
-export default function RandomGallery({
-  artworks,
-  count = 8,
-}: RandomGalleryProps) {
-  const images: ArtworkImage[] = useMemo(() => {
-    return [
-      ...artworks.flatMap((a) =>
-        a.images.map((img) => ({ ...img, artworkId: a.id })),
-      ),
-    ]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, count);
-  }, [artworks, count]);
-
+export default function RandomGallery({ images }: RandomGalleryProps) {
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
@@ -47,13 +28,15 @@ export default function RandomGallery({
       columnClassName="space-y-4"
     >
       {images.map((img, index) => (
-        <div key={`${img.artworkId}-${index}`} className="relative w-full">
+        <div key={img.id} className="relative w-full">
           <Image
             src={img.url}
             alt={img.title || "Artwork"}
             width={500}
             height={500}
             className="w-full h-auto object-contain"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=="
           />
         </div>
       ))}
