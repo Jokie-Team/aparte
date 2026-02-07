@@ -3,8 +3,6 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const revalidate = 1800;
-
 const ExhibitionPage = () => {
   const params = useParams();
   const exhibitionId = params?.exhibitionId as string;

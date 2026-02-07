@@ -6,22 +6,32 @@ export const revalidate = 1800;
 
 export async function generateStaticParams() {
   const artists = await fetchAllArtistsIds();
-  return artists;
+  const locales = ["en", "pt"];
+
+  return locales.flatMap((locale) =>
+    artists.map((artist) => ({
+      locale,
+      id: artist,
+    })),
+  );
 }
 
 export default async function ArtistPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const artist = await fetchArtistById(id);
 
   if (!artist) {
     throw new Error("Artist not found");
   }
 
-  const t = await getTranslations("artists");
+  const t = await getTranslations({
+    locale: locale,
+    namespace: "artists",
+  });
 
   return (
     <ArtistClient

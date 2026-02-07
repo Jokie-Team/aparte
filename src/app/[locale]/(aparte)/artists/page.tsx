@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import React, { Suspense } from "react";
+import React from "react";
 import { fetchAllArtists } from "@/lib/artists";
 import { ArtistsClient } from "./ArtistsClient";
 
