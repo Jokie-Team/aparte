@@ -27,60 +27,161 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   if (artistsCache[cacheKey]) {
     return artistsCache[cacheKey];
   }
+  const CHUNK_SIZE = 200;
+  let allArtists: Artist[] = [];
+  let hasMore = true;
+  let skip = 0;
 
-  const query = `
+  const countQuery = `
+  query {
+    artistCollection {
+      total
+    }
+  }
+  `;
+
+  const countResponse = await fetchGraphQL(countQuery, preview);
+  if (countResponse.errors) {
+    console.error(countResponse.errors);
+    throw new Error("Failed to fetch artists count");
+  }
+
+  const total = countResponse.data.artistCollection.total;
+
+  while (hasMore) {
+    const query = `
     {
-      artistCollection(limit: 400) {
+      artistCollection(limit: ${CHUNK_SIZE}, skip: ${skip}) {
         items {
           sys { id }
           name
           picture { url }
           bio
+          exhibitionsCollection(limit: 5) {
+            items {
+              sys { id }
+              title
+              picture { url }
+              startDate
+              endDate
+            }
+          }
+          artworksCollection(limit: 10) {
+            items {
+              sys { id }
+              name
+              imagesCollection(limit: 1) {
+                items {
+                  url(transform: { quality: 10 }) 
+                  title
+                  description
+                }
+              }
+              available
+              width
+              height
+              depth
+              technique
+            }
+          }
         }
       }
     }
   `;
 
-  const response = await fetchGraphQL(query, preview);
-  if (response.errors) {
-    throw new Error("Failed to fetch artists");
+    try {
+      const response = await fetchGraphQL(query, preview);
+      if (response.errors) {
+        throw new Error(
+          "Failed to fetch artists with errors: " + response.errors.join(", "),
+        );
+      }
+
+      const artists = response.data.artistCollection.items.map(
+        (artist: any) => ({
+          id: artist.sys.id,
+          name: artist.name,
+          picture: artist.picture,
+          bio: artist.bio,
+          exhibitions:
+            artist.exhibitionsCollection?.items.map((ex: any) => ({
+              id: ex.sys.id,
+              title: ex.title,
+              picture: ex.picture,
+              startDate: ex.startDate,
+              endDate: ex.endDate,
+            })) || [],
+          artworks:
+            artist.artworksCollection?.items.map((art: any) => ({
+              id: art.sys.id,
+              name: art.name || "",
+              images:
+                art.imagesCollection?.items.map((img: any) => ({
+                  url: img.url,
+                  title: img.title || "",
+                  description: img.description || "",
+                })) || [],
+              available: art.available,
+              width: art.width,
+              height: art.height,
+              depth: art.depth,
+              technique: art.technique,
+            })) || [],
+        }),
+      );
+
+      skip += CHUNK_SIZE;
+      hasMore = skip < total;
+
+      allArtists = allArtists.concat(artists);
+    } catch (error) {
+      console.error(`Error fetching chunk at skip ${skip}:`, error);
+      throw error;
+    }
   }
-
-  const artists = response.data.artistCollection.items.map((artist: any) => ({
-    id: artist.sys.id,
-    name: artist.name,
-    picture: artist.picture,
-    bio: artist.bio,
-    exhibitions: [],
-  }));
-
-  artistsCache[cacheKey] = artists;
-  return artists;
+  artistsCache[cacheKey] = allArtists;
+  return allArtists;
 }
 
-export async function fetchArtistDetails(
-  artistId: string,
-  preview = false
-): Promise<Partial<Artist>> {
-  const query = `
-    query {
-      artist(id: "${artistId}") {
-        exhibitionsCollection(limit: 5) {
+export async function fetchArtistById(
+  id: string,
+  preview = false,
+): Promise<Artist | null> {
+  try {
+    const query = `
+    {
+      artist(id: "${id}") {
+        sys { id }
+        name
+        bio
+        picture {
+          url
+          title
+          description
+          width
+          height
+        }
+        exhibitionsCollection {
           items {
             sys { id }
             title
-            picture { url }
+            description
             startDate
             endDate
+            picture {
+              url
+              title
+              description
+            }
           }
         }
-        artworksCollection(limit: 10) {
+        artworksCollection {
           items {
             sys { id }
             name
-            imagesCollection(limit: 1) {
+            imagesCollection {
               items {
-                url(transform: { quality: 10 }) 
+                url
                 title
                 description
               }
@@ -88,34 +189,30 @@ export async function fetchArtistDetails(
             available
             width
             height
-            depth
             technique
           }
         }
       }
     }
-  `;
+    `;
 
-  const response = await fetchGraphQL(query, preview);
-
-  if (response.errors) {
-    console.error(response.errors);
-    throw new Error("Failed to fetch Artist by ID");
-  }
-
-  const artist = response.data.artist;
-
-  return {
-    exhibitions:
-      artist.exhibitionsCollection?.items.map((ex: any) => ({
-        id: ex.sys.id,
-        title: ex.title,
-        picture: ex.picture,
-        startDate: ex.startDate,
-        endDate: ex.endDate,
-      })) || [],
-    artworks:
-      artist.artworksCollection?.items.map((art: any) => ({
+    const artist = await fetchGraphQL(query, preview, { id });
+    return {
+      id: artist.data.artist.sys.id,
+      name: artist.data.artist.name,
+      bio: artist.data.artist.bio,
+      picture: artist.data.artist.picture,
+      exhibitions: artist.data.artist.exhibitionsCollection.items.map(
+        (ex: any) => ({
+          id: ex.sys.id,
+          title: ex.title,
+          description: ex.description,
+          startDate: ex.startDate,
+          endDate: ex.endDate,
+          picture: ex.picture,
+        }),
+      ),
+      artworks: artist.data.artist.artworksCollection.items.map((art: any) => ({
         id: art.sys.id,
         name: art.name || "",
         images:
@@ -127,8 +224,38 @@ export async function fetchArtistDetails(
         available: art.available,
         width: art.width,
         height: art.height,
-        depth: art.depth,
         technique: art.technique,
-      })) || [],
-  };
+      })),
+    };
+  } catch (error) {
+    throw new Error("Failed to fetch artist by ID: " + error);
+  }
+}
+
+export async function fetchAllArtistsIds(preview = false): Promise<string[]> {
+  const query = `
+    {
+      artistCollection {
+        items {
+          sys { id }
+        }
+      }
+    }
+    `;
+
+  try {
+    const response = await fetchGraphQL(query, preview);
+    if (response.errors) {
+      console.error(response.errors);
+      throw new Error("Failed to fetch artists IDs");
+    }
+
+    const artistIds = response.data.artistCollection.items.map(
+      (item: any) => item.sys.id,
+    );
+    return artistIds;
+  } catch (error) {
+    console.error("Error fetching artist IDs:", error);
+    throw error;
+  }
 }

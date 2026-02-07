@@ -1,4 +1,4 @@
-import { fetchAllArtists, fetchArtistDetails } from "@/lib/artists";
+import { fetchAllArtistsIds, fetchArtistById } from "@/lib/artists";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -7,18 +7,16 @@ export async function GET(req: NextRequest) {
 
   try {
     if (id) {
-      const artist = await fetchArtistDetails(id);
+      const artist = await fetchArtistById(id);
       return NextResponse.json(artist);
     } else {
-      const artists = await fetchAllArtists();
+      const artists = await fetchAllArtistsIds();
       return NextResponse.json(artists);
     }
-  } catch (error) {
-    console.log(error);
-
+  } catch {
     return NextResponse.json(
-      { error: "Failed to fetch data" },
-      { status: 500 }
+      { error: "Failed to fetch artists data" },
+      { status: 500 },
     );
   }
 }
