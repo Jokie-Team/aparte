@@ -77,5 +77,9 @@
     "currentExhibitions": "Current Exhibitions",
     "futureExhibitions": "Future Exhibitions",
     "pastExhibitions": "Past Exhibitions"
+  },
+  "maintenance": {
+"title": "The site is under maintenance.",
+    "subtitle": "We’ll be back online soon."
   }
 }

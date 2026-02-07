@@ -6,6 +6,8 @@ import ScrollUp from "@/src/components/buttons/scrollup";
 import Header from "@/src/components/header/header";
 import * as React from "react";
 
+export const dynamic = "force-dynamic";
+
 export default async function LocaleLayout({ children, params }: any) {
   const { locale } = await params;
   const messages = await getMessages({ locale });
@@ -24,6 +26,6 @@ export default async function LocaleLayout({ children, params }: any) {
   );
 }
 
-export function generateStaticParams() {
+/* export function generateStaticParams() {
   return [{ locale: "pt" }, { locale: "en" }];
-}
+} */
