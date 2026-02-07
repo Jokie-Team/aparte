@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   return locales.flatMap((locale) =>
     artists.map((artist) => ({
       locale,
-      id: artist,
+      artistId: artist,
     })),
   );
 }
@@ -19,10 +19,10 @@ export async function generateStaticParams() {
 export default async function ArtistPage({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ locale: string; artistId: string }>;
 }) {
-  const { id, locale } = await params;
-  const artist = await fetchArtistById(id);
+  const { artistId, locale } = await params;
+  const artist = await fetchArtistById(artistId);
 
   if (!artist) {
     throw new Error("Artist not found");

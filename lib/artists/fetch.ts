@@ -160,7 +160,6 @@ export async function fetchArtistById(
           description
           width
           height
-          depth
         }
         exhibitionsCollection {
           items {
@@ -190,7 +189,6 @@ export async function fetchArtistById(
             available
             width
             height
-            depth
             technique
           }
         }
@@ -199,7 +197,36 @@ export async function fetchArtistById(
     `;
 
     const artist = await fetchGraphQL(query, preview, { id });
-    return artist;
+    return {
+      id: artist.data.artist.sys.id,
+      name: artist.data.artist.name,
+      bio: artist.data.artist.bio,
+      picture: artist.data.artist.picture,
+      exhibitions: artist.data.artist.exhibitionsCollection.items.map(
+        (ex: any) => ({
+          id: ex.sys.id,
+          title: ex.title,
+          description: ex.description,
+          startDate: ex.startDate,
+          endDate: ex.endDate,
+          picture: ex.picture,
+        }),
+      ),
+      artworks: artist.data.artist.artworksCollection.items.map((art: any) => ({
+        id: art.sys.id,
+        name: art.name || "",
+        images:
+          art.imagesCollection?.items.map((img: any) => ({
+            url: img.url,
+            title: img.title || "",
+            description: img.description || "",
+          })) || [],
+        available: art.available,
+        width: art.width,
+        height: art.height,
+        technique: art.technique,
+      })),
+    };
   } catch (error) {
     throw new Error("Failed to fetch artist by ID: " + error);
   }
