@@ -35,12 +35,14 @@ export const ArtistClient = ({
 
   if (!artist) return <div className="p-10">A carregar artista...</div>;
 
+  const artworks = artist.artworks ?? [];
+  const exhibitions = artist.exhibitions ?? [];
   const artworksPerPage = 12;
-  const initialArtworks = artist.artworks.slice(0, artworksPerPage);
-  const remainingArtworks = artist.artworks.slice(artworksPerPage);
+  const initialArtworks = artworks.slice(0, artworksPerPage);
+  const remainingArtworks = artworks.slice(artworksPerPage);
 
   const hasPicture = artist.picture?.url;
-  const hasArtwork = artist.artworks?.length > 0;
+  const hasArtwork = artworks.length > 0;
 
   const openGallery = (index: number) => {
     setSelectedIndex(index);
@@ -50,7 +52,7 @@ export const ArtistClient = ({
   const closeGallery = () => setGalleryOpen(false);
   const navigateGallery = (newIndex: number) => setSelectedIndex(newIndex);
 
-  const galleryArtworks = artist.artworks?.map((artwork: any) => ({
+  const galleryArtworks = artworks.map((artwork: any) => ({
     imageUrl: artwork.images?.[0]?.url,
     title: artwork.name,
     available: artwork.available,
@@ -93,8 +95,8 @@ export const ArtistClient = ({
             {!hasPicture && hasArtwork && (
               <div className="w-full">
                 <Image
-                  src={artist.artworks[0].images?.[0].url}
-                  alt={artist.artworks[0].images?.[0].title || artist.name}
+                  src={artworks[0].images?.[0]?.url}
+                  alt={artworks[0].images?.[0]?.title || artist.name}
                   width={300}
                   height={300}
                   className="object-cover w-full h-auto"
@@ -114,8 +116,8 @@ export const ArtistClient = ({
                 </div>
                 <div className="w-[calc(70%-12px)]">
                   <Image
-                    src={artist.artworks[0].images?.[0].url}
-                    alt={artist.artworks[0].images?.[0].title || artist.name}
+                    src={artworks[0].images?.[0]?.url}
+                    alt={artworks[0].images?.[0]?.title || artist.name}
                     width={300}
                     height={300}
                     className="object-cover w-full h-auto"
@@ -125,9 +127,9 @@ export const ArtistClient = ({
             )}
           </div>
         </div>
-        {(artist.artworks?.length > 0 || artist.exhibitions?.length > 0) && (
+        {(artworks.length > 0 || exhibitions.length > 0) && (
           <div className="pt-28 flex flex-row space-x-2">
-            {artist.artworks?.length > 0 && (
+            {artworks.length > 0 && (
               <button onClick={() => setActiveTab("artworks")}>
                 <Tag
                   size="small"
@@ -137,7 +139,7 @@ export const ArtistClient = ({
                 />
               </button>
             )}
-            {artist.exhibitions?.length > 0 && (
+            {exhibitions.length > 0 && (
               <button onClick={() => setActiveTab("exhibitions")}>
                 <Tag
                   size="small"
@@ -180,7 +182,7 @@ export const ArtistClient = ({
                 ) : null;
               })}
             </div>
-            {remainingArtworks.length > 0 && (
+            {remainingArtworks?.length > 0 && (
               <div className="text-center text-sm text-gray-500">
                 {translations.moreArtworksAvailable}
               </div>
@@ -200,11 +202,11 @@ export const ArtistClient = ({
           />
         )}
 
-        {activeTab === "exhibitions" && artist.exhibitions?.length > 0 && (
+        {activeTab === "exhibitions" && exhibitions.length > 0 && (
           <div className="space-y-8">
             <div className="md:flex">
               <Carousel
-                images={artist?.exhibitions
+                images={exhibitions
                   .filter(
                     (exhibition: {
                       title: string;

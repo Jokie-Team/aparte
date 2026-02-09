@@ -197,30 +197,31 @@ export async function fetchArtistById(
     `;
 
     const artist = await fetchGraphQL(query, preview, { id });
+    const raw = artist.data.artist;
+    const exhibitionsItems = raw.exhibitionsCollection?.items ?? [];
+    const artworksItems = raw.artworksCollection?.items ?? [];
     return {
-      id: artist.data.artist.sys.id,
-      name: artist.data.artist.name,
-      bio: artist.data.artist.bio,
-      picture: artist.data.artist.picture,
-      exhibitions: artist.data.artist.exhibitionsCollection.items.map(
-        (ex: any) => ({
-          id: ex.sys.id,
-          title: ex.title,
-          description: ex.description,
-          startDate: ex.startDate,
-          endDate: ex.endDate,
-          picture: ex.picture,
-        }),
-      ),
-      artworks: artist.data.artist.artworksCollection.items.map((art: any) => ({
+      id: raw.sys.id,
+      name: raw.name,
+      bio: raw.bio ?? "",
+      picture: raw.picture,
+      exhibitions: exhibitionsItems.map((ex: any) => ({
+        id: ex.sys.id,
+        title: ex.title,
+        description: ex.description,
+        startDate: ex.startDate,
+        endDate: ex.endDate,
+        picture: ex.picture,
+      })),
+      artworks: artworksItems.map((art: any) => ({
         id: art.sys.id,
         name: art.name || "",
         images:
-          art.imagesCollection?.items.map((img: any) => ({
+          art.imagesCollection?.items?.map((img: any) => ({
             url: img.url,
             title: img.title || "",
             description: img.description || "",
-          })) || [],
+          })) ?? [],
         available: art.available,
         width: art.width,
         height: art.height,

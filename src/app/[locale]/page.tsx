@@ -7,8 +7,6 @@ import Tag from "@/src/components/tags/tag";
 import { fetchHomepageExhibitions } from "@/lib/homepage/fetch";
 import { Exhibition } from "@/lib/exhibitions";
 
-export const revalidate = 1800;
-
 export default async function LocalePage() {
   const t = await getTranslations("homepage");
   let exhibitions: Exhibition[] = [];
