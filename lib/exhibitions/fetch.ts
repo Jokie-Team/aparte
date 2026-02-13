@@ -62,7 +62,7 @@ export async function fetchAllExhibitions(
             title
             description
           }
-          artworksCollection(limit: 15) {
+          artworksCollection(where:{sys:{id_exists:true}}, limit: 15) {
             items {
               sys { id }
               name
@@ -86,9 +86,13 @@ export async function fetchAllExhibitions(
 
     try {
       const response = await fetchGraphQL(query, preview);
+
+      // Log errors but don't throw - GraphQL can return partial data with errors
       if (response.errors) {
-        console.error(response.errors);
-        throw new Error("Failed to fetch exhibitions chunk");
+        console.warn(
+          "GraphQL errors (continuing with partial data):",
+          response.errors,
+        );
       }
 
       const exhibitions = response.data.exhibitionCollection.items.map(
@@ -108,11 +112,13 @@ export async function fetchAllExhibitions(
               id: artwork.sys.id,
               name: artwork.name || "",
               images:
-                artwork.imagesCollection?.items.map((image: any) => ({
-                  url: image.url,
-                  title: image.title || "",
-                  description: image.description || "",
-                })) || [],
+                artwork.imagesCollection?.items
+                  ?.filter((image: any) => image !== null)
+                  .map((image: any) => ({
+                    url: image.url,
+                    title: image.title || "",
+                    description: image.description || "",
+                  })) || [],
               width: artwork.width || 0,
               height: artwork.height || 0,
               depth: artwork.depth || 0,
@@ -157,7 +163,7 @@ export async function fetchExhibitionById(
           title
           description
         }
-        artworksCollection {
+        artworksCollection(where:{sys:{id_exists:true}}) {
           items {
             sys { id }
             name
@@ -174,7 +180,7 @@ export async function fetchExhibitionById(
             technique
           }
         }
-        artistsCollection {
+        artistsCollection(where:{sys:{id_exists:true}}) {
           items {
             sys { id }
             name
@@ -185,9 +191,13 @@ export async function fetchExhibitionById(
   `;
 
   const response = await fetchGraphQL(query, preview);
+
+  // Log errors but don't throw - GraphQL can return partial data with errors
   if (response.errors) {
-    console.error(response.errors);
-    throw new Error("Failed to fetch exhibition by ID");
+    console.warn(
+      "GraphQL errors (continuing with partial data):",
+      response.errors,
+    );
   }
 
   const item = response.data.exhibition;
@@ -208,11 +218,13 @@ export async function fetchExhibitionById(
         id: artwork.sys.id,
         name: artwork.name || "",
         images:
-          artwork.imagesCollection?.items.map((image: any) => ({
-            url: image.url,
-            title: image.title || "",
-            description: image.description || "",
-          })) || [],
+          artwork.imagesCollection?.items
+            ?.filter((image: any) => image !== null)
+            .map((image: any) => ({
+              url: image.url,
+              title: image.title || "",
+              description: image.description || "",
+            })) || [],
         width: artwork.width || 0,
         height: artwork.height || 0,
         depth: artwork.depth || 0,
