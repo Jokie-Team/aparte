@@ -2,8 +2,6 @@ import { fetchAllArtistsIds, fetchArtistById } from "@/lib/artists";
 import { ArtistClient } from "./ArtistClient";
 import { getTranslations } from "next-intl/server";
 
-export const revalidate = 1800;
-
 export async function generateStaticParams() {
   const artists = await fetchAllArtistsIds();
   const locales = ["en", "pt"];

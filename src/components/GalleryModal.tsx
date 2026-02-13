@@ -24,13 +24,14 @@ interface GalleryModalProps {
 }
 
 const GalleryModal: React.FC<GalleryModalProps> = ({
-  artworks,
+  artworks = [],
   currentIndex,
   onClose,
   onNavigate,
   translations,
 }) => {
-  const artwork = artworks[currentIndex];
+  const safeArtworks = artworks ?? [];
+  const artwork = safeArtworks[currentIndex];
 
   if (!artwork) return null;
 
@@ -57,7 +58,7 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
       )}
 
       {/* Right Arrow */}
-      {currentIndex < artworks.length - 1 && (
+      {currentIndex < safeArtworks.length - 1 && (
         <button
           onClick={() => onNavigate(currentIndex + 1)}
           className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
