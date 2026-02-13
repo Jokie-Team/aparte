@@ -16,7 +16,7 @@ export interface Artwork {
 
 export async function fetchArtworksByArtist(
   artistId: string,
-  preview = false
+  preview = false,
 ): Promise<Artwork[]> {
   const query = `query GetArtistArtworks {
     artworkCollection(limit: 50) {
@@ -29,7 +29,7 @@ export async function fetchArtworksByArtist(
         depth
         available
         technique
-        artistsCollection(limit: 5) {
+        artistsCollection(where:{sys:{id_exists:true}}, limit: 5) {
           items {
             sys { id }
           }
@@ -47,22 +47,32 @@ export async function fetchArtworksByArtist(
 
   const response = await fetchGraphQL(query, preview);
 
+  // Log errors but don't throw - GraphQL can return partial data with errors
   if (response.errors) {
-    console.error("GraphQL error in fetchArtworksByArtist:", JSON.stringify(response.errors, null, 2));
-    return [];
+    console.warn(
+      "GraphQL errors (continuing with partial data):",
+      JSON.stringify(response.errors, null, 2),
+    );
   }
 
   response.data.artworkCollection?.items?.forEach((item: any) => {
     if (!item?.artistsCollection?.items?.length) {
-      console.warn("⚠️ Artwork with broken or missing artist reference:", item.sys?.id, item.name);
+      console.warn(
+        "⚠️ Artwork with broken or missing artist reference:",
+        item.sys?.id,
+        item.name,
+      );
     }
   });
 
-  const items = response.data.artworkCollection?.items?.filter(
-    (item: any) =>
-      item?.artistsCollection?.items?.length > 0 &&
-      item.artistsCollection.items.some((artist: any) => artist?.sys?.id === artistId)
-  ) || [];
+  const items =
+    response.data.artworkCollection?.items?.filter(
+      (item: any) =>
+        item?.artistsCollection?.items?.length > 0 &&
+        item.artistsCollection.items.some(
+          (artist: any) => artist?.sys?.id === artistId,
+        ),
+    ) || [];
 
   return mapArtworks(items);
 }
@@ -82,10 +92,12 @@ function mapArtworks(items: any[]): Artwork[] {
         id: artist.sys.id,
       })) || [],
     images:
-      item.imagesCollection?.items.map((image: any) => ({
-        url: image.url,
-        title: image.title || "",
-        description: image.description || "",
-      })) || [],
+      item.imagesCollection?.items
+        ?.filter((image: any) => image !== null)
+        .map((image: any) => ({
+          url: image.url,
+          title: image.title || "",
+          description: image.description || "",
+        })) || [],
   }));
 }

@@ -51,13 +51,13 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
   while (hasMore) {
     const query = `
     {
-      artistCollection(limit: ${CHUNK_SIZE}, skip: ${skip}) {
+      artistCollection(where:{sys:{id_exists:true}}, limit: ${CHUNK_SIZE}, skip: ${skip}) {
         items {
           sys { id }
           name
           picture { url }
           bio
-          exhibitionsCollection(limit: 5) {
+          exhibitionsCollection(where:{sys:{id_exists:true}}, limit: 5) {
             items {
               sys { id }
               title
@@ -66,7 +66,7 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
               endDate
             }
           }
-          artworksCollection(limit: 10) {
+          artworksCollection(where:{sys:{id_exists:true}},limit: 10) {
             items {
               sys { id }
               name
@@ -91,9 +91,12 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
 
     try {
       const response = await fetchGraphQL(query, preview);
+
+      // Log errors but don't throw - GraphQL can return partial data with errors
       if (response.errors) {
-        throw new Error(
-          "Failed to fetch artists with errors: " + response.errors.join(", "),
+        console.warn(
+          "GraphQL errors (continuing with partial data):",
+          response.errors,
         );
       }
 
@@ -116,11 +119,13 @@ export async function fetchAllArtists(preview = false): Promise<Artist[]> {
               id: art.sys.id,
               name: art.name || "",
               images:
-                art.imagesCollection?.items.map((img: any) => ({
-                  url: img.url,
-                  title: img.title || "",
-                  description: img.description || "",
-                })) || [],
+                art.imagesCollection?.items
+                  ?.filter((img: any) => img !== null)
+                  .map((img: any) => ({
+                    url: img.url,
+                    title: img.title || "",
+                    description: img.description || "",
+                  })) || [],
               available: art.available,
               width: art.width,
               height: art.height,
@@ -161,7 +166,7 @@ export async function fetchArtistById(
           width
           height
         }
-        exhibitionsCollection {
+        exhibitionsCollection(where:{sys:{id_exists:true}}) {
           items {
             sys { id }
             title
@@ -175,7 +180,7 @@ export async function fetchArtistById(
             }
           }
         }
-        artworksCollection {
+        artworksCollection(where:{sys:{id_exists:true}}) {
           items {
             sys { id }
             name
@@ -217,11 +222,13 @@ export async function fetchArtistById(
         id: art.sys.id,
         name: art.name || "",
         images:
-          art.imagesCollection?.items?.map((img: any) => ({
-            url: img.url,
-            title: img.title || "",
-            description: img.description || "",
-          })) ?? [],
+          art.imagesCollection?.items
+            ?.filter((img: any) => img !== null)
+            .map((img: any) => ({
+              url: img.url,
+              title: img.title || "",
+              description: img.description || "",
+            })) || [],
         available: art.available,
         width: art.width,
         height: art.height,
