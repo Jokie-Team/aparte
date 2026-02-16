@@ -3,8 +3,6 @@ import React from "react";
 import { fetchAllArtists } from "@/lib/artists";
 import { ArtistsClient } from "./ArtistsClient";
 
-export const revalidate = 1800;
-
 const Artists = async () => {
   const [t, artists] = await Promise.all([
     getTranslations("artists"),

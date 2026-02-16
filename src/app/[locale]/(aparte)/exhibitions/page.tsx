@@ -4,8 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import Spinner from "@/src/components/spinner";
 
-export const revalidate = 1800;
-
 const Exhibitions = async () => {
   const [t, exhibitions] = await Promise.all([
     getTranslations("exhibitions"),
